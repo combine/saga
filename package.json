@@ -200,7 +200,10 @@
     "helmet": "^3.10.0",
     "history": "^4.7.2",
     "include-media": "^1.4.9",
+    "knex": "^0.14.2",
     "lodash": "^4.17.4",
+    "objection": "^0.9.4",
+    "pg": "^7.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
@@ -213,6 +216,7 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^0.77.2",
-    "serve-static": "^1.13.1"
+    "serve-static": "^1.13.1",
+    "sqlite3": "^3.1.13"
   }
 }
