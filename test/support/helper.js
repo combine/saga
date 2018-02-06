@@ -8,6 +8,9 @@ addPath(path.join(__dirname, '../..', 'server'));
 // allow relative path for root /lib directory
 addPath(path.join(__dirname, '../..', 'lib'));
 
+// test directory
+addPath(path.join(__dirname, '..'));
+
 const db = require('db');
 
 // Bind all models to Knex
