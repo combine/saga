@@ -5,6 +5,17 @@ if (env !== 'production') {
   require('dotenv').load();
 }
 
+const opts = {
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: './server/db/migrations'
+  },
+  seeds: {
+    directory: './server/db/seeds'
+  },
+  ...knexSnakeCaseMappers()
+};
+
 const pg = {
   client: 'postgresql',
   connection: {
@@ -17,14 +28,7 @@ const pg = {
     min: 2,
     max: 10
   },
-  migrations: {
-    tableName: 'knex_migrations',
-    directory: './server/db/migrations'
-  },
-  seeds: {
-    directory: './server/db/seeds'
-  },
-  ...knexSnakeCaseMappers()
+  ...opts
 };
 
 module.exports = {
@@ -33,7 +37,8 @@ module.exports = {
     useNullAsDefault: true,
     connection: {
       filename: './test/db.sqlite3'
-    }
+    },
+    ...opts
   },
   development: pg,
   production: pg

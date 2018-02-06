@@ -7,15 +7,13 @@ import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
 import { httpsRedirect } from 'middleware';
 import { Model } from 'objection';
-import Knex from 'knex';
-import knexConfig from '../knexfile';
+import db from 'db';
 
 const env = process.env.NODE_ENV || 'development';
 const app = new express();
-const knex = Knex(knexConfig[env]);
 
 // Bind all models to Knex
-Model.knex(knex);
+Model.knex(db);
 
 // Secure with helmet
 app.use(helmet());

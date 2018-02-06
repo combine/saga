@@ -6,6 +6,7 @@ exports.up = function(knex) {
     table.string('last_name');
     table.enu('role', ['admin', 'user']);
     table.string('email');
+    table.string('password');
     table.timestamps();
   });
 };

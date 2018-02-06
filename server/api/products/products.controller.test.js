@@ -2,22 +2,30 @@ import request from 'supertest';
 import express from 'express';
 import expect from 'expect';
 
-describe('/api/todos', function() {
-  let app, agent;
+describe('/api/products', function() {
+  let server, agent;
 
   before(async function() {
-    app = express();
-    app.use('/api', require('api').default);
-    agent = request.agent(app.listen());
+    const app = express();
+    const router = require('./index').default;
+
+    app.use('/api/products', router);
+
+    server = app.listen();
+    agent = request.agent(server);
   });
 
-  describe('GET /', function() {
-    it('retrieves a list of todos', function() {
+  after(async function() {
+    server.close();
+  });
+
+  describe('GET /api/products', function() {
+    it('retrieves a list of products', function() {
       return agent
-        .get('/api/todos')
+        .get('/api/products')
         .expect(200)
         .then(({ body }) => {
-          expect(body.map(t => t.id)).toEqual([1, 2, 3]);
+          expect(body).toEqual([]);
         });
     });
   });

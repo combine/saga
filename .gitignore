@@ -5,7 +5,7 @@ npm-debug.log*
 .DS_Store
 
 # test database
-/test/test.sqlite3
+/test/db.sqlite3
 
 # ignore built static files
 /dist

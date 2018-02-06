@@ -167,13 +167,17 @@ Make sure you have it installed:
 npm install -g mocha
 ```
 
-Tests should reside in `test/spec` in their appropriate folders:
+Tests should reside alongside their component/feature and be named `*.test.js`:
 
 ```
-├── test
-│   ├── spec
-│   │   ├── api
-│   │   │   ├── todos.test.js
+├── server
+│   ├── controllers
+│   │   ├── users
+│   │   │   ├── users.controller.js
+│   │   │   ├── users.controller.test.js
+│   ├── models
+│   │   ├── User.js
+│   │   ├── User.test.js
 ```
 
 Tests can be written with ES2015, since it passes through `babel-register`.
