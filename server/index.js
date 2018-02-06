@@ -18,6 +18,9 @@ addPath(path.join(__dirname, '../server'));
 addPath(path.join(__dirname, '../common'));
 addPath(path.join(__dirname, '../common/js'));
 
+// custom lib/modules
+addPath(path.join(__dirname, '../lib'));
+
 // HTML files are read as pure strings
 require.extensions['.html'] = (module, filename) => {
   module.exports = fs.readFileSync(filename, 'utf8');

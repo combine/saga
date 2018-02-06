@@ -2,7 +2,7 @@ import expect from 'expect';
 import User from './User';
 
 describe('User', function() {
-  describe('.create', function() {
+  describe('creation', function() {
     let user;
 
     before(async function() {
@@ -13,12 +13,18 @@ describe('User', function() {
       });
     });
 
-    it('creates the user', async function() {
+    it('creates the user', function() {
       expect(user.firstName).toEqual('Foo');
     });
 
-    it('hashes the password', async function() {
+    it('hashes the password', function() {
       expect(user.password).not.toEqual('foobar');
+      expect(User.isBcryptHash(user.password)).toBe(true);
+    });
+
+    it('verifies password correctly', async function() {
+      const verified = await user.verifyPassword('foobar');
+      expect(verified).toBe(true);
     });
   });
 });
