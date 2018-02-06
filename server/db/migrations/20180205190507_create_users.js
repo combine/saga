@@ -7,6 +7,8 @@ exports.up = function(knex) {
     table.enu('role', ['admin', 'user']);
     table.string('email');
     table.string('password');
+    table.string('reset_password_token');
+    table.string('reset_password_exp');
     table.timestamps();
   });
 };

@@ -1,7 +1,9 @@
 import { Model } from 'objection';
-import { Authenticatable } from 'objection-auth';
+import { Authenticatable, Recoverable } from 'objection-auth';
 
-export default class User extends Authenticatable(Model) {
+const AuthModel = Recoverable(Authenticatable(Model));
+
+export default class User extends AuthModel {
   static modelPaths = [__dirname];
   static tableName = 'users';
   static jsonSchema = {
