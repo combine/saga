@@ -93,4 +93,27 @@ describe('User', function() {
       });
     });
   });
+
+  describe('Tokenable', function() {
+    let token;
+
+    before(async function() {
+      token = await user.generateJWT();
+    });
+
+    describe('.generateJWT', function() {
+      it('generates a token with expiration', async function() {
+        expect(token).toBeDefined();
+        expect(token).not.toBe(null);
+      });
+    });
+
+    describe('.decodeJWT', function() {
+      it('verifies the given token against the user', async function() {
+        const decoded = await user.decodeJWT(token);
+        expect(decoded.id).toEqual(user.id);
+        expect(decoded.email).toEqual(user.email);
+      });
+    });
+  });
 });

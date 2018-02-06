@@ -1,7 +1,7 @@
 import { Model } from 'objection';
-import { Authenticatable, Recoverable } from 'objection-auth';
+import { Authenticatable, Recoverable, Tokenable } from 'objection-auth';
 
-const AuthModel = Recoverable(Authenticatable(Model));
+const AuthModel = Authenticatable(Recoverable(Tokenable(Model)));
 
 export default class User extends AuthModel {
   static modelPaths = [__dirname];
