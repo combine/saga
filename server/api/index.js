@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import todos from './todos';
+import products from './products';
+import users from './users';
 
 const Api = express();
 
@@ -14,6 +15,7 @@ Api.use((req, res, next) => {
 Api.use(bodyParser.json());
 
 // Add all API endpoints here
-Api.use('/todos', todos);
+Api.use('/products', products);
+Api.use('/users', users);
 
 export default Api;

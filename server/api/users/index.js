@@ -1,8 +1,8 @@
 import express from 'express';
-import { index } from './todos.controller';
+import { show } from './users.controller';
 
 const router = express.Router();
 
-router.get('/', index);
+router.get('/:id', show);
 
 export default router;

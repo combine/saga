@@ -6,9 +6,16 @@ import Api from './api';
 import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
 import { httpsRedirect } from 'middleware';
+import { Model } from 'objection';
+import Knex from 'knex';
+import knexConfig from '../knexfile';
 
 const env = process.env.NODE_ENV || 'development';
 const app = new express();
+const knex = Knex(knexConfig[env]);
+
+// Bind all models to Knex
+Model.knex(knex);
 
 // Secure with helmet
 app.use(helmet());
