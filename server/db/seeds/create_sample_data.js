@@ -1,21 +1,28 @@
+const { Model } = require('objection');
 const faker = require('faker');
+const db = require('../index');
+
+Model.knex(db);
+
+const Product = require('../../models/Product').default;
+const User = require('../../models/User').default;
+
 
 exports.seed = async function(knex) {
   await knex('users').del();
   await knex('products').del();
   await knex('favorites').del();
 
-  await knex('users').insert([
-    {
-      id: 1,
-      firstName: 'Admin',
-      lastName: 'User',
-      role: 'admin',
-      email: 'admin@example.com'
-    }
-  ]);
+  await User.query().insert({
+    id: 1,
+    firstName: 'Admin',
+    lastName: 'User',
+    password: 'password',
+    role: 'admin',
+    email: 'admin@example.com'
+  });
 
-  await knex('products').insert([
+  await Product.query().insert([
     {
       id: 1,
       name: faker.commerce.productName(),
@@ -34,18 +41,20 @@ exports.seed = async function(knex) {
     }
   ]);
 
-  await knex('users').insert([
+  await User.query().insert([
     {
       id: 2,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email()
+      email: faker.internet.email(),
+      password: 'password'
     },
     {
       id: 3,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email()
+      email: faker.internet.email(),
+      password: 'password'
     }
   ]);
 

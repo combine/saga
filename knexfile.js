@@ -1,5 +1,12 @@
+require('babel-register');
+require('babel-polyfill');
+
+const path = require('path');
+const { addPath } = require('app-module-path');
 const { knexSnakeCaseMappers } = require('objection');
 const env = process.NODE_ENV || 'development';
+
+addPath(path.join(__dirname, 'lib'));
 
 if (env !== 'production') {
   require('dotenv').load();
