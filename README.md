@@ -1,7 +1,9 @@
-# Universal React Redux Boilerplate
+# Saga
 
-A universal React/Redux boilerplate with sensible defaults. Out of the box, this
-boilerplate comes with:
+A universal starter-kit for building large SPAs. Comes bundled with fancy
+developer tools and features out of the box.
+
+## Features
 
 - Server-side rendering with Express
 - Code splitting with [dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports) and [react-loadable](https://github.com/thejameskyle/react-loadable)
@@ -9,7 +11,14 @@ boilerplate comes with:
 - JS hot reloading with [react-hot-loader (@next)](https://github.com/gaearon/react-hot-loader) and [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 - CSS, SASS and [css-modules](https://github.com/css-modules/css-modules) support with hot reloading and no [flash of unstyled content](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) ([css-hot-loader](https://github.com/shepherdwind/css-hot-loader))
 - Routing with [react-router-v4](https://github.com/ReactTraining/react-router)
-- Full production builds that do not rely on `babel-node`.
+- Full production builds that do not rely on `babel-node`
+- Database ORM with [Objection.js](https://github.com/Vincit/objection.js)
+- Database migrations and seeds with [knex](http://knexjs.org/)
+- Authentication features built in:
+  - `Authenticatable` - automatically hashed passwords on a specified model
+  - `Recoverable` - allow account recovery with a token and an expiration
+  - `Tokenable` - generate JSON web tokens for API access
+
 
 ## Philosophy
 
