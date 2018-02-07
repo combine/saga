@@ -87,7 +87,7 @@ describe('User', function() {
 
       it('sets the expiration date to the specified time', async function() {
         await user.generateResetToken(7200);
-        const exp = new Date(currTime.getTime() + (7200 * 1000));
+        const exp = new Date(currTime.getTime() + (7200 * 1000)).toISOString();
 
         expect(user.resetPasswordExp).toEqual(exp);
       });
