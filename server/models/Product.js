@@ -1,6 +1,6 @@
-import { Model } from 'objection';
+import Base from './Base';
 
-export default class Product extends Model {
+export default class Product extends Base {
   static tableName = 'products';
   static jsonSchema = {
     type: 'object',

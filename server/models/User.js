@@ -1,27 +1,29 @@
-import { Model } from 'objection';
+import Base from './Base';
 import { Authenticatable, Recoverable, Tokenable } from 'objection-auth';
 
-const AuthModel = Authenticatable(Recoverable(Tokenable(Model)));
+const AuthModel = Authenticatable(Recoverable(Tokenable(Base)));
 
 export default class User extends AuthModel {
   static modelPaths = [__dirname];
   static tableName = 'users';
   static jsonSchema = {
     type: 'object',
-    required: ['firstName', 'lastName', 'password'],
+    required: ['firstName', 'lastName', 'password', 'email'],
 
     properties: {
       id: { type: 'integer' },
       firstName: { type: 'string', minLength: 1, maxLength: 255 },
       lastName: { type: 'string', minLength: 1, maxLength: 255 },
       email: { type: 'string', minLength: 3, maxLength: 255 },
-      password: { type: 'string', minLength: 3, maxLength: 255 }
+      password: { type: 'string', minLength: 3, maxLength: 255 },
+      resetPasswordToken: { type: 'string', minLength: 20, maxLength: 255 },
+      resetPasswordExp: { type: 'string', format: 'date-time' }
     }
   };
 
   static relationMappings = {
     favorites: {
-      relation: Model.ManyToManyRelation,
+      relation: Base.ManyToManyRelation,
       modelClass: 'Product',
       join: {
         from: 'users.id',
