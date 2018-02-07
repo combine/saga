@@ -7,12 +7,18 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "$(npm bin)/mocha --recursive ./test/support/helper.js 'test/spec/**/*.test.js'"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^1.0.3",
     "jsonwebtoken": "^8.1.1"
+  },
+  "devDependencies": {
+    "expect": "^22.1.0",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2",
+    "sqlite3": "^3.1.13"
   }
 }
