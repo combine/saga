@@ -4,13 +4,15 @@ if (isDev) require('dotenv').load();
 import yn from 'yn';
 import path from 'path';
 import webpack from 'webpack';
-import mapValues from 'lodash/mapValues';
 import IsoPlugin from 'webpack-isomorphic-tools/plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
+import { mapValues, keyBy } from 'lodash';
+import { _moduleAliases } from '../package.json';
 import config from '../config';
 
+let cwd = process.cwd();
 let ssr = yn(process.env.SSR) || false;
 let isoPlugin = new IsoPlugin(config.isomorphicConfig).development(isDev);
 let extractTextPlugin = new ExtractTextPlugin({
@@ -24,7 +26,9 @@ let plugins = [
   extractTextPlugin,
   new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|es/),
   new webpack.DefinePlugin({
-    'process.env': config.clientEnv
+    'process.env': mapValues(keyBy(config.clientEnvVars), (env) => {
+      return JSON.stringify(process.env[env]);
+    })
   })
 ];
 
@@ -55,8 +59,8 @@ export default {
   output,
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],
-    alias: mapValues(config.clientResolvePaths, str =>
-      path.join(process.cwd(), ...str.split('/'))
+    alias: mapValues(_moduleAliases, aliasPath =>
+      path.join(cwd, ...aliasPath.split('/'))
     )
   },
   module: {

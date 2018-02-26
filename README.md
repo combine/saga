@@ -11,14 +11,8 @@ developer tools and features out of the box.
 - JS hot reloading with [react-hot-loader (@next)](https://github.com/gaearon/react-hot-loader) and [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 - CSS, SASS and [css-modules](https://github.com/css-modules/css-modules) support with hot reloading and no [flash of unstyled content](https://en.wikipedia.org/wiki/Flash_of_unstyled_content) ([css-hot-loader](https://github.com/shepherdwind/css-hot-loader))
 - Routing with [react-router-v4](https://github.com/ReactTraining/react-router)
-- Full production builds that do not rely on `babel-node`
-- Database ORM with [Objection.js](https://github.com/Vincit/objection.js)
-- Database migrations and seeds with [knex](http://knexjs.org/)
-- Authentication features built in:
-  - `Authenticatable` - automatically hashed passwords on a specified model
-  - `Recoverable` - allow account recovery with a token and an expiration
-  - `Tokenable` - generate JSON web tokens for API access
-
+- Full production builds that do not rely on `babel-node`.
+- Pre-configured testing tools with `jest` and `enzyme` to work with css modules, static files, and aliased module paths.
 
 ## Philosophy
 
@@ -79,6 +73,30 @@ If using Heroku, simply add a `Procfile` in the root directory. The
 ```
 web: npm run serve
 ```
+
+## Path Aliases
+
+In `package.json`, there is a property named `_moduleAliases`. This object
+defines the require() aliases used by both webpack and node.
+
+Aliased paths are prefixed with one of two symbols, which denote different
+things:
+
+`@` - paths in the `common/` folder, e.g. `@components` or `@actions`, etc.
+`$` - paths in the `server/` folder
+
+Aliases are nice to use for convenience, and lets us avoid using relative paths
+in our components:
+
+```
+// This sucks
+import SomeComponent from '../../../components/SomeComponent';
+
+// This is way better
+import SomeComponent from '@components/SomeComponent';
+```
+
+You can add additional aliases in `package.json` to your own liking.
 
 ## Environment Variables
 
@@ -169,24 +187,19 @@ higher. If you experience errors, please upgrade your version of Node.js.
 
 ## Testing
 
-The default testing framework is Mocha, though you can use whatever you want.
-Make sure you have it installed:
+The default testing framework is Jest, though you can use whatever you want.
+
+Tests and their corresponding files such as Jest snapshots, should be co-located
+alongside the modules they are testing, in a `spec/` folder. For example:
 
 ```
-npm install -g mocha
-```
-
-Tests should reside alongside their component/feature and be named `*.test.js`:
-
-```
-├── server
-│   ├── controllers
-│   │   ├── users
-│   │   │   ├── users.controller.js
-│   │   │   ├── users.controller.test.js
-│   ├── models
-│   │   ├── User.js
-│   │   ├── User.test.js
+├── components
+│   ├── todos
+│   │   ├── TodoForm
+│   │   │   ├── spec
+│   │   │   │   ├── TodoForm.test.js
+│   │   │   ├── index.js
+│   │   │   ├── index.scss
 ```
 
 Tests can be written with ES2015, since it passes through `babel-register`.
@@ -197,21 +210,19 @@ To run a single test:
 
 ```
 npm test /path/to/single.test.js
-```
 
-To run a directory of tests:
-
-```
-npm test /path/to/test/directory
+// Or, to watch for changes
+npm run test:watch /path/to/single.test.js
 ```
 
 To run all tests:
 
 ```
 npm run test:all
-```
 
-This will run all tests in the `test/spec` directory.
+// Or, to watch for changes
+npm run test:all:watch
+```
 
 ## Running ESLint
 

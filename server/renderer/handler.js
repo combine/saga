@@ -3,19 +3,25 @@ import { Provider } from 'react-redux';
 import { StaticRouter, matchPath } from 'react-router';
 import { setMobileDetect, mobileParser } from 'react-responsive-redux';
 import { renderToString } from 'react-dom/server';
-import { ErrorPage } from 'components/common';
+import { ErrorPage } from '@components/common';
 import { getBundles } from 'react-loadable/webpack';
 import Loadable from 'react-loadable';
 import render from './render';
-import routes from 'routes';
-import configureStore from 'store';
-import App from 'containers/App';
-import config from '../../config';
+import routes from '@routes';
+import configureStore from '@store';
+import App from '@containers/App';
+import config from '$config';
 
 let stats = null;
 
+// This is a small 'hack' to tell webpack to avoid resolving the below file
+// during compilation, since react-loadable.json may or may not exist.
+const requireFunc = typeof __webpack_require__ === 'function'
+  ? __non_webpack_require__
+  : require;
+
 if (config.enableDynamicImports) {
-  stats = require('../../react-loadable.json');
+  stats = requireFunc('../../react-loadable.json');
 }
 
 export default function handleRender(req, res) {
@@ -31,6 +37,12 @@ export default function handleRender(req, res) {
 
   // Grab the initial state from our Redux store
   const finalState = store.getState();
+
+  // If SSR is disabled, just render the skeleton HTML.
+  if (!config.enableSSR) {
+    const markup = render(null, finalState, []);
+    return res.send(markup);
+  }
 
   // See react-router's Server Rendering section:
   // https://reacttraining.com/react-router/web/guides/server-rendering
@@ -88,20 +100,30 @@ export default function handleRender(req, res) {
 
   let context = {}, modules = [];
 
-  const component = (
-    <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+  const getComponent = () => {
+    let component = (
       <Provider store={store}>
         <StaticRouter context={context} location={req.baseUrl}>
           <App />
         </StaticRouter>
       </Provider>
-    </Loadable.Capture>
-  );
+    );
+
+    if (config.enableDynamicImports) {
+      return (
+        <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+          {component}
+        </Loadable.Capture>
+      );
+    }
+
+    return component;
+  };
 
   // Execute the render only after all promises have been resolved.
   Promise.all(fetchData).then(() => {
     const state = store.getState();
-    const html = renderToString(component);
+    const html = renderToString(getComponent());
     const bundles = stats && getBundles(stats, modules) || [];
     const markup = render(html, state, bundles);
 
