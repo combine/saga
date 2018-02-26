@@ -1,12 +1,12 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import createUser from 'factories/user';
-import User from './User';
+import createUser from '$factories/user';
+import User from '../User';
 
 describe('User', function() {
   let user;
 
-  before(async function() {
+  beforeAll(async function() {
     user = await createUser({
       firstName: 'Foo',
       lastName: 'Bar',
@@ -15,31 +15,31 @@ describe('User', function() {
   });
 
   describe('creation', function() {
-    it('creates the user', function() {
+    test('creates the user', function() {
       expect(user.firstName).toEqual('Foo');
     });
   });
 
   describe('Authenticatable', function() {
-    it('hashes the password', function() {
+    test('hashes the password', function() {
       expect(user.password).not.toEqual('foobar');
       expect(User.isBcryptHash(user.password)).toBe(true);
     });
 
-    it('verifies password correctly', async function() {
+    test('verifies password correctly', async function() {
       const verified = await user.verifyPassword('foobar');
       expect(verified).toBe(true);
     });
 
-    context('when updating', function() {
+    describe('when updating', function() {
       let originalHash;
 
-      before(function() {
+      beforeAll(function() {
         originalHash = user.password;
       });
 
-      context('and password has not changed', function() {
-        before(async function() {
+      describe('and password has not changed', function() {
+        beforeAll(async function() {
           await user.$query().patch({ firstName: 'Baz' });
         });
 
@@ -50,8 +50,8 @@ describe('User', function() {
         });
       });
 
-      context('and password has changed', function() {
-        before(async function() {
+      describe('and password has changed', function() {
+        beforeAll(async function() {
           await user.$query().patch({ password: 'newpass' });
         });
 
@@ -69,7 +69,7 @@ describe('User', function() {
     describe('.generateResetToken', function() {
       let currTime;
 
-      before(async function() {
+      beforeAll(async function() {
         currTime = new Date();
         sinon.useFakeTimers(currTime);
       });
@@ -97,7 +97,7 @@ describe('User', function() {
   describe('Tokenable', function() {
     let token;
 
-    before(async function() {
+    beforeAll(async function() {
       token = await user.generateJWT();
     });
 
