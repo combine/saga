@@ -54,9 +54,12 @@
     "@routes": "common/js/routes",
     "@store": "common/js/store",
     "$api": "server/api",
+    "$db": "server/db",
     "$lib": "server/lib",
     "$middleware": "server/middleware",
+    "$models": "server/models",
     "$templates": "server/templates",
+    "$factories": "test/factories",
     "$config": "config"
   },
   "scripts": {
@@ -123,7 +126,7 @@
       }
     },
     "test": {
-      "command": "$(npm bin)/jest",
+      "command": "$(npm bin)/jest -c ./test/support/jest.config.js",
       "env": {
         "NODE_ENV": "test"
       }
@@ -175,6 +178,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.1",
+    "escape-string-regexp": "^1.0.5",
     "eslint": "^4.16.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-babel": "^4.1.2",
@@ -227,6 +231,10 @@
     "knex": "^0.14.2",
     "lodash": "^4.17.4",
     "module-alias": "^2.0.6",
+    "objection": "^1.0.0",
+    "objection-auth": "file:lib/objection-auth",
+    "objection-slugify": "file:lib/objection-slugify",
+    "pg": "^7.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
