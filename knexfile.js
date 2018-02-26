@@ -1,29 +1,22 @@
-require('babel-register');
-require('babel-polyfill');
-
 const path = require('path');
-const { addPath } = require('app-module-path');
 const { knexSnakeCaseMappers } = require('objection');
 const env = process.NODE_ENV || 'development';
-
-addPath(path.join(__dirname, 'lib'));
 
 if (env !== 'production') {
   require('dotenv').load();
 }
 
-const opts = {
+const opts = Object.assign({
   migrations: {
     tableName: 'knex_migrations',
-    directory: './server/db/migrations'
+    directory: path.join(__dirname, 'server/db/migrations')
   },
   seeds: {
-    directory: './server/db/seeds'
-  },
-  ...knexSnakeCaseMappers()
-};
+    directory: path.join(__dirname, 'server/db/seed')
+  }
+}, knexSnakeCaseMappers());
 
-const pg = {
+const pg = Object.assign({
   client: 'postgresql',
   connection: {
     host: process.env.PG_DB_HOST,
@@ -34,19 +27,17 @@ const pg = {
   pool: {
     min: 2,
     max: 10
-  },
-  ...opts
-};
+  }
+}, opts);
 
 module.exports = {
-  test: {
+  test: Object.assign({
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: './test/db.sqlite3'
-    },
-    ...opts
-  },
+      filename: path.join(__dirname, 'test/db.sqlite3')
+    }
+  }, opts),
   development: pg,
   production: pg
 };
