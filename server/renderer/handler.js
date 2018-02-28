@@ -4,7 +4,6 @@ import { StaticRouter, matchPath } from 'react-router';
 import { setMobileDetect, mobileParser } from 'react-responsive-redux';
 import { renderToString } from 'react-dom/server';
 import { getBundles } from 'react-loadable/webpack';
-import ErrorPage from '@pages/Error';
 import Loadable from 'react-loadable';
 import render from './render';
 import routes from '@routes';
@@ -83,11 +82,16 @@ export default function handleRender(req, res) {
 
   const matches = matchRoutes(routes);
 
-  const getComponent = (innerComponent = null) => {
+  // No matched route, send an error.
+  if (!matches.length) {
+    return res.status(500).send('Server Error');
+  }
+
+  const getComponent = () => {
     let component = (
       <Provider store={store}>
         <StaticRouter context={context} location={req.baseUrl}>
-          <App component={innerComponent} />
+          <App  />
         </StaticRouter>
       </Provider>
     );
@@ -102,16 +106,6 @@ export default function handleRender(req, res) {
 
     return component;
   };
-
-  // No matched route, render a 404 page.
-  if (!matches.length) {
-    const errorComponent = <ErrorPage code={404} />;
-    const html = renderToString(errorComponent);
-    const markup = render(html, finalState);
-
-    res.contentType('text/html');
-    return res.status(404).send(markup);
-  }
 
   // There's a match, render the component with the matched route, firing off
   // any fetchData methods that are statically defined on the server.
@@ -128,6 +122,7 @@ export default function handleRender(req, res) {
     const html = renderToString(getComponent());
     const bundles = stats && getBundles(stats, modules) || [];
     const markup = render(html, state, bundles);
+    const status = matches.length && matches[0].match.path === '*' ? 404 : 200;
 
     // A 301 redirect was rendered somewhere if context.url exists after
     // rendering has happened.
@@ -135,6 +130,7 @@ export default function handleRender(req, res) {
       return res.redirect(302, context.url);
     }
 
-    return res.status(200).send(markup);
+    res.contentType('text/html');
+    return res.status(status).send(markup);
   });
 }
