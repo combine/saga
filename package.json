@@ -234,6 +234,7 @@
     "css-modules-require-hook": "^4.2.3",
     "express": "^4.16.2",
     "font-awesome": "^4.7.0",
+    "formik": "^0.11.11",
     "helmet": "^3.10.0",
     "history": "^4.7.2",
     "include-media": "^1.4.9",
