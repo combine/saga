@@ -2,21 +2,17 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
 
-const menuItems = [
-  { name: 'Home', to: '/', exact: true },
-  { name: 'Todos', to: '/todos' }
-];
-
 class HeaderView extends Component {
   render() {
     return (
       <Header>
         <Menu size="massive">
-          {menuItems.map(item => (
-            <Menu.Item {...item} as={NavLink} key={item.name}>
-              {item.name}
-            </Menu.Item>
-          ))}
+          <Menu.Item to="/" exact as={NavLink} content="Home" />
+          <Menu.Item to="/products" exact as={NavLink} content="Products" />
+          <Menu.Menu position="right">
+            <Menu.Item to="/login" as={NavLink} content="Login" />
+            <Menu.Item to="/signup" as={NavLink} content="Signup" />
+          </Menu.Menu>
         </Menu>
       </Header>
     );

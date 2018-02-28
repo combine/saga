@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 // Import your reducers here
-import todos from './todos';
+import products from './products';
 
 const rootReducer = combineReducers({
   routing: routerReducer,
-  todos
+  products
 });
 
 export default rootReducer;
