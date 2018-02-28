@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { StaticRouter, matchPath } from 'react-router';
 import { setMobileDetect, mobileParser } from 'react-responsive-redux';
 import { renderToString } from 'react-dom/server';
-import { ErrorPage } from '@components/common';
 import { getBundles } from 'react-loadable/webpack';
+import ErrorPage from '@pages/Error';
 import Loadable from 'react-loadable';
 import render from './render';
 import routes from '@routes';
@@ -25,7 +25,8 @@ if (config.enableDynamicImports) {
 }
 
 export default function handleRender(req, res) {
-  const initialState = {};
+  let context = {}, modules = [], initialState = {};
+
   // Create a new Redux store instance
   const store = configureStore(initialState);
 
@@ -82,29 +83,11 @@ export default function handleRender(req, res) {
 
   const matches = matchRoutes(routes);
 
-  // No matched route, render a 404 page.
-  if (!matches.length) {
-    res.contentType('text/html');
-    res.status(404).send(render(<ErrorPage code={404} />, finalState));
-    return;
-  }
-
-  // There's a match, render the component with the matched route, firing off
-  // any fetchData methods that are statically defined on the server.
-  const fetchData = matches.map(match => {
-    const { fetchData, ...rest } = match; // eslint-disable-line no-unused-vars
-
-    // return fetch data Promise, excluding unnecessary fetchData method
-    return match.fetchData({ store, ...rest });
-  });
-
-  let context = {}, modules = [];
-
-  const getComponent = () => {
+  const getComponent = (innerComponent = null) => {
     let component = (
       <Provider store={store}>
         <StaticRouter context={context} location={req.baseUrl}>
-          <App />
+          <App component={innerComponent} />
         </StaticRouter>
       </Provider>
     );
@@ -119,6 +102,25 @@ export default function handleRender(req, res) {
 
     return component;
   };
+
+  // No matched route, render a 404 page.
+  if (!matches.length) {
+    const errorComponent = <ErrorPage code={404} />;
+    const html = renderToString(errorComponent);
+    const markup = render(html, finalState);
+
+    res.contentType('text/html');
+    return res.status(404).send(markup);
+  }
+
+  // There's a match, render the component with the matched route, firing off
+  // any fetchData methods that are statically defined on the server.
+  const fetchData = matches.map(match => {
+    const { fetchData, ...rest } = match; // eslint-disable-line no-unused-vars
+
+    // return fetch data Promise, excluding unnecessary fetchData method
+    return match.fetchData({ store, ...rest });
+  });
 
   // Execute the render only after all promises have been resolved.
   Promise.all(fetchData).then(() => {
