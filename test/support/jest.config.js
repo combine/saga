@@ -28,6 +28,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     ...moduleAliasesMap,
+    [toRegex('$factories')]: '<rootDir>/test/factories/$1',
     [staticFiles]: '<rootDir>/__mocks__/fileMock.js',
     [cssFiles]: 'identity-obj-proxy'
   }
