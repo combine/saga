@@ -12,7 +12,7 @@ const opts = Object.assign({
     directory: path.join(__dirname, 'server/db/migrations')
   },
   seeds: {
-    directory: path.join(__dirname, 'server/db/seed')
+    directory: path.join(__dirname, 'server/db/seeds')
   }
 }, knexSnakeCaseMappers());
 
