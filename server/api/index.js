@@ -3,14 +3,12 @@ import bodyParser from 'body-parser';
 import products from './products';
 import todos from './todos';
 import users from './users';
+import { jsonHeaders } from '$middleware';
 
 const Api = express();
 
 // always send JSON headers
-Api.use((req, res, next) => {
-  res.contentType('application/json');
-  next();
-});
+Api.use(jsonHeaders);
 
 // parse JSON body
 Api.use(bodyParser.json());

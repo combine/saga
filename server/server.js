@@ -3,10 +3,11 @@ import express from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import Api from './api';
+import Auth from './auth';
 import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
 import { Model } from 'objection';
-import { httpsRedirect } from '$middleware';
+import { httpsRedirect, errorHandler } from '$middleware';
 import db from '$db/index';
 
 const env = process.env.NODE_ENV || 'development';
@@ -42,7 +43,10 @@ app.use(
 );
 
 // Mount the REST API
-app.use('/api', Api);
+app.use('/api', Api, errorHandler);
+
+// Auth service
+app.use('/auth', Auth, errorHandler);
 
 // Mount the react render handler
 

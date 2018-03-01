@@ -15,10 +15,6 @@ class SignupPage extends Component {
     const { auth } = this.props;
     const title = 'Sign Up';
 
-    if (auth.isLoggedIn) {
-      return <Redirect to="/" />;
-    }
-
     return (
       <div className={css.signupPage}>
         <Helmet>

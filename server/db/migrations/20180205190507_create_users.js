@@ -5,6 +5,7 @@ exports.up = function(knex) {
     table.string('first_name');
     table.string('last_name');
     table.enu('role', ['admin', 'user']);
+    table.string('username');
     table.string('email');
     table.string('password');
     table.string('reset_password_token');

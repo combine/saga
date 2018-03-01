@@ -43,7 +43,7 @@ class SignupForm extends Component {
             content={error}
           />
         )}
-        <Field component={Input} name="name" placeholder="Name" />
+        <Field component={Input} name="username" placeholder="Username" />
         <Field
           component={Input}
           type="email"
@@ -76,7 +76,7 @@ class SignupForm extends Component {
   render() {
     return (
       <Formik
-        initialValues={{ name: '', email: '', password: '' }}
+        initialValues={{ username: '', email: '', password: '' }}
         onSubmit={this.handleSubmit}
         validate={validate}
         render={this.renderForm}

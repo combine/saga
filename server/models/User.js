@@ -8,12 +8,13 @@ export default class User extends AuthModel {
   static tableName = 'users';
   static jsonSchema = {
     type: 'object',
-    required: ['firstName', 'lastName', 'password', 'email'],
+    required: ['username', 'email', 'password'],
 
     properties: {
       id: { type: 'integer' },
       firstName: { type: 'string', minLength: 1, maxLength: 255 },
       lastName: { type: 'string', minLength: 1, maxLength: 255 },
+      username: { type: 'string', minLength: 1, maxLength: 255 },
       email: { type: 'string', minLength: 3, maxLength: 255 },
       password: { type: 'string', minLength: 3, maxLength: 255 },
       resetPasswordToken: { type: 'string', minLength: 20, maxLength: 255 },

@@ -45,8 +45,14 @@ export default function callAPI({ dispatch, getState }) {
         }
 
         dispatch(action);
+
+        return Promise.resolve(response);
       },
-      error => dispatch({ ...payload, error, type: failureType })
+      error => {
+        dispatch({ ...payload, error, type: failureType });
+
+        return Promise.reject(error);
+      }
     );
   };
 }
