@@ -10,24 +10,44 @@ describe('User', function() {
     user = await createUser({
       firstName: 'Foo',
       lastName: 'Bar',
-      password: 'foobar'
+      username: 'foobar',
+      password: 'Foobar1',
+      email: 'foo@bar.com'
     });
   });
 
   describe('creation', function() {
     test('creates the user', function() {
-      expect(user.firstName).toEqual('Foo');
+      expect(user.username).toEqual('foobar');
+    });
+
+    describe('with a username that is in use', function() {
+      test('throws a validation error', function() {
+        expect(createUser({
+          username: 'foobar',
+          password: 'Foobar1'
+        })).rejects.toThrow('username already in use.');
+      });
+    });
+
+    describe('with an email that is in use', function() {
+      test('throws a validation error', function() {
+        expect(createUser({
+          username: 'bazbar',
+          email: 'foo@bar.com'
+        })).rejects.toThrow('email already in use.');
+      });
     });
   });
 
   describe('Authenticatable', function() {
     test('hashes the password', function() {
-      expect(user.password).not.toEqual('foobar');
+      expect(user.password).not.toEqual('Foobar1');
       expect(User.isBcryptHash(user.password)).toBe(true);
     });
 
     test('verifies password correctly', async function() {
-      const verified = await user.verifyPassword('foobar');
+      const verified = await user.verifyPassword('Foobar1');
       expect(verified).toBe(true);
     });
 
@@ -44,7 +64,7 @@ describe('User', function() {
         });
 
         it('does not update the password hash', async function() {
-          const verified = await user.verifyPassword('foobar');
+          const verified = await user.verifyPassword('Foobar1');
           expect(verified).toBe(true);
           expect(user.password).toEqual(originalHash);
         });

@@ -2,8 +2,12 @@ import Base from './Base';
 import { Authenticatable, Recoverable, Tokenable } from 'objection-auth';
 
 const AuthModel = Authenticatable(Recoverable(Tokenable(Base)));
+const unique = require('objection-unique')({
+  fields: ['email', 'username'],
+  identifiers: ['id']
+});
 
-export default class User extends AuthModel {
+export default class User extends unique(AuthModel) {
   static modelPaths = [__dirname];
   static tableName = 'users';
   static jsonSchema = {
