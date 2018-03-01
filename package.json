@@ -27,6 +27,7 @@
     "@routes": "common/js/routes",
     "@store": "common/js/store",
     "@templates": "server/templates",
+    "@factories": "test/factories",
     "@config": "config",
     "$api": "server/api",
     "$auth": "server/auth",
@@ -36,6 +37,7 @@
     "$models": "server/models"
   },
   "scripts": {
+    "knex": "better-npm-run knex",
     "db:test:prepare": "better-npm-run db:migrate",
     "db:migrate": "better-npm-run db:migrate",
     "db:rollback": "better-npm-run db:rollback",
@@ -58,9 +60,10 @@
     "heroku-postbuild": "better-npm-run prod:build"
   },
   "betterScripts": {
-    "db:migrate": "$(npm bin)/knex migrate:latest",
-    "db:rollback": "$(npm bin)/knex migrate:rollback",
-    "db:seed": "$(npm bin)/knex seed:run",
+    "knex": "babel-node $(npm bin)/knex",
+    "db:migrate": "npm run knex -- migrate:latest",
+    "db:rollback": "npm run knex -- migrate:rollback",
+    "db:seed": "npm run knex -- seed:run",
     "serve": {
       "command": "node ./dist/index.js",
       "env": {

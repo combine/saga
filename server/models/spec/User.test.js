@@ -1,6 +1,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import createUser from '$factories/user';
+import createUser from '@factories/user';
 import User from '../User';
 
 describe('User', function() {

@@ -1,12 +1,10 @@
-const { Model } = require('objection');
-const faker = require('faker');
-const db = require('../index');
+import { Model } from 'objection';
+import faker from 'faker';
+import db from '../index';
+import Product from '../../models/Product';
+import User from '../../models/User';
 
 Model.knex(db);
-
-const Product = require('../../models/Product').default;
-const User = require('../../models/User').default;
-
 
 exports.seed = async function(knex) {
   await knex('users').del();
@@ -17,6 +15,7 @@ exports.seed = async function(knex) {
     id: 1,
     firstName: 'Admin',
     lastName: 'User',
+    username: 'saga_admin',
     password: 'password',
     role: 'admin',
     email: 'admin@example.com'
@@ -47,6 +46,7 @@ exports.seed = async function(knex) {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
+      username: faker.internet.userName(),
       password: 'password'
     },
     {
@@ -54,6 +54,7 @@ exports.seed = async function(knex) {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
+      username: faker.internet.userName(),
       password: 'password'
     }
   ]);

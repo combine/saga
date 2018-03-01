@@ -1,5 +1,5 @@
 import expect from 'expect';
-import createProduct from '$factories/product';
+import createProduct from '@factories/product';
 
 describe('Product', function() {
   let product;

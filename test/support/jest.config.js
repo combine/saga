@@ -2,7 +2,7 @@ const { mapValues, mapKeys } = require('lodash');
 const { _moduleAliases } = require('../../package.json');
 const escapeStringRegexp = require('escape-string-regexp');
 
-const toRegex = (alias) => `^${escapeStringRegexp(alias)}/(.*)$`;
+const toRegex = (alias) => `^${escapeStringRegexp(alias)}/(.*)?$`;
 
 // Maps _moduleAliases in package.json to Jest's regex format that it can read
 const moduleAliasesMap = mapValues(
@@ -28,7 +28,6 @@ module.exports = {
   ],
   moduleNameMapper: {
     ...moduleAliasesMap,
-    [toRegex('$factories')]: '<rootDir>/test/factories/$1',
     [staticFiles]: '<rootDir>/__mocks__/fileMock.js',
     [cssFiles]: 'identity-obj-proxy'
   }
