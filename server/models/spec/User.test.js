@@ -11,7 +11,7 @@ describe('User', function() {
       firstName: 'Foo',
       lastName: 'Bar',
       username: 'foobar',
-      password: 'Foobar1',
+      password: 'Foobar12',
       email: 'foo@bar.com'
     });
   });
@@ -25,7 +25,7 @@ describe('User', function() {
       test('throws a validation error', function() {
         expect(createUser({
           username: 'foobar',
-          password: 'Foobar1'
+          password: 'Foobar12'
         })).rejects.toThrow('username already in use.');
       });
     });
@@ -34,20 +34,28 @@ describe('User', function() {
       test('throws a validation error', function() {
         expect(createUser({
           username: 'bazbar',
-          email: 'foo@bar.com'
+          email: 'foo@bar.com',
+          password: 'Foobar12'
         })).rejects.toThrow('email already in use.');
       });
+    });
+
+    describe('with invalid characters in a name', function() {
+      expect(createUser({
+        firstName: 'Fo$0bar',
+        password: 'Foobar12',
+      })).rejects.toThrow('must only contain alpha-numeric characters');
     });
   });
 
   describe('Authenticatable', function() {
     test('hashes the password', function() {
-      expect(user.password).not.toEqual('Foobar1');
+      expect(user.password).not.toEqual('Foobar12');
       expect(User.isBcryptHash(user.password)).toBe(true);
     });
 
     test('verifies password correctly', async function() {
-      const verified = await user.verifyPassword('Foobar1');
+      const verified = await user.verifyPassword('Foobar12');
       expect(verified).toBe(true);
     });
 
@@ -64,7 +72,7 @@ describe('User', function() {
         });
 
         it('does not update the password hash', async function() {
-          const verified = await user.verifyPassword('Foobar1');
+          const verified = await user.verifyPassword('Foobar12');
           expect(verified).toBe(true);
           expect(user.password).toEqual(originalHash);
         });
@@ -72,12 +80,12 @@ describe('User', function() {
 
       describe('and password has changed', function() {
         beforeAll(async function() {
-          await user.$query().patch({ password: 'newpass' });
+          await user.$query().patch({ password: 'Newpass12' });
         });
 
         it('updates the password hash', async function() {
-          const verified = await user.verifyPassword('newpass');
-          expect(user.password).not.toEqual('newpass');
+          const verified = await user.verifyPassword('Newpass12');
+          expect(user.password).not.toEqual('Newpass12');
           expect(user.password).not.toEqual(originalHash);
           expect(verified).toBe(true);
         });

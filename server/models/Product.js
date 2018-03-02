@@ -1,19 +1,16 @@
 import Base from './Base';
 import { Slugify } from 'objection-slugify';
+import Joi from 'joi';
 
 const SluggedModel = Slugify(Base, { sourceField: 'name', unique: true });
 
 export default class Product extends SluggedModel {
   static tableName = 'products';
-  static jsonSchema = {
-    type: 'object',
-    required: ['name'],
-
-    properties: {
-      id: { type: 'integer' },
-      name: { type: 'string', minLength: 1, maxLength: 255 },
-      slug: { type: 'string', minLength: 1, maxLength: 255 },
-      description: { type: ['string', 'null'] }
-    }
-  };
+  static schema = Joi.object().keys({
+    name: Joi.string(),
+    slug: Joi.string().optional(),
+    description: Joi.string().optional(),
+    updatedAt: Joi.date().optional(),
+    createdAt: Joi.date().optional()
+  });
 }

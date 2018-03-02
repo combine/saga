@@ -1,7 +1,11 @@
 import { Model } from 'objection';
-import { DbErrors } from 'objection-db-errors';
+import JoiValidator from './validators/JoiValidator';
 
-export default class Base extends DbErrors(Model) {
+export default class Base extends Model {
+  static createValidator() {
+    return new JoiValidator();
+  }
+
   $beforeInsert() {
     this.createdAt = new Date().toISOString();
   }
