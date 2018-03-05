@@ -111,7 +111,7 @@
       }
     },
     "test": {
-      "command": "$(npm bin)/jest -c ./test/support/jest.config.js",
+      "command": "$(npm bin)/jest -c ./test/support/jest.config.js --forceExit",
       "env": {
         "NODE_ENV": "test"
       }
