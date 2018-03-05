@@ -7,6 +7,7 @@ const SluggedModel = Slugify(Base, { sourceField: 'name', unique: true });
 export default class Product extends SluggedModel {
   static tableName = 'products';
   static schema = Joi.object().keys({
+    id: Joi.number().optional(),
     name: Joi.string(),
     slug: Joi.string().optional(),
     description: Joi.string().optional(),

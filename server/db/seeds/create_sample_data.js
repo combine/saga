@@ -12,11 +12,10 @@ exports.seed = async function(knex) {
   await knex('favorites').del();
 
   await User.query().insert({
-    id: 1,
     firstName: 'Admin',
     lastName: 'User',
     username: 'saga_admin',
-    password: 'password',
+    password: 'Password1',
     role: 'admin',
     email: 'admin@example.com'
   });
@@ -43,19 +42,19 @@ exports.seed = async function(knex) {
   await User.query().insert([
     {
       id: 2,
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: 'Moronius',
+      lastName: 'Bario',
       email: faker.internet.email(),
       username: faker.internet.userName(),
-      password: 'password'
+      password: 'Password1'
     },
     {
       id: 3,
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: 'Thaddeus',
+      lastName: 'Klein',
       email: faker.internet.email(),
       username: faker.internet.userName(),
-      password: 'password'
+      password: 'Password1'
     }
   ]);
 
