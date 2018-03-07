@@ -19,6 +19,8 @@ export default function errorHandler(err, req, res, _) {
         };
         break;
     }
+  } else {
+    console.error(err);
   }
 
   res.status(statusCode).json(json);
