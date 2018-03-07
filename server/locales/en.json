@@ -12,7 +12,11 @@
 				"string": {
 					"regex": {
 						"base": "Password must contain at least 8 characters, 1 uppercase, 1 lowercase, and 1 number."
-					}
+					},
+					"min": "Password must contain at least 8 characters."
+				},
+				"any": {
+					"required": "A password is required."
 				}
 			},
 			"email": {

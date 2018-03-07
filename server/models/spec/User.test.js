@@ -39,12 +39,26 @@ describe('User', function() {
         })).rejects.toThrow('email already in use.');
       });
     });
+  });
 
-    describe('with invalid characters in a name', function() {
-      expect(createUser({
-        firstName: 'Fo$0bar',
-        password: 'Foobar12',
-      })).rejects.toThrow('must only contain alpha-numeric characters');
+  describe('roles', function() {
+    test('has a default role of user', function() {
+      expect(user.role).toEqual('user');
+    });
+
+    test('.hasRole works propertly', function() {
+      expect(user.hasRole('user')).toEqual(true);
+    });
+
+    describe('when role is changed', function() {
+      beforeAll(async function() {
+        await user.$query().patch({ role: 'admin' });
+      });
+
+      test('correctly changes the role', function() {
+        expect(user.role).toEqual('admin');
+        expect(user.hasRole('admin')).toBe(true);
+      });
     });
   });
 
@@ -115,7 +129,7 @@ describe('User', function() {
 
       it('sets the expiration date to the specified time', async function() {
         await user.generateResetToken(7200);
-        const exp = new Date(currTime.getTime() + (7200 * 1000)).toISOString();
+        const exp = new Date(currTime.getTime() + (7200 * 1000));
 
         expect(user.resetPasswordExp).toEqual(exp);
       });

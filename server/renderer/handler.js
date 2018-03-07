@@ -26,6 +26,17 @@ if (config.enableDynamicImports) {
 export default function handleRender(req, res) {
   let context = {}, modules = [], initialState = {};
 
+  if (req.user) {
+    const user = req.user;
+
+    initialState.auth = {
+      isLoading: false,
+      isLoggedIn: true,
+      isAdmin: user.hasRole('admin'),
+      user: user.toJSON()
+    };
+  }
+
   // Create a new Redux store instance
   const store = configureStore(initialState);
 
