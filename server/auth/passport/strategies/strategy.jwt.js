@@ -14,7 +14,7 @@ const opts = {
 
 export default new Strategy(opts, async function(payload, done) {
   try {
-    const user = await User.query().where('id', payload.id);
+    const user = await User.query().where('id', payload.id).first();
 
     if (user) {
       return done(null, user);
