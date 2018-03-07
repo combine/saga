@@ -117,19 +117,18 @@ export const signup = asyncWrapper(async function signup(req, res) {
 
   const { username, email, password } = userData;
   const params = { username, email, password };
-  const user = await User.query().insert(params);
+  const user = await User.query().insertAndFetch(params);
 
   return passportLogin(req, res, user);
 });
 
 // Utility methods
 function passportLogin(req, res, user) {
-  return req.login(user, function(err) {
-    console.log(user);
+  return req.login(user, async function(err) {
     if (err) {
       throw new Error({ status: 422, error: err });
     } else {
-      const token = user.generateJWT(res);
+      const token = await user.generateJWT(res);
 
       return res.status(200).json({ ...user.toJSON(), token });
     }
