@@ -2,23 +2,31 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import * as controller from './auth.controller';
 import setupPassport from '$auth/passport';
-import { jsonHeaders } from '$middleware';
+import { errorHandler, jsonHeaders } from '$middleware';
 
-const router = setupPassport(express.Router());
+const auth = setupPassport(express.Router());
 
-router.use(jsonHeaders);
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
+// always send JSON headers
+auth.use(jsonHeaders);
+
+
+// parse JSON body
+auth.use(bodyParser.json());
+
+// auth.use(bodyParser.urlencoded({ extended: false }));
 
 // Authentication routes
-router.post('/login', controller.login);
-router.delete('/logout', controller.logout);
+auth.post('/login', controller.login);
+auth.delete('/logout', controller.logout);
 
 // Registration routes
-router.post('/signup', controller.signup);
+auth.post('/signup', controller.signup);
 
 // Password reset
-// router.post('/forgot-password', controller.forgotPassword);
-// router.put('/reset-password', controller.resetPassword);
+// auth.post('/forgot-password', controller.forgotPassword);
+// auth.put('/reset-password', controller.resetPassword);
 
-export default router;
+// Handle errors with middleware
+auth.use(errorHandler);
+
+export default auth;

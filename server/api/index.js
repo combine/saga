@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import products from './products';
 import todos from './todos';
 import users from './users';
-import { jsonHeaders } from '$middleware';
+import { errorHandler, jsonHeaders } from '$middleware';
 
 const Api = express();
 
@@ -17,5 +17,10 @@ Api.use(bodyParser.json());
 Api.use('/products', products);
 Api.use('/users', users);
 Api.use('/todos', todos);
+
+// Handle errors with middleware
+// NOTE: This must be at the end of the router in order for the errors to be
+// propertly routed via next().
+Api.use(errorHandler);
 
 export default Api;

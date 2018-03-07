@@ -7,7 +7,7 @@ import Auth from './auth';
 import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
 import { Model } from 'objection';
-import { httpsRedirect, errorHandler } from '$middleware';
+import { httpsRedirect } from '$middleware';
 import db from '$db/index';
 
 const env = process.env.NODE_ENV || 'development';
@@ -43,10 +43,10 @@ app.use(
 );
 
 // Mount the REST API
-app.use('/api', Api, errorHandler);
+app.use('/api', Api);
 
 // Auth service
-app.use('/auth', Auth, errorHandler);
+app.use('/auth', Auth);
 
 // Mount the react render handler
 
