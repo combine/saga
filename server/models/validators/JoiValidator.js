@@ -1,8 +1,15 @@
-import { Validator, ValidationError } from 'objection';
-// import { isEmpty } from 'lodash';
-// import Joi from 'joi';
+import { Validator } from 'objection';
 
 class JoiValidator extends Validator {
+  constructor(options) {
+    super();
+    this.errorParser = options.errorParser || this.defaultErrorParser;
+  }
+
+  defaultErrorParser(error) {
+    return error;
+  }
+
   validate(args) {
     const { model, json, options } = args;
     let { schema } = model.constructor;
@@ -18,13 +25,13 @@ class JoiValidator extends Validator {
       presence = 'optional';
     }
 
-    const result = schema.validate(json, { presence });
+    const result = schema.validate(json, { presence, abortEarly: false });
 
     if (result.error) {
-      throw new ValidationError({
+      throw model.constructor.createValidationError({
         type: 'ModelValidation',
         statusCode: 400,
-        data: result.error
+        data: this.errorParser(result.error)
       });
     }
 
