@@ -34,9 +34,9 @@ describe('POST /api/signup', function() {
         .send(data)
         .expect(200)
         .then(async ({ body }) => {
-          const user = await User.query().where('id', body.id);
+          const user = await User.query().where('id', body.id).first();
 
-          expect(body).toEqual(expect.objectContaining(user[0].toJSON()));
+          expect(body).toEqual(expect.objectContaining(user.toJSON()));
           expect(body.token).not.toEqual(null);
         });
     });
