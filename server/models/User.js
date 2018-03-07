@@ -13,13 +13,24 @@ export default class User extends unique(AuthModel) {
   static tableName = 'users';
   static schema = Joi.object().keys({
     id: Joi.number().optional(),
-    firstName: Joi.string().alphanum().min(2).optional(),
-    lastName: Joi.string().alphanum().min(2).optional(),
-    username: Joi.string().regex(/[A-Za-z0-9_]/).min(3).max(30),
-    password: Joi.string()
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/),
+    firstName: Joi.string()
+      .alphanum()
+      .min(2)
+      .optional(),
+    lastName: Joi.string()
+      .alphanum()
+      .min(2)
+      .optional(),
+    username: Joi.string()
+      .regex(/^[a-zA-Z0-9]+([_]?[a-zA-Z0-9])*$/)
+      .min(3)
+      .max(30),
+    password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/),
     email: Joi.string().email(),
-    role: Joi.string().valid('admin', 'user').default('user').optional(),
+    role: Joi.string()
+      .valid('admin', 'user')
+      .default('user')
+      .optional(),
     resetPasswordExp: Joi.date().optional(),
     resetPasswordToken: Joi.string().optional()
   });
