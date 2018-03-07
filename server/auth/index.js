@@ -9,11 +9,11 @@ const auth = setupPassport(express.Router());
 // always send JSON headers
 auth.use(jsonHeaders);
 
-
 // parse JSON body
 auth.use(bodyParser.json());
 
-// auth.use(bodyParser.urlencoded({ extended: false }));
+// URL encoded
+auth.use(bodyParser.urlencoded({ extended: false }));
 
 // Authentication routes
 auth.post('/login', controller.login);

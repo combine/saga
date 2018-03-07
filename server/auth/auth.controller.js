@@ -1,6 +1,6 @@
-import { User } from '$models';
 import passport from 'passport';
 import { asyncWrapper } from '$middleware';
+import User, { JWT_EXPIRATION } from '$models/User';
 
 // export const forgotPassword = async (req, res) => {
 //   const { email } = req.body;
@@ -128,7 +128,16 @@ function passportLogin(req, res, user) {
     if (err) {
       throw new Error({ status: 422, error: err });
     } else {
-      const token = await user.generateJWT(res);
+      const currTime = new Date();
+      const exp = new Date(currTime.getTime() + (JWT_EXPIRATION * 1000));
+      const token = await user.generateJWT();
+      const cookie = {
+        secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,
+        maxAge: exp.getTime()
+      };
+
+      // set cookie
+      res.cookie('jwt', token, cookie);
 
       return res.status(200).json({ ...user.toJSON(), token });
     }
