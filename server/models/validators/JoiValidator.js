@@ -36,7 +36,7 @@ class JoiValidator extends Validator {
     }
 
     // You need to return the (possibly modified) json.
-    return json;
+    return result.value;
   }
 
   // Override Validator.beforeValidate until
