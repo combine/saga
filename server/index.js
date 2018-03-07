@@ -1,4 +1,5 @@
 import './registerAliases';
+import './init';
 import fs from 'fs';
 import path from 'path';
 import config from '@config';

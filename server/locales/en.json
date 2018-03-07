@@ -1,0 +1,25 @@
+{
+	"models": {
+		"User": {
+			"username": {
+				"string": {
+					"regex": {
+						"base": "Username can only contain alphanumeric characters and underscores."
+					}
+				}
+			},
+			"password": {
+				"string": {
+					"regex": {
+						"base": "Password must contain at least 8 characters, 1 uppercase, 1 lowercase, and 1 number."
+					}
+				}
+			},
+			"email": {
+				"string": {
+					"email": "Email must be a valid email."
+				}
+			}
+		}
+	}
+}
