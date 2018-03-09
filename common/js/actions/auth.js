@@ -1,7 +1,32 @@
 import api from '@lib/api';
-import { SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE } from '@constants';
+import {
+  SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
+  LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
+  LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE
+} from '@constants';
 
-export const login = () => {};
+/**
+ * logout()
+ * Logs the user out.
+ */
+export const login = (data) => {
+  return {
+    types: [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE],
+    callAPI: () => api.post('/auth/login', JSON.stringify(data)),
+    transform: response => ({ user: response })
+  };
+};
+
+/**
+ * logout()
+ * Logs the user out.
+ */
+export const logout = () => {
+  return {
+    types: [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE],
+    callAPI: () => api.delete('/auth/logout')
+  };
+};
 
 /**
  * signup()

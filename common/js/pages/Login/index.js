@@ -16,7 +16,7 @@ class LoginPage extends Component {
     const title = 'Log In';
 
     if (auth.isLoggedIn) {
-      return <Redirect to="/ideas" />;
+      return <Redirect to="/" />;
     }
 
     return (

@@ -1,6 +1,7 @@
 import {
+  SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
-  SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE
+  LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE
 } from '@constants';
 
 const defaultState = {
@@ -14,6 +15,7 @@ const auth = (state = defaultState, action) => {
   switch (action.type) {
     case SIGNUP_REQUEST:
     case LOGIN_REQUEST:
+    case LOGOUT_REQUEST:
       return { ...state, isLoading: true };
 
     case SIGNUP_SUCCESS:
@@ -23,6 +25,17 @@ const auth = (state = defaultState, action) => {
         isLoading: false,
         isLoggedIn: true,
         user: state.user ? { ...state.user, ...action.user } : action.user
+      };
+
+    case LOGOUT_SUCCESS:
+      return {
+        ...defaultState
+      };
+
+    case LOGOUT_FAILURE:
+      return {
+        ...state,
+        isLoading: false
       };
 
     case SIGNUP_FAILURE:

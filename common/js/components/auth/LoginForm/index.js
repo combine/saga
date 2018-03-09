@@ -22,7 +22,7 @@ class LoginForm extends Component {
 
     return dispatch(login(values))
       .then(() => {
-        dispatch(push('/ideas'));
+        dispatch(push('/'));
         actions.setSubmitting(false);
       })
       .catch(err => {
@@ -46,9 +46,9 @@ class LoginForm extends Component {
         )}
         <Field
           component={Input}
-          type="email"
-          name="email"
-          placeholder="Email"
+          type="username"
+          name="username"
+          placeholder="Username"
         />
         <Field
           component={Input}
@@ -77,7 +77,7 @@ class LoginForm extends Component {
   render() {
     return (
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ username: '', password: '' }}
         onSubmit={this.handleSubmit}
         validate={validate}
         render={this.renderForm}
