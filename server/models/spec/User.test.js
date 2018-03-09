@@ -26,9 +26,17 @@ describe('User', function() {
       expect(user.username).toEqual('foobar12');
     });
 
+    describe('with missing required fields', function() {
+      test('throws a validation error', async function() {
+        await expect(createUser({
+          username: undefined
+        })).rejects.toThrow('Username is required');
+      });
+    });
+
     describe('with a username that is in use', function() {
-      test('throws a validation error', function() {
-        expect(createUser({
+      test('throws a validation error', async function() {
+        await expect(createUser({
           username: 'foobar12',
           password: 'Foobar12'
         })).rejects.toThrow('username already in use.');
@@ -36,8 +44,8 @@ describe('User', function() {
     });
 
     describe('with an email that is in use', function() {
-      test('throws a validation error', function() {
-        expect(createUser({
+      test('throws a validation error', async function() {
+        await expect(createUser({
           username: 'bazbar',
           email: 'foo1@bar.com',
           password: 'Foobar12'
@@ -57,7 +65,7 @@ describe('User', function() {
 
     describe('when role is changed', function() {
       beforeAll(async function() {
-        await user.$query().patch({ role: 'admin' });
+        await user.$query().patch({ role: 'admin' }).returning();
       });
 
       test('correctly changes the role', function() {

@@ -25,6 +25,7 @@
     "@pages": "common/js/pages",
     "@reducers": "common/js/reducers",
     "@routes": "common/js/routes",
+    "@schemas": "common/js/schemas",
     "@store": "common/js/store",
     "@templates": "server/templates",
     "@factories": "test/factories",
@@ -249,6 +250,6 @@
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^0.77.2",
     "serve-static": "^1.13.1",
-    "sqlite3": "^3.1.13"
+    "yup": "^0.24.1"
   }
 }

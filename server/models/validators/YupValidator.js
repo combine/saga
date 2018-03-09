@@ -1,23 +1,18 @@
 import { Validator } from 'objection';
 import { keyBy, mapValues } from 'lodash';
 
-class JoiValidator extends Validator {
+class YupValidator extends Validator {
   constructor(options = {}) {
     super();
     this.errorParser = options.errorParser || this.defaultErrorParser;
   }
 
   defaultErrorParser(error) {
-    // map errors from Joi result object by key and type
-    const errors = error.details.map(err => ({
-      key: err.context.key,
-      message: err.message,
-      type: err.type
+    const errors = error.inner.map(err => ({
+      key: err.path,
+      message: err.message
     }));
 
-    // key the object by the validation property and use i18n
-    // to return the associated error message based on the key and
-    // the joi type string, e.g. 'string.regex.base'
     return mapValues(keyBy(errors, 'key'), (o) => ({
       message: o.message
     }));
@@ -25,28 +20,36 @@ class JoiValidator extends Validator {
 
   validate(args) {
     const { model, json, options } = args;
-    const { schema } = model.constructor;
+    const { yupSchema } = model.constructor;
+    let result;
 
-    // when patching, make presence optional since we don't need to validate
-    // all the other fields (that are not included in `json`).
-    const presence = options.patch ? 'optional' : 'required';
-
-    if (!schema) {
-      throw new Error('A `schema` must be included in the model.');
+    if (!yupSchema) {
+      throw new Error('A `yupSchema` must be included in the model.');
     }
 
-    const result = schema.validate(json, { presence, abortEarly: false });
-
-    if (result.error) {
+    try {
+      // use synchronous validation since objection.js doesn't support
+      // async validation (unless we implement it on our own).
+      result = yupSchema.validateSync(json, {
+        abortEarly: false,
+        stripUnknown: true,
+        context: {
+          // if this is an update, we make fields optional since updates
+          // do not have all the fields in the json to validate.
+          patch: !!options.patch
+        }
+      });
+    } catch (err) {
+      // Catch the error throw by `yup`, and create our own validation error.
       throw model.constructor.createValidationError({
         type: 'ModelValidation',
         statusCode: 400,
-        data: this.errorParser(result.error)
+        data: this.errorParser(err)
       });
     }
 
     // Return the modified/validated data (possibly with default values added)
-    return result.value;
+    return result;
   }
 
   // Override Validator.beforeValidate until
@@ -62,4 +65,4 @@ class JoiValidator extends Validator {
   }
 }
 
-module.exports = JoiValidator;
+module.exports = YupValidator;

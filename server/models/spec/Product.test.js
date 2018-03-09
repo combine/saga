@@ -19,6 +19,12 @@ describe('Product', function() {
     test('creates the product', function() {
       expect(product.name).toEqual('Oath Breaker');
     });
+
+    describe('with missing required fields', async function() {
+      await expect(createProduct({
+        name: undefined
+      })).rejects.toThrow('A product name is required.');
+    });
   });
 
   describe('Slugify', function() {

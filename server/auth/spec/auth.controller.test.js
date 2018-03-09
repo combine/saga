@@ -102,13 +102,13 @@ describe('POST /api/signup', function() {
           expect(body.errors).toEqual(
             expect.objectContaining({
               username: {
-                message: expect.stringMatching(/can only contain/)
+                message: expect.stringMatching(/can only contain letters/)
               },
               email: {
-                message: expect.stringMatching(/valid email/)
+                message: expect.stringMatching(/Invalid email/)
               },
               password: {
-                message: expect.stringMatching(/must contain at least/)
+                message: expect.stringMatching(/must be at least/)
               }
             })
           );
