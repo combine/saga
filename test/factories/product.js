@@ -10,6 +10,6 @@ export const productParams = (params = {}) => ({
   ...params
 });
 
-export default async (params = {}) => {
-  return await Product.query().insert(productParams(params));
+export default (params = {}) => {
+  return Product.query().insert(productParams(params));
 };

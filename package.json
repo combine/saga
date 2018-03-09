@@ -53,6 +53,7 @@
     "prod:build:client": "better-npm-run prod:build:client",
     "prod:build:ssr": "better-npm-run prod:build:ssr",
     "prod:build:server": "better-npm-run prod:build:server",
+    "pretest": "better-npm-run pretest",
     "test": "better-npm-run test",
     "test:all": "better-npm-run test:all",
     "test:watch": "better-npm-run test:watch",
@@ -110,8 +111,14 @@
         "NODE_ENV": "production"
       }
     },
+    "pretest": {
+      "command": "node ./test/support/init.js",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
     "test": {
-      "command": "$(npm bin)/jest -c ./test/support/jest.config.js --forceExit",
+      "command": "$(npm bin)/jest -c ./test/support/jest.config.js --forceExit --verbose --runInBand",
       "env": {
         "NODE_ENV": "test"
       }
@@ -134,6 +141,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.1",
     "babel-loader": "^7.1.4",
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-lodash": "^3.3.2",
@@ -216,16 +224,18 @@
     "include-media": "^1.4.9",
     "joi": "^13.1.2",
     "knex": "^0.14.2",
+    "knex-db-manager": "^0.4.0",
     "lodash": "^4.17.4",
     "module-alias": "^2.0.6",
     "objection": "^1.0.0",
-    "objection-auth": "^1.0.1",
+    "objection-auth": "^1.0.2",
     "objection-slugify": "^1.0.1",
     "objection-unique": "^1.0.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
     "pg": "^7.4.1",
+    "pg-escape": "^0.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",

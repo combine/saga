@@ -1,6 +1,3 @@
-const clean = require('./clean');
+const { setup } = require('./db');
 
-module.exports = async () => {
-  // Add stubs, etc. here.
-  await clean();
-};
+module.exports = setup;

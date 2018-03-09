@@ -1,20 +1,20 @@
 import LocalStrategy from 'passport-local';
 import { User } from '$models';
 
-const callback = async function(email, password, done) {
+const callback = async function(username, password, done) {
   try {
-    const user = await User.query.where('email', email);
+    const user = await User.query().where('username', username).first();
 
     if (!user) {
       return done(null, null, {
-        user: { email: 'Invalid username or email.' }
+        username: global.__('errors.auth.username')
       });
     }
 
-    const validPassword = await user.validatePassword(password);
+    const validPassword = await user.verifyPassword(password);
 
     if (!validPassword) {
-      return done(null, null, { user: { password: 'Incorrect password.' } });
+      return done(null, null, { password: global.__('errors.auth.password') });
     }
 
     // success!
@@ -24,4 +24,4 @@ const callback = async function(email, password, done) {
   }
 };
 
-export default new LocalStrategy({ usernameField: 'email' }, callback);
+export default new LocalStrategy({ usernameField: 'username' }, callback);

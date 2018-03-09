@@ -10,6 +10,6 @@ export const userParams = (params = {}) => ({
   ...params
 });
 
-export default async (params = {}) => {
-  return await User.query().insert(userParams(params));
+export default (params = {}) => {
+  return User.query().insert(userParams(params));
 };

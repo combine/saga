@@ -1,7 +1,12 @@
 import expect from 'expect';
 import sinon from 'sinon';
 import createUser from '@factories/user';
-import User from '../User';
+import { User } from '$models';
+import { db } from '@support/db';
+
+beforeAll(async function() {
+  await db.truncateDb();
+});
 
 describe('User', function() {
   let user;
@@ -10,21 +15,21 @@ describe('User', function() {
     user = await createUser({
       firstName: 'Foo',
       lastName: 'Bar',
-      username: 'foobar',
+      username: 'foobar12',
       password: 'Foobar12',
-      email: 'foo@bar.com'
+      email: 'foo1@bar.com'
     });
   });
 
   describe('creation', function() {
     test('creates the user', function() {
-      expect(user.username).toEqual('foobar');
+      expect(user.username).toEqual('foobar12');
     });
 
     describe('with a username that is in use', function() {
       test('throws a validation error', function() {
         expect(createUser({
-          username: 'foobar',
+          username: 'foobar12',
           password: 'Foobar12'
         })).rejects.toThrow('username already in use.');
       });
@@ -34,7 +39,7 @@ describe('User', function() {
       test('throws a validation error', function() {
         expect(createUser({
           username: 'bazbar',
-          email: 'foo@bar.com',
+          email: 'foo1@bar.com',
           password: 'Foobar12'
         })).rejects.toThrow('email already in use.');
       });

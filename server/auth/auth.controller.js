@@ -1,87 +1,15 @@
 import passport from 'passport';
 import { asyncWrapper } from '$middleware';
 import User, { JWT_EXPIRATION } from '$models/User';
-
-// export const forgotPassword = async (req, res) => {
-//   const { email } = req.body;
-//
-//   if (!email) return errorHandler.message(res, 'Email must be provided.', 422);
-//
-//   let err,
-//     user = await User.findOne({ where: { email } });
-//
-//   if (!user)
-//     return errorHandler.error(res, {
-//       email: 'No user with that email was found.'
-//     });
-//
-//   [err, user] = await to(user.generatePasswordResetToken());
-//   if (err)
-//     return errorHandler.error(res, {
-//       email: 'Unable to reset password. Please contact support.'
-//     });
-//
-//   // send email
-//   new UserMailer().forgotPassword(user).send();
-//
-//   // All good!
-//   return res.status(200).send({ success: true });
-// };
-
-// export const resetPassword = async (req, res) => {
-//   const { token, password } = req.body;
-//   let err, user;
-//
-//   // find user via token
-//   const where = {
-//     resetPasswordToken: token,
-//     resetPasswordExp: {
-//       [Op.gte]: Date.now()
-//     }
-//   };
-//   [err, user] = await to(User.findOne({ where }));
-//
-//   if (!user)
-//     return errorHandler.error(
-//       res,
-//       {
-//         error: 'Could not reset your password. Your token may have expired.'
-//       },
-//       401
-//     );
-//
-//   // token accepted, change the password
-//   [err, user] = await to(user.update({ password }, { include: ['company'] }));
-//   if (err) return errorHandler.resource(res, 'user', err);
-//
-//   return passportLogin(req, res, user);
-// };
+import { ApiError } from '$lib/errors';
 
 /** login()
  * Uses passport local authentication to authentiate a user
  */
 export function login(req, res, next) {
-  const { body: { email, password } } = req;
+  const opts = { session: false };
 
-  if (!email) {
-    throw new Error({
-      status: 422,
-      error: { user: { password: 'Missing email.' } }
-    });
-  }
-
-  if (!password) {
-    throw new Error({
-      status: 422,
-      error: { user: { password: 'Missing password.' } }
-    });
-  }
-
-  return passport.authenticate('local', { session: false }, function(
-    err,
-    user,
-    info
-  ) {
+  return passport.authenticate('local', opts, function(err, user, info) {
     if (err) {
       return next(err);
     }
@@ -89,7 +17,7 @@ export function login(req, res, next) {
     if (user) {
       return passportLogin(req, res, user);
     } else {
-      throw new Error({ status: 422, error: info });
+      throw new ApiError({ type: 'Unauthorized', data: info });
     }
   })(req, res, next);
 }
@@ -106,16 +34,7 @@ export function logout(req, res) {
  * @param {Object} user: the user form data such as email, password, etc.
  */
 export const signup = asyncWrapper(async function signup(req, res) {
-  const userData = req.body;
-
-  if (!userData) {
-    throw new Error({
-      status: 400,
-      message: 'Unable to register, missing fields.'
-    });
-  }
-
-  const { username, email, password } = userData;
+  const { username, email, password } = req.body;
   const params = { username, email, password };
   const user = await User.query().insertAndFetch(params);
 
@@ -126,10 +45,10 @@ export const signup = asyncWrapper(async function signup(req, res) {
 function passportLogin(req, res, user) {
   return req.login(user, async function(err) {
     if (err) {
-      throw new Error({ status: 422, error: err });
+      throw new ApiError({ type: 'Unprocessable', data: err });
     } else {
       const currTime = new Date();
-      const exp = new Date(currTime.getTime() + (JWT_EXPIRATION * 1000));
+      const exp = new Date(currTime.getTime() + JWT_EXPIRATION * 1000);
       const token = await user.generateJWT();
       const cookie = {
         secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,

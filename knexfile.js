@@ -31,13 +31,14 @@ const pg = Object.assign({
 }, opts);
 
 module.exports = {
-  test: Object.assign({
-    client: 'sqlite3',
-    useNullAsDefault: true,
+  test: Object.assign(pg, {
     connection: {
-      filename: path.join(__dirname, 'test/db.sqlite3')
+      host: process.env.TEST_DB_HOST || 'localhost',
+      user: process.env.TEST_DB_USER || process.env.USER || 'postgres',
+      password: process.env.TEST_DB_PASS || null,
+      database: process.env.TEST_DB_NAME || 'saga_test'
     }
-  }, opts),
+  }),
   development: pg,
   production: pg
 };

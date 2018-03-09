@@ -1,12 +1,12 @@
 import request from 'supertest';
 import express from 'express';
 import { createProduct } from '@factories';
-import clean from '@support/clean';
+import { db } from '@support/db';
 
 let server, agent;
 
 beforeAll(async () => {
-  await clean();
+  await db.truncateDb();
 
   const app = express();
 

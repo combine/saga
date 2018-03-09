@@ -12,17 +12,14 @@ class JoiValidator extends Validator {
 
   validate(args) {
     const { model, json, options } = args;
-    let { schema } = model.constructor;
-    let presence = 'required';
-
-    if (!schema) {
-      throw new Error('A `schema` must be included in the model.');
-    }
+    const { schema } = model.constructor;
 
     // when patching, make presence optional since we don't need to validate
     // all the other fields (that are not included in `json`).
-    if (options.patch) {
-      presence = 'optional';
+    const presence = options.patch ? 'optional' : 'required';
+
+    if (!schema) {
+      throw new Error('A `schema` must be included in the model.');
     }
 
     const result = schema.validate(json, { presence, abortEarly: false });
@@ -35,7 +32,7 @@ class JoiValidator extends Validator {
       });
     }
 
-    // You need to return the (possibly modified) json.
+    // Return the modified/validated data (possibly with default values added)
     return result.value;
   }
 

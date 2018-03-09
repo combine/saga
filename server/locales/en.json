@@ -25,5 +25,11 @@
 				}
 			}
 		}
+	},
+	"errors": {
+		"auth": {
+			"username": "Username or email not found.",
+			"password": "Invalid password."
+		}
 	}
 }
