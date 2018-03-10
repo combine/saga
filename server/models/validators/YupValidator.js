@@ -1,5 +1,4 @@
 import { Validator } from 'objection';
-import { keyBy, mapValues } from 'lodash';
 
 class YupValidator extends Validator {
   constructor(options = {}) {
@@ -8,14 +7,17 @@ class YupValidator extends Validator {
   }
 
   defaultErrorParser(error) {
-    const errors = error.inner.map(err => ({
-      key: err.path,
-      message: err.message
-    }));
+    let errors = {};
 
-    return mapValues(keyBy(errors, 'key'), (o) => ({
-      message: o.message
-    }));
+    error.inner.forEach(err => {
+      if (!errors.hasOwnProperty(err.path)) {
+        errors[err.path] = [{ message: err.message }];
+      } else {
+        errors[err.path].push({ message: err.message });
+      }
+    });
+
+    return errors;
   }
 
   validate(args) {

@@ -49,7 +49,9 @@ describe('POST /api/login', function() {
           expect(body).toEqual(
             expect.objectContaining({
               errors: {
-                password: expect.stringMatching(/Invalid password/)
+                password: expect.arrayContaining([
+                  { message: expect.stringMatching(/Invalid password/) }
+                ])
               }
             })
           );
@@ -89,7 +91,7 @@ describe('POST /api/signup', function() {
   describe('with invalid signup data', function() {
     test('returns an error', function() {
       const data = {
-        username: 'inval!d_username',
+        username: '!a',
         password: 'invalid',
         email: 'notavalidemail'
       };
@@ -101,15 +103,16 @@ describe('POST /api/signup', function() {
         .then(async ({ body }) => {
           expect(body.errors).toEqual(
             expect.objectContaining({
-              username: {
-                message: expect.stringMatching(/can only contain letters/)
-              },
-              email: {
+              username: expect.arrayContaining([
+                { message: expect.stringMatching(/can only contain letters/) },
+                { message: expect.stringMatching(/must be at least/)}
+              ]),
+              email: expect.arrayContaining([{
                 message: expect.stringMatching(/Invalid email/)
-              },
-              password: {
+              }]),
+              password: expect.arrayContaining([{
                 message: expect.stringMatching(/must be at least/)
-              }
+              }])
             })
           );
         });
