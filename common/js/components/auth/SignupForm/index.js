@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
-import { Form, Message } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@components/form';
 import { signup } from '@actions/auth';
-import validate from './validate';
+import transformErrors from '@lib/transformErrors';
+import userSchema from '@schemas/user';
 import css from './index.scss';
 
 class SignupForm extends Component {
@@ -14,8 +15,6 @@ class SignupForm extends Component {
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
   };
-
-  state = { error: null };
 
   handleSubmit = (values, actions) => {
     const { dispatch } = this.props;
@@ -26,23 +25,14 @@ class SignupForm extends Component {
         actions.setSubmitting(false);
       })
       .catch(err => {
-        this.setState({ error: err.reason });
+        actions.setErrors(transformErrors(err));
         actions.setSubmitting(false);
       });
   };
 
   renderForm = ({ handleSubmit, isSubmitting, isValid }) => {
-    const { error } = this.state;
-
     return (
-      <Form className={css.signupForm} onSubmit={handleSubmit} error={!!error}>
-        {error && (
-          <Message
-            error
-            header="Submission Error"
-            content={error}
-          />
-        )}
+      <Form className={css.signupForm} onSubmit={handleSubmit}>
         <Field component={Input} name="username" placeholder="Username" />
         <Field
           component={Input}
@@ -78,7 +68,7 @@ class SignupForm extends Component {
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={this.handleSubmit}
-        validate={validate}
+        validationSchema={userSchema}
         render={this.renderForm}
       />
     );

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
-import { Form, Message } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@components/form';
 import { login } from '@actions/auth';
-import validate from './validate';
+import transformErrors from '@lib/transformErrors';
+import schema from './schema';
 import css from './index.scss';
 
 class LoginForm extends Component {
@@ -14,8 +15,6 @@ class LoginForm extends Component {
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
   };
-
-  state = { error: null };
 
   handleSubmit = (values, actions) => {
     const { dispatch } = this.props;
@@ -26,27 +25,17 @@ class LoginForm extends Component {
         actions.setSubmitting(false);
       })
       .catch(err => {
-        this.setState({ error: err.reason });
+        actions.setErrors(transformErrors(err));
         actions.setSubmitting(false);
       });
 
   };
 
   renderForm = ({ handleSubmit, isSubmitting, isValid }) => {
-    const { error } = this.state;
-
     return (
-      <Form className={css.loginForm} onSubmit={handleSubmit} error={!!error}>
-        {error && (
-          <Message
-            error
-            header="Submission Error"
-            content={error}
-          />
-        )}
+      <Form className={css.loginForm} onSubmit={handleSubmit} error={true}>
         <Field
           component={Input}
-          type="username"
           name="username"
           placeholder="Username"
         />
@@ -79,7 +68,7 @@ class LoginForm extends Component {
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={this.handleSubmit}
-        validate={validate}
+        validationSchema={schema}
         render={this.renderForm}
       />
     );
