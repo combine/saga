@@ -31,7 +31,7 @@ const pg = Object.assign({
 }, opts);
 
 module.exports = {
-  test: Object.assign(pg, {
+  test: Object.assign({}, pg, {
     connection: {
       host: process.env.TEST_DB_HOST || 'localhost',
       user: process.env.TEST_DB_USER || process.env.USER || 'postgres',
