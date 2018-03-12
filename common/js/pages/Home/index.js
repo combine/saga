@@ -18,7 +18,7 @@ class HomePage extends Component {
           server as well.
         </p>
         <p>
-          Check out the <Link to="/todos">todos list</Link>.
+          Check out the <Link to="/products">products list</Link>.
         </p>
       </div>
     );
