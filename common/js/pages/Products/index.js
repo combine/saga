@@ -1,47 +1,43 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loadProducts } from '@actions/products';
-import { Loader } from 'semantic-ui-react';
+import { Helmet } from 'react-helmet';
+import { searchProducts } from '@actions/search';
+import { ProductSearch, ProductList } from '@components/products';
 
 class ProductsPage extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     products: PropTypes.object.isRequired
-  }
+  };
 
   componentDidMount() {
     const { dispatch, products } = this.props;
 
     if (!products.isLoaded) {
-      return dispatch(loadProducts());
+      return dispatch(searchProducts({ query: ' ' }));
     }
   }
 
   render() {
-    const { products } = this.props;
+    const { products, dispatch } = this.props;
+    const title = 'Products';
 
     return (
       <div>
-        <h1>Products</h1>
-        <Loader active={products.isLoading} />
-        <div>
-          {products.products.map(product => {
-            return (
-              <div key={product.id}>
-                <h2>{product.name}</h2>
-                <p>{product.description}</p>
-              </div>
-            );
-          })}
-        </div>
+        <Helmet>
+          <title>{title}</title>
+        </Helmet>
+        <h1>{title}</h1>
+        <ProductSearch dispatch={dispatch} products={products} />
+        <ProductList products={products} />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  products: state.products
+const mapStateToProps = state => ({
+  products: state.search.products
 });
 
 export default connect(mapStateToProps)(ProductsPage);

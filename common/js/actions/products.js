@@ -13,6 +13,6 @@ export const loadProducts = (query = {}) => {
       LOAD_PRODUCTS_FAILURE
     ],
     callAPI: () => api.get('/api/products', { query }),
-    transform: (response) => ({ products: response })
+    transform: response => ({ products: response })
   };
 };

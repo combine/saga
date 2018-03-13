@@ -13,7 +13,9 @@ module.exports = {
   // **WARNING**: Be careful not to expose any secrets here!
   clientEnvVars: [
     'NODE_ENV',
-    'APPLICATION_BASE_URL'
+    'APPLICATION_BASE_URL',
+    'ALGOLIA_APP_ID',
+    'ALGOLIA_SEARCH_KEY'
   ],
 
   /* The identifier to use for css-modules.

@@ -208,6 +208,8 @@
     "yn": "^2.0.0"
   },
   "dependencies": {
+    "algoliasearch": "^3.25.1",
+    "algoliasearch-helper": "^2.24.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "chokidar": "^2.0.2",
