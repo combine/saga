@@ -7,6 +7,7 @@ import {
 const defaultState = {
   products: [],
   meta: {},
+  query: '',
   isLoading: false,
   isLoaded: false,
   error: null

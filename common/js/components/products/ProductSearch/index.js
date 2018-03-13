@@ -17,11 +17,11 @@ class ProductSearch extends Component {
 
   state = { query: '' };
 
-  handleSearch = (params) => {
+  handleSearch = params => {
     const { dispatch } = this.props;
 
     return dispatch(searchProducts(params));
-  }
+  };
 
   debouncedSearch = debounce(this.handleSearch, DEBOUNCE_TIMER);
 
@@ -34,8 +34,9 @@ class ProductSearch extends Component {
   };
 
   render() {
+    const { className, products: { meta, isLoading } } = this.props;
     const { query } = this.state;
-    const { className, products: { isLoading } } = this.props;
+    const initialQuery = (meta.query && meta.query.trim()) || '';
 
     return (
       <div className={classnames(css.productSearch, className)}>
@@ -49,7 +50,7 @@ class ProductSearch extends Component {
             placeholder="Search..."
             onChange={this.handleSearchChange}
             action={{ icon: 'search', loading: isLoading }}
-            query={query}
+            value={query || initialQuery}
           />
         </Form>
       </div>
