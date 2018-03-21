@@ -1,11 +1,14 @@
 import Base from './Base';
-import { Slugify } from 'objection-slugify';
+import slugify from 'objection-slugify';
 import yup from 'yup';
 import productSchema from '@schemas/product';
 
-const SluggedModel = Slugify(Base, { sourceField: 'name', unique: true });
+const slugged = slugify({
+  sourceField: 'name',
+  unique: true
+});
 
-export default class Product extends SluggedModel {
+export default class Product extends slugged(Base) {
   static tableName = 'products';
   static yupSchema = productSchema.concat(yup.object().shape({
     id: yup.number().integer(),

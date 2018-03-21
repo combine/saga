@@ -232,7 +232,7 @@
     "module-alias": "^2.0.6",
     "objection": "^1.0.0",
     "objection-auth": "^1.0.2",
-    "objection-slugify": "^1.0.1",
+    "objection-slugify": "^2.0.0",
     "objection-unique": "^1.0.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
