@@ -3,7 +3,12 @@ import {
   SEARCH_PRODUCTS_SUCCESS,
   SEARCH_PRODUCTS_FAILURE,
 } from '@constants';
-import { performSearch } from '@lib/algolia';
+import { getEnv } from '@lib/env';
+import AlgoliaSearch from '@lib/AlgoliaSearch';
+
+const env = getEnv();
+const offline = ['test'].includes(env);
+const search = new AlgoliaSearch({ offline }).search;
 
 export const searchProducts = (params) => {
   return {
@@ -13,6 +18,6 @@ export const searchProducts = (params) => {
       SEARCH_PRODUCTS_SUCCESS,
       SEARCH_PRODUCTS_FAILURE
     ],
-    callAPI: () => performSearch('products', params)
+    callAPI: () => search('products', params)
   };
 };
