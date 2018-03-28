@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
 import { logout } from '@actions/auth';
 
@@ -56,4 +56,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(HeaderView);
+export default withRouter(connect(mapStateToProps)(HeaderView));
