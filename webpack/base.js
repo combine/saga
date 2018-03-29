@@ -28,7 +28,8 @@ let reactLoadablePlugin = new ReactLoadablePlugin({
 export default {
   context: path.resolve(__dirname, '..'),
   entry: {
-    app: ['./client/index']
+    app: ['./client/app'],
+    admin: ['./client/admin']
   },
   output: {
     path: path.join(__dirname, '..', process.env.PUBLIC_OUTPUT_PATH),

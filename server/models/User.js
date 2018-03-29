@@ -57,6 +57,10 @@ export default class User extends UniqueAuthModel {
     return role === this.role;
   };
 
+  isAdmin = () => {
+    return this.hasRole('admin');
+  }
+
   $formatJson(json) {
     json = super.$parseJson(json);
 
