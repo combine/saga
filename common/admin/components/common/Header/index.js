@@ -9,50 +9,47 @@ class HeaderView extends Component {
   static propTypes = {
     auth: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
-  }
+  };
 
   logout = () => {
     const { dispatch } = this.props;
 
     dispatch(logout());
-  }
+  };
 
   renderUser = () => {
     const { auth } = this.props;
 
-    if (auth.isLoggedIn) {
-      return (
-        <Fragment>
-          <Menu.Item><b>{auth.user.username}</b></Menu.Item>
-          <Menu.Item as="a" content="Logout" onClick={this.logout} />
-        </Fragment>
-      );
-    }
-
     return (
       <Fragment>
-        <Menu.Item to="/login" as={NavLink} content="Login" />
-        <Menu.Item to="/signup" as={NavLink} content="Signup" />
+        <Menu.Item>
+          <b>{auth.user.username}</b>
+        </Menu.Item>
+        <Menu.Item as="a" content="Home" href="/" />
+        <Menu.Item as="a" content="Logout" onClick={this.logout} />
       </Fragment>
     );
-  }
+  };
 
   render() {
     return (
       <Header>
         <Menu size="massive">
-          <Menu.Item to="/" exact as={NavLink} content="Home" />
-          <Menu.Item to="/products" exact as={NavLink} content="Products" />
-          <Menu.Menu position="right">
-            {this.renderUser()}
-          </Menu.Menu>
+          <Menu.Item to="/admin" exact as={NavLink} content="Home" />
+          <Menu.Item
+            to="/admin/products"
+            exact
+            as={NavLink}
+            content="Products"
+          />
+          <Menu.Menu position="right">{this.renderUser()}</Menu.Menu>
         </Menu>
       </Header>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   auth: state.auth
 });
 

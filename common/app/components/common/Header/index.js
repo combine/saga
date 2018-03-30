@@ -17,6 +17,18 @@ class HeaderView extends Component {
     dispatch(logout());
   }
 
+  renderAdmin = () => {
+    const { auth } = this.props;
+
+    if (auth.isAdmin) {
+      return (
+        <Menu.Item as="a" content="Admin" href="/admin" />
+      );
+    }
+
+    return null;
+  }
+
   renderUser = () => {
     const { auth } = this.props;
 
@@ -24,6 +36,7 @@ class HeaderView extends Component {
       return (
         <Fragment>
           <Menu.Item><b>{auth.user.username}</b></Menu.Item>
+          {this.renderAdmin()}
           <Menu.Item as="a" content="Logout" onClick={this.logout} />
         </Fragment>
       );
