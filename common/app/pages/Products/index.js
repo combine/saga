@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { searchProducts } from '@app/actions/search';
-import { ProductSearch, ProductList } from '@app/components/products';
+import { ProductList } from '@app/components/products';
+import { ProductSearch } from '@shared/components/products';
 
 class ProductsPage extends Component {
   static propTypes = {
@@ -19,8 +20,15 @@ class ProductsPage extends Component {
     }
   }
 
+  handleSearch = (params) => {
+    const { dispatch } = this.props;
+
+    return dispatch(searchProducts(params));
+  }
+
   render() {
-    const { products, dispatch } = this.props;
+    const { products, products: { meta } } = this.props;
+    const initialQuery = (meta.query && meta.query.trim()) || '';
     const title = 'Products';
 
     return (
@@ -29,7 +37,12 @@ class ProductsPage extends Component {
           <title>{title}</title>
         </Helmet>
         <h1>{title}</h1>
-        <ProductSearch dispatch={dispatch} products={products} />
+        <ProductSearch
+          products={products}
+          onSearch={this.handleSearch}
+          emptyQuery={' '}
+          initialQuery={initialQuery}
+        />
         <ProductList products={products} />
       </div>
     );

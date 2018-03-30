@@ -11,8 +11,6 @@ const RouteWithSubRoutes = props => {
     restProps
   } = props;
 
-  console.log(Component);
-
   return (
     <Route
       path={path}
@@ -34,7 +32,7 @@ const RouteWithSubRoutes = props => {
 RouteWithSubRoutes.propTypes = {
   path: PropTypes.string,
   computedMatch: PropTypes.object,
-  component: PropTypes.function,
+  component: PropTypes.func,
   routes: PropTypes.array,
   restProps: PropTypes.object
 };

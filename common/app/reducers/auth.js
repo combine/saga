@@ -24,6 +24,7 @@ const auth = (state = defaultState, action) => {
         ...state,
         isLoading: false,
         isLoggedIn: true,
+        isAdmin: action.user.role === 'admin',
         user: state.user ? { ...state.user, ...action.user } : action.user
       };
 
