@@ -11,7 +11,7 @@ module.exports = {
   // in node.js.
   //
   // **WARNING**: Be careful not to expose any secrets here!
-  clientEnvVars: [
+  clientEnv: [
     'NODE_ENV',
     'APPLICATION_BASE_URL',
     'ALGOLIA_APP_ID',
