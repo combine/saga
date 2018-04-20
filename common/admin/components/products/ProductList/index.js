@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class ProductList extends React.Component {
   static propTypes = {
@@ -26,7 +27,9 @@ class ProductList extends React.Component {
           {products.products.map(product => (
             <Table.Row key={product.id}>
               <Table.Cell>{product.id}</Table.Cell>
-              <Table.Cell>{product.name}</Table.Cell>
+              <Table.Cell>
+                <Link to={`/products/${product.slug}`}>{product.name}</Link>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
