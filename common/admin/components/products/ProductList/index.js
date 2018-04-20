@@ -28,7 +28,9 @@ class ProductList extends React.Component {
             <Table.Row key={product.id}>
               <Table.Cell>{product.id}</Table.Cell>
               <Table.Cell>
-                <Link to={`/products/${product.slug}`}>{product.name}</Link>
+                <Link to={`/admin/products/${product.slug}`}>
+                  {product.name}
+                </Link>
               </Table.Cell>
             </Table.Row>
           ))}

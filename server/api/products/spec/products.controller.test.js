@@ -37,3 +37,20 @@ describe('GET /api/products', function() {
       });
   });
 });
+
+describe('GET /api/products/:slug', function() {
+  let p;
+
+  beforeAll(async () => {
+    p = await createProduct();
+  });
+
+  test('retrieves a list of products', function() {
+    return agent
+      .get(`/api/product/${p.slug}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(p.toJSON());
+      });
+  });
+});

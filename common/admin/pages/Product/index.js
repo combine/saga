@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { fetchProduct } from '@admin/actions/product';
+import { loadProduct } from '@admin/actions/product';
+import { get } from 'lodash';
 
 class AdminProductPage extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    product: PropTypes.object.isRequired
+    product: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired
   };
 
   componentDidMount() {
-    const { dispatch, product } = this.props;
+    const { dispatch, product, match } = this.props;
+    const { isLoaded } = product;
+    const slug = get(match, 'params.slug', null);
 
-    if (!product.isLoaded) {
-      return dispatch(fetchProduct(product.slug));
+    if ((!isLoaded && slug) || (isLoaded && slug !== product.slug)) {
+      return dispatch(loadProduct(match.params.slug));
     }
   }
 
