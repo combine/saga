@@ -10,7 +10,7 @@ beforeAll(async () => {
 
   const app = express();
 
-  app.use('/api/products', require('../index').default);
+  app.use('/api/products', require('./index').default);
 
   server = app.listen();
   agent = request.agent(server);
@@ -33,7 +33,14 @@ describe('GET /api/products', function() {
       .get('/api/products')
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual([p1.toJSON()]);
+        expect(body).toEqual(
+          expect.objectContaining({
+            meta: expect.objectContaining({
+              total: 1
+            }),
+            products: [p1.toJSON()]
+          })
+        );
       });
   });
 });
@@ -43,11 +50,12 @@ describe('GET /api/products/:slug', function() {
 
   beforeAll(async () => {
     p = await createProduct();
+    await p.$query().patch({});
   });
 
-  test('retrieves a list of products', function() {
+  test('retrieves the specific product', function() {
     return agent
-      .get(`/api/product/${p.slug}`)
+      .get(`/api/products/${p.slug}`)
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual(p.toJSON());

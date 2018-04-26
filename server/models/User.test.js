@@ -39,7 +39,7 @@ describe('User', function() {
         await expect(createUser({
           username: 'foobar12',
           password: 'Foobar12'
-        })).rejects.toThrow('username already in use.');
+        })).rejects.toThrowError('Unique Validation');
       });
     });
 
@@ -49,7 +49,7 @@ describe('User', function() {
           username: 'bazbar',
           email: 'foo1@bar.com',
           password: 'Foobar12'
-        })).rejects.toThrow('email already in use.');
+        })).rejects.toThrowError('Unique Validation');
       });
     });
   });
@@ -140,9 +140,9 @@ describe('User', function() {
         expect(user.resetPasswordToken).not.toEqual(null);
       });
 
-      it('sets the expiration date to the specified time', async function() {
-        await user.generateResetToken(7200);
-        const exp = new Date(currTime.getTime() + (7200 * 1000));
+      it('sets the expiration date to 1 hour (default)', async function() {
+        await user.generateResetToken(60);
+        const exp = new Date(currTime.getTime() + 60 * 60 * 1000);
 
         expect(user.resetPasswordExp).toEqual(exp);
       });

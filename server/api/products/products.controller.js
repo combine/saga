@@ -2,6 +2,7 @@ import Product from '$models/Product';
 import { asyncWrapper } from '$middleware';
 import { raw } from 'objection';
 import { ApiError } from '$lib/errors';
+import { omit } from 'lodash';
 
 export const index = asyncWrapper(async (req, res) => {
   let { q = '', page = 1, limit = 20 } = req.query;
@@ -22,7 +23,7 @@ export const index = asyncWrapper(async (req, res) => {
     .orderBy('createdAt', 'desc');
 
   res.send({
-    products,
+    products: products.map(p => omit(p, 'fullcount')),
     meta: {
       total: products.length && parseInt(products[0].fullcount) || 0,
       page,

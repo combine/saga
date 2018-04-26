@@ -10,7 +10,7 @@ beforeAll(async () => {
   await db.truncateDb();
   const app = express();
 
-  app.use('/auth', require('../index').default);
+  app.use('/auth', require('./index').default);
 
   server = app.listen();
   agent = request.agent(server);
@@ -86,6 +86,40 @@ describe('POST /api/signup', function() {
           expect(body.token).not.toEqual(null);
         });
     });
+  });
+
+  describe('when username is already taken', function() {
+    test('returns a validation error', function() {
+      const data = {
+        username: 'foobar',
+        email: 'foo@bar.com',
+        password: 'FoobarOne1'
+      };
+
+      return agent
+        .post('/auth/signup')
+        .send(data)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual(
+            expect.objectContaining({
+              errors: {
+                email: expect.arrayContaining([
+                  expect.objectContaining({
+                    message: expect.stringMatching(/email already in use/)
+                  })
+                ]),
+                username: expect.arrayContaining([
+                  expect.objectContaining({
+                    message: expect.stringMatching(/username already in use/)
+                  })
+                ])
+              }
+            })
+          );
+        });
+    });
+
   });
 
   describe('with invalid signup data', function() {

@@ -226,7 +226,7 @@
     "lodash": "^4.17.5",
     "module-alias": "^2.0.6",
     "objection": "^1.1.7",
-    "objection-auth": "^1.0.2",
+    "objection-auth": "^3.0.1",
     "objection-slugify": "^2.0.0",
     "objection-unique": "^1.0.1",
     "passport": "^0.4.0",
