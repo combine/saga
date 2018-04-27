@@ -5,13 +5,14 @@ import { Error } from '@shared/components/form';
 import classnames from 'classnames';
 
 const Input = (props) => {
-  const { className, field, form, ...rest } = props;
+  const { className, inputComponent, field, form, ...rest } = props;
   const { touched, errors } = form;
   const hasError = !!(touched[field.name] && errors[field.name]);
+  const Component = inputComponent === 'textarea' ? Form.TextArea : Form.Input;
 
   return (
     <React.Fragment>
-      <Form.Input
+      <Component
         className={classnames(className)}
         {...field}
         {...rest}
@@ -23,9 +24,14 @@ const Input = (props) => {
 };
 
 Input.propTypes = {
+  inputComponent: PropTypes.oneOf(['input', 'textarea']),
   className: PropTypes.string,
   field: PropTypes.object,
   form: PropTypes.object
+};
+
+Input.defaultProps = {
+  component: 'input'
 };
 
 export default Input;
