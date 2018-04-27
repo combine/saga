@@ -1,7 +1,6 @@
 import Product from '$models/Product';
 import { asyncWrapper } from '$middleware';
 import { raw } from 'objection';
-import { ApiError } from '$lib/errors';
 import { omit } from 'lodash';
 
 export const index = asyncWrapper(async (req, res) => {
@@ -34,13 +33,19 @@ export const index = asyncWrapper(async (req, res) => {
 });
 
 export const show = asyncWrapper(async (req, res) => {
-  let { slug } = req.params;
+  let { product } = req;
 
-  const product = await Product.query().where('slug', slug).first();
+  res.send(product.toJSON());
+});
 
-  if (!product) {
-    throw new ApiError({ type: 'Not Found', data: 'Product not found.' });
-  }
+export const update = asyncWrapper(async (req, res) => {
+  const { data } = req.body;
+  let { product } = req;
+
+  product = await product.$query().patchAndFetch({
+    name: data.name,
+    description: data.description
+  });
 
   res.send(product.toJSON());
 });
