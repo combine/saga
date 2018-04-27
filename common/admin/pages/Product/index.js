@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { loadProduct } from '@admin/actions/product';
+import { loadProduct, updateProduct } from '@admin/actions/product';
+import { ProductForm } from '@admin/components/products';
 import { get } from 'lodash';
 
 class AdminProductPage extends Component {
@@ -22,6 +23,12 @@ class AdminProductPage extends Component {
     }
   }
 
+  handleUpdate = (values) => {
+    const { dispatch, product } = this.props;
+
+    return dispatch(updateProduct(product.slug, values));
+  }
+
   render() {
     const { product } = this.props;
     const title = product.name;
@@ -32,6 +39,10 @@ class AdminProductPage extends Component {
           <title>{title}</title>
         </Helmet>
         <h1>{title}</h1>
+        <ProductForm
+          product={product}
+          onSubmit={this.handleUpdate}
+        />
       </div>
     );
   }
