@@ -5,16 +5,19 @@ import { RouteWithSubRoutes } from '@shared/components/common';
 import { Header } from '@admin/components/common';
 import { hot } from 'react-hot-loader';
 import routes from '@admin/routes';
+import css from './index.scss';
 
 const App = () => {
   return (
-    <Container fluid={true}>
+    <Container fluid={true} className={css.appContainer}>
       <Header />
-      <Switch>
-        {routes.map(route => (
-          <RouteWithSubRoutes key={route.path} {...route} />
-        ))}
-      </Switch>
+      <div className={css.content}>
+        <Switch>
+          {routes.map(route => (
+            <RouteWithSubRoutes key={route.path} {...route} />
+          ))}
+        </Switch>
+      </div>
     </Container>
   );
 };
