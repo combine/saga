@@ -6,7 +6,7 @@ export default class ApiError extends Error {
     'Unauthorized': 401,
     'Payment Required': 402,
     'Forbidden': 403,
-    'Not Found': '404',
+    'Not Found': 404,
     'Unprocessable': 422
   };
 
