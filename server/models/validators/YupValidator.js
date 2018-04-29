@@ -54,12 +54,6 @@ class YupValidator extends Validator {
     return result;
   }
 
-  // Override Validator.beforeValidate until
-  // https://github.com/Vincit/objection.js/issues/804 is released
-  beforeValidate({ model, json, opts }) {
-    model.$beforeValidate(null, json, opts);
-  }
-
   afterValidate(args) {
     // Takes the same arguments as `validate`. Usually there is no need
     // to override this.
