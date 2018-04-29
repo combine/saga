@@ -14,7 +14,7 @@ exports.seed = async function(knex) {
   await User.query().insert({
     firstName: 'Admin',
     lastName: 'User',
-    username: 'saga_admin',
+    username: 'admin',
     password: 'Password1',
     role: 'admin',
     email: 'admin@example.com'
