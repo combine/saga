@@ -225,6 +225,7 @@
     "knex-db-manager": "^0.4.0",
     "lodash": "^4.17.5",
     "module-alias": "^2.0.6",
+    "numbro": "^2.0.6",
     "objection": "^1.1.7",
     "objection-auth": "^3.0.1",
     "objection-slugify": "^2.0.1",
