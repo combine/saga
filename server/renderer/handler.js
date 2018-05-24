@@ -1,10 +1,18 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { SchemaLink } from 'apollo-link-schema';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import { getBundles } from 'react-loadable/webpack';
-import { matchRoutes, getStats, createStore } from './helpers';
+import { matchRoutes, getStats } from './helpers';
 import { enableDynamicImports, enableSSR } from '@config';
+import { get } from 'lodash';
+import qs from 'query-string';
+import AdminContainer from '@admin/containers/App';
+import AppContainer from '@app/containers/App';
+import schema from '$graphql/schema';
 import adminRoutes from '@admin/routes';
 import appRoutes from '@app/routes';
 import Loadable from 'react-loadable';
@@ -30,20 +38,36 @@ export default function handleRender(req, res) {
     return res.status(500).send('Server Error');
   }
 
-  const { store, finalState, App, layout } = createStore(matches, req);
+  const [ pathname, search ] = req.originalUrl.split('?');
+  const location = { pathname, search };
+  const matchPath = get(matches[0], 'route.path');
+  const layout = matchPath.match(/\/admin/) ? 'admin' : 'app';
+  const App = layout === 'admin' ? AdminContainer : AppContainer;
+  const cache = new InMemoryCache();
+
+  const client = new ApolloClient({
+    ssrMode: true,
+    cache,
+    link: new SchemaLink({
+      schema,
+      context: {
+        user: req.user
+      }
+    })
+  });
 
   // If SSR is disabled, just render the skeleton HTML with the initial state.
   if (!enableSSR) {
-    return res.send(render(null, finalState, []));
+    return res.send(render(null, {}, []));
   }
 
-  const getComponent = () => {
+  const Component = (() => {
     let component = (
-      <Provider store={store}>
-        <StaticRouter context={context} location={req.baseUrl}>
+      <ApolloProvider client={client}>
+        <StaticRouter context={context} location={location}>
           <App />
         </StaticRouter>
-      </Provider>
+      </ApolloProvider>
     );
 
     if (enableDynamicImports) {
@@ -55,21 +79,11 @@ export default function handleRender(req, res) {
     }
 
     return component;
-  };
+  })();
 
-  // Retrieve any static fetchData promises from the matched routes and their
-  // components and return an array of promises.
-  const fetchData = matches.map(match => {
-    const { fetchData, ...rest } = match; // eslint-disable-line no-unused-vars
-
-    // return fetch data Promise, excluding unnecessary fetchData method
-    return match.fetchData({ store, ...rest });
-  });
-
-  // After all the fetchData promises have been resolved, render the page.
-  return Promise.all(fetchData).then(() => {
-    const state = store.getState();
-    const html = renderToString(getComponent());
+  return getDataFromTree(Component).then(() => {
+    const html = renderToString(Component);
+    const state = client.extract();
     const bundles = stats && getBundles(stats, modules) || [];
     const markup = render(html, layout, state, bundles);
     const status = matches.length && matches[0].match.path === '*' ? 404 : 200;

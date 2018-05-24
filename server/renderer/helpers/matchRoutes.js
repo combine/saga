@@ -5,26 +5,11 @@ import { matchPath } from 'react-router';
 export default function matchRoutes(baseUrl, routes) {
   return routes.reduce((matches, route) => {
     const { path } = route;
-    const match = matchPath(baseUrl, {
-      path,
-      exact: true,
-      strict: false
-    });
+    const match = matchPath(baseUrl, { path, exact: true, strict: false });
 
     if (match) {
-      // Grab any wrapped components
-      const wc =
-        (route.component && route.component.WrappedComponent) ||
-        route.component;
-
       // Push a new object into the matches array
-      matches.push({
-        route,
-        match,
-        // ensure that any static fetchData methods are included,
-        // otherwise return an empty resolved promise.
-        fetchData: (wc && wc.fetchData) || (() => Promise.resolve())
-      });
+      matches.push({ route, match });
     }
 
     if (!match && route.routes) {
