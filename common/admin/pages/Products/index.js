@@ -1,54 +1,87 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { searchProducts } from '@admin/actions/search';
+import { withRouter } from 'react-router-dom';
 import { ProductList } from '@admin/components/products';
 import { ProductSearch } from '@shared/components/products';
+import { Query } from 'react-apollo';
+import { get } from 'lodash';
+import qs from 'query-string';
+import gql from 'graphql-tag';
+
+const FIND_PRODUCTS = gql`
+  query findProducts($query: String!, $count: Int, $after: Int) {
+    findProducts(query: $query, count: $count, after: $after) {
+      products {
+        id
+        slug
+        name
+        description
+      }
+      meta {
+        total
+        count
+        after
+        q
+      }
+    }
+  }
+`;
 
 class AdminProductsPage extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    products: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    const { dispatch, products } = this.props;
-
-    if (!products.isLoaded) {
-      return dispatch(searchProducts());
-    }
-  }
+  state = { query: null };
 
   handleSearch = ({ query }) => {
-    const { dispatch } = this.props;
+    const { history } = this.props;
+    const search = (query && query !== '') ? '?query=' + query : null;
 
-    return dispatch(searchProducts({ q: query }));
+    // set query string
+    history.push({ search });
+
+    // set current query state
+    this.setState({ query });
   }
 
   render() {
-    const { products } = this.props;
     const title = 'Products';
+    const { location: { search } } = this.props;
+    const { query } = this.state;
+    const { query: initial = '' } = qs.parse(search);
 
     return (
-      <div>
-        <Helmet>
-          <title>{title}</title>
-        </Helmet>
-        <h1>{title}</h1>
-        <ProductSearch
-          products={products}
-          onSearch={this.handleSearch}
-          instant={false}
-        />
-        <ProductList products={products} />
-      </div>
+      <Query query={FIND_PRODUCTS} variables={{ query: query || initial }}>
+        {({ loading, error, data }) => {
+          if (error) return null;
+
+          const products = get(data, 'findProducts.products');
+
+          return (
+            <div>
+              <Helmet>
+                <title>{title}</title>
+              </Helmet>
+              <h1>{title}</h1>
+              <ProductSearch
+                products={products}
+                onSearch={this.handleSearch}
+                initialQuery={initial}
+                loading={loading}
+              />
+              <ProductList
+                loading={loading}
+                products={products}
+              />
+            </div>
+          );
+        }}
+      </Query>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  products: state.search.products
-});
-
-export default connect(mapStateToProps)(AdminProductsPage);
+export default withRouter(AdminProductsPage);

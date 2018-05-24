@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { push } from 'react-router-redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@shared/components/form';
-import { login } from '@app/actions/auth';
+// import { login } from '@app/actions/auth';
 import transformErrors from '@lib/transformErrors';
 import schema from './schema';
 import css from './index.scss';
 
 class LoginForm extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   handleSubmit = (values, actions) => {
-    const { dispatch } = this.props;
+    const { onSubmit } = this.props;
 
-    return dispatch(login(values))
+    return onSubmit(values)
       .then(() => {
-        dispatch(push('/'));
+        history.push('/');
         actions.setSubmitting(false);
       })
       .catch(err => {
@@ -36,8 +35,8 @@ class LoginForm extends Component {
       <Form className={css.loginForm} onSubmit={handleSubmit} error={true}>
         <Field
           component={Input}
-          name="username"
-          placeholder="Username"
+          name="usernameOrEmail"
+          placeholder="Username or email"
         />
         <Field
           component={Input}
@@ -66,7 +65,7 @@ class LoginForm extends Component {
   render() {
     return (
       <Formik
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={this.handleSubmit}
         validationSchema={schema}
         render={this.renderForm}
@@ -75,4 +74,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

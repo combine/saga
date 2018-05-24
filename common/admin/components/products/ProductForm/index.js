@@ -60,8 +60,6 @@ class LoginForm extends Component {
   render() {
     const { product } = this.props;
 
-    console.log(product);
-
     return (
       <Formik
         initialValues={product}

@@ -1,36 +1,30 @@
 import React, { Fragment, Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
-import { logout } from '@app/actions/auth';
+// import { logout } from '@app/actions/auth';
 
 class HeaderView extends Component {
-  static propTypes = {
-    auth: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
-  };
-
-  logout = () => {
-    const { dispatch } = this.props;
-
-    dispatch(logout());
-  };
-
-  renderUser = () => {
-    const { auth } = this.props;
-
-    return (
-      <Fragment>
-        <Menu.Item>
-          <b>{auth.user.username}</b>
-        </Menu.Item>
-        <Menu.Item as="a" content="Home" href="/" />
-        <Menu.Item as="a" content="Logout" onClick={this.logout} />
-      </Fragment>
-    );
-  };
-
+  // logout = () => {
+  //   const { dispatch } = this.props;
+  //
+  //   dispatch(logout());
+  // };
+  //
+  // renderUser = () => {
+  //   const { auth } = this.props;
+  //
+  //   return (
+  //     <Fragment>
+  //       <Menu.Item>
+  //         <b>{auth.user.username}</b>
+  //       </Menu.Item>
+  //       <Menu.Item as="a" content="Home" href="/" />
+  //       <Menu.Item as="a" content="Logout" onClick={this.logout} />
+  //     </Fragment>
+  //   );
+  // };
+  //
   render() {
     return (
       <Header>
@@ -42,15 +36,10 @@ class HeaderView extends Component {
             as={NavLink}
             content="Products"
           />
-          <Menu.Menu position="right">{this.renderUser()}</Menu.Menu>
         </Menu>
       </Header>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default withRouter(connect(mapStateToProps)(HeaderView));
+export default withRouter(HeaderView);

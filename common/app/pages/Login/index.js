@@ -1,23 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import { Redirect } from 'react-router-dom';
+import { withApollo } from 'react-apollo';
 import { LoginForm } from '@app/components/auth';
+import localStorage from '@shared/lib/localStorage';
+import gql from 'graphql-tag';
 import css from './index.scss';
+
+const LOGIN = gql`
+  query loginQuery($usernameOrEmail: String!, $password: String!) {
+    login(usernameOrEmail: $usernameOrEmail, password: $password)
+  }
+`;
 
 class LoginPage extends Component {
   static propTypes = {
-    auth: PropTypes.object.isRequired
-  };
+    client: PropTypes.object.isRequired
+  }
+
+  handleSubmit = (values) => {
+    const { client } = this.props;
+
+    return client
+      .query({ query: LOGIN, variables: values })
+      .then(({ data }) => {
+        localStorage.set('token', data.login);
+      });
+  }
 
   render() {
-    const { auth } = this.props;
     const title = 'Log In';
 
-    if (auth.isLoggedIn) {
-      return <Redirect to="/" />;
-    }
+    // if (auth.isLoggedIn) {
+    //   return <Redirect to="/" />;
+    // }
 
     return (
       <div className={css.loginPage}>
@@ -25,14 +41,12 @@ class LoginPage extends Component {
           <title>{title}</title>
         </Helmet>
         <h1>{title}</h1>
-        <LoginForm {...this.props} />
+        <LoginForm
+          onSubmit={this.handleSubmit}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps)(LoginPage);
+export default withApollo(LoginPage);

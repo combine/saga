@@ -9,7 +9,7 @@ const DEBOUNCE_TIMER = 300;
 
 class ProductSearch extends Component {
   static propTypes = {
-    products: PropTypes.object.isRequired,
+    loading: PropTypes.bool,
     instant: PropTypes.bool,
     className: PropTypes.string,
     onSearch: PropTypes.func,
@@ -19,12 +19,21 @@ class ProductSearch extends Component {
   };
 
   static defaultProps = {
-    instant: true,
-    initialQuery: '',
+    loading: false,
+    instant: false,
+    initialQuery: null,
     emptyQuery: ''
-  }
+  };
 
   state = { query: '' };
+
+  componentDidMount() {
+    const { initialQuery } = this.props;
+
+    if (initialQuery) {
+      this.setState({ query: initialQuery });
+    }
+  }
 
   handleSearch = () => {
     const { query } = this.state;
@@ -51,8 +60,7 @@ class ProductSearch extends Component {
   };
 
   render() {
-    const { className, initialQuery, products } = this.props;
-    const { isLoading } = products;
+    const { className, loading } = this.props;
     const { query } = this.state;
 
     return (
@@ -64,8 +72,9 @@ class ProductSearch extends Component {
           <Input
             placeholder="Search..."
             onChange={this.handleSearchChange}
-            action={{ icon: 'search', loading: isLoading }}
-            value={query || initialQuery}
+            disabled={loading}
+            action={{ icon: 'search', loading }}
+            value={query}
           />
         </Form>
       </div>

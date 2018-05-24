@@ -1,26 +1,22 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
-import { logout } from '@app/actions/auth';
+import { currentUser } from '@shared/auth';
 
 class HeaderView extends Component {
   static propTypes = {
-    auth: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
+    currentUser: PropTypes.object
   }
 
   logout = () => {
-    const { dispatch } = this.props;
-
-    dispatch(logout());
+    console.log('logout');
   }
 
   renderAdmin = () => {
-    const { auth } = this.props;
+    const { currentUser } = this.props;
 
-    if (auth.isAdmin) {
+    if (currentUser.role === 'admin') {
       return (
         <Menu.Item as="a" content="Admin" href="/admin" />
       );
@@ -30,12 +26,12 @@ class HeaderView extends Component {
   }
 
   renderUser = () => {
-    const { auth } = this.props;
+    const { currentUser } = this.props;
 
-    if (auth.isLoggedIn) {
+    if (currentUser) {
       return (
         <Fragment>
-          <Menu.Item><b>{auth.user.username}</b></Menu.Item>
+          <Menu.Item><b>{currentUser.username}</b></Menu.Item>
           {this.renderAdmin()}
           <Menu.Item as="a" content="Logout" onClick={this.logout} />
         </Fragment>
@@ -65,8 +61,4 @@ class HeaderView extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.auth
-});
-
-export default withRouter(connect(mapStateToProps)(HeaderView));
+export default currentUser(withRouter(HeaderView));

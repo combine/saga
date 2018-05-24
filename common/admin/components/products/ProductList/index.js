@@ -5,8 +5,12 @@ import { Link } from 'react-router-dom';
 
 class ProductList extends React.Component {
   static propTypes = {
-    products: PropTypes.object.isRequired
-  }
+    products: PropTypes.array.isRequired
+  };
+
+  static defaultProps = {
+    products: []
+  };
 
   render() {
     const { products } = this.props;
@@ -15,16 +19,12 @@ class ProductList extends React.Component {
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>
-              ID
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Name
-            </Table.HeaderCell>
+            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>Name</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {products.products.map(product => (
+          {products.map(product => (
             <Table.Row key={product.id}>
               <Table.Cell>{product.id}</Table.Cell>
               <Table.Cell>

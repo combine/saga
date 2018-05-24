@@ -5,24 +5,28 @@ import { ProductCard } from '@app/components/products';
 import classnames from 'classnames';
 import css from './index.scss';
 
-const ProductList = (props) => {
-  const { products, className } = props;
+const ProductList = props => {
+  const { products, loading, className } = props;
 
   return (
     <div className={classnames(css.productList, className)}>
-      <Loader active={products.isLoading} />
-      {products.products.map(product => {
-        return (
-          <ProductCard key={product.id} product={product} />
-        );
+      <Loader active={loading} />
+      {products.map(product => {
+        return <ProductCard key={product.id} product={product} />;
       })}
     </div>
   );
 };
 
 ProductList.propTypes = {
-  products: PropTypes.object.isRequired,
-  className: PropTypes.string,
+  products: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
+  className: PropTypes.string
+};
+
+ProductList.defaultProps = {
+  products: [],
+  loading: false
 };
 
 export default ProductList;
