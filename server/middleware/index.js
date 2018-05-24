@@ -1,5 +1,5 @@
 export { default as asyncWrapper } from './asyncWrapper';
-export { default as auth } from './auth';
+export { default as authMiddleware } from './authMiddleware';
 export { default as errorHandler } from './errorHandler';
 export { default as findResource } from './findResource';
 export { default as httpsRedirect } from './httpsRedirect';

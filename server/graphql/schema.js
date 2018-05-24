@@ -12,6 +12,8 @@ const typeDefs = `
     description: String
     slug: String!
     variants: [Variant]
+    createdAt: String
+    updatedAt: String
   }
 
   type Variant {
@@ -33,8 +35,24 @@ const typeDefs = `
     password: String!
   }
 
+  type MetaList {
+    total: Int
+    count: Int
+    after: Int
+    q: String
+  }
+
+  type ProductList {
+    meta: MetaList
+    products: [Product]
+  }
+
   type Query {
+    login(usernameOrEmail: String!, password: String!): String
+    currentUser: User
     user(id: Int, email: String, username: String): User
+    product(id: Int, slug: String): Product
+    findProducts(query: String, after: Int, count: Int): ProductList
     allProducts: [Product]
   }
 `;

@@ -2,15 +2,11 @@ import path from 'path';
 import express from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
 import { Model } from 'objection';
-import { httpsRedirect } from '$middleware';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import Api from './api';
-import Auth from './auth';
-import schema from './graphql/schema';
+import { httpsRedirect, authMiddleware } from '$middleware';
+import graphqlMiddleware from './graphql';
 import db from '$db/index';
 
 const env = process.env.NODE_ENV || 'development';
@@ -45,19 +41,11 @@ app.use(
   express.static(path.join(__dirname, '../common/images/favicon/favicon.ico'))
 );
 
-// Mount the REST API
-app.use('/api/v1', Api);
+// Mount authentication middleware for JWT
+app.use(authMiddleware);
 
-// GraphQL Service
-app.use('/api/v2', bodyParser.json(), graphqlExpress({ schema }));
-
-// Set up GraphiQL in development environment
-if (env === 'development') {
-  app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
-}
-
-// Auth service
-app.use('/auth', Auth);
+// Mount GraphQL Service
+app.use(graphqlMiddleware);
 
 // Mount the react render handler
 app.use('*', ReactRenderer);
