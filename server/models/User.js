@@ -1,17 +1,11 @@
 import Base from './Base';
 import { compose } from 'objection';
-import { Authenticatable, Recoverable, Tokenable } from 'objection-auth';
+import { Authenticatable, Recoverable } from 'objection-auth';
 import { omit } from 'lodash';
 import { patchOptional } from '@schemas/lib';
 import userSchema from '@schemas/user';
 import Unique from 'objection-unique';
 import yup from 'yup';
-
-// 7 days (in minutes)
-export const JWT_EXPIRATION = 10800;
-
-// 1 hour
-export const RECOVERABLE_EXPIRATION = 60;
 
 const mixins = compose(
   Unique({
@@ -21,12 +15,7 @@ const mixins = compose(
   Authenticatable({ passwordField: 'password' }),
   Recoverable({
     tokenField: 'resetPasswordToken',
-    tokenExpField: 'resetPasswordExp',
-    expiresIn: RECOVERABLE_EXPIRATION
-  }),
-  Tokenable({
-    expiresIn: JWT_EXPIRATION,
-    secretOrPrivateKey: process.env.SECRET_TOKEN
+    tokenExpField: 'resetPasswordExp'
   })
 );
 
