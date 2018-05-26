@@ -15,40 +15,6 @@ const resolvers = {
       return null;
     },
 
-    // authentication
-    async login(_, { usernameOrEmail, password }, { res }) {
-      const user = await User.query()
-        .where('username', usernameOrEmail)
-        .orWhere('email', usernameOrEmail)
-        .first()
-        .debug();
-
-      if (!user) {
-        throw new Error(global.__('errors.auth.username'));
-      }
-
-      const validPassword = await user.verifyPassword(password);
-
-      if (!validPassword) {
-        throw new Error(global.__('errors.auth.password'));
-      }
-
-      const token = jwt.sign({
-        id: user.id,
-        email: user.email
-      }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-      const cookie = {
-        secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,
-        maxAge: moment.duration(7, 'days').asMilliseconds()
-      };
-
-      // set cookie
-      res.cookie('jwt', token, cookie);
-
-      return token;
-    },
-
     user(_, args) {
       return User.query()
         .where(args)
@@ -100,6 +66,57 @@ const resolvers = {
   Product: {
     variants(product) {
       return product.$relatedQuery('variants');
+    }
+  },
+  Mutation: {
+    // authentication
+    async login(_, { usernameOrEmail, password }, { res }) {
+      const user = await User.query()
+        .where('username', usernameOrEmail)
+        .orWhere('email', usernameOrEmail)
+        .first()
+        .debug();
+
+      if (!user) {
+        throw new Error(global.__('errors.auth.username'), null, {
+          path: 'username'
+        });
+      }
+
+      const validPassword = await user.verifyPassword(password);
+
+      if (!validPassword) {
+        throw new Error(global.__('errors.auth.password'), null, {
+          path: 'password'
+        });
+      }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          email: user.email
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      const cookie = {
+        secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,
+        maxAge: moment.duration(7, 'days').asMilliseconds()
+      };
+
+      // set cookie
+      res.cookie('jwt', token, cookie);
+
+      return {
+        token,
+        currentUser: user.toJSON()
+      };
+    },
+
+    logout(_, args, { res }) {
+      res.clearCookie('jwt');
+      return { success: true };
     }
   }
 };

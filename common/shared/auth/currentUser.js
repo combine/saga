@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const GET_CURRENT_USER = gql`
+export const GET_CURRENT_USER = gql`
   query getCurrentUser{
     currentUser {
       id

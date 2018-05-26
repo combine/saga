@@ -47,13 +47,22 @@ const typeDefs = `
     products: [Product]
   }
 
+  type LoginPayload {
+    token: String
+    currentUser: User
+  }
+
   type Query {
-    login(usernameOrEmail: String!, password: String!): String
     currentUser: User
     user(id: Int, email: String, username: String): User
     product(id: Int, slug: String): Product
     findProducts(query: String, after: Int, count: Int): ProductList
     allProducts: [Product]
+  }
+
+  type Mutation {
+    login(usernameOrEmail: String!, password: String!): LoginPayload
+    logout: Boolean
   }
 `;
 

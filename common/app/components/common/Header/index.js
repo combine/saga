@@ -1,16 +1,33 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
+import { withApollo } from 'react-apollo';
 import { Header, Menu } from 'semantic-ui-react';
 import { currentUser } from '@shared/auth';
+import localStorage from '@shared/lib/localStorage';
+import gql from 'graphql-tag';
+
+const LOGOUT_MUTATION = gql`
+  mutation {
+    logout
+  }
+`;
 
 class HeaderView extends Component {
   static propTypes = {
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
+    client: PropTypes.object.isRequired
   }
 
   logout = () => {
-    console.log('logout');
+    const { client } = this.props;
+
+    return client
+      .mutate({ mutation: LOGOUT_MUTATION })
+      .then(() => {
+        localStorage.remove('token');
+        client.resetStore();
+      });
   }
 
   renderAdmin = () => {
@@ -61,4 +78,4 @@ class HeaderView extends Component {
   }
 }
 
-export default currentUser(withRouter(HeaderView));
+export default currentUser(withApollo(withRouter(HeaderView)));
