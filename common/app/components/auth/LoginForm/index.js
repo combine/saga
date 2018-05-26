@@ -1,30 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@shared/components/form';
-// import { login } from '@app/actions/auth';
-import transformErrors from '@lib/transformErrors';
+import { getValidationErrors } from '@lib/errors';
 import schema from './schema';
 import css from './index.scss';
 
 class LoginForm extends Component {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    onSubmit: PropTypes.func.isRequired
   };
 
   handleSubmit = (values, actions) => {
     const { onSubmit } = this.props;
 
     return onSubmit(values)
-      .then(() => {
-        history.push('/');
-        actions.setSubmitting(false);
-      })
-      .catch(err => {
-        actions.setErrors(transformErrors(err));
+      .catch(error => {
+        actions.setErrors(getValidationErrors(error, 'login'));
         actions.setSubmitting(false);
       });
 
@@ -74,4 +68,4 @@ class LoginForm extends Component {
   }
 }
 
-export default withRouter(LoginForm);
+export default LoginForm;
