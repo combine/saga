@@ -3,6 +3,7 @@ import { compose } from 'objection';
 import { Authenticatable, Recoverable } from 'objection-auth';
 import { omit } from 'lodash';
 import { patchOptional } from '@schemas/lib';
+import jwt from 'jsonwebtoken';
 import userSchema from '@schemas/user';
 import Unique from 'objection-unique';
 import yup from 'yup';
@@ -57,6 +58,14 @@ export default class User extends mixins(Base) {
 
   isAdmin = () => {
     return this.hasRole('admin');
+  };
+
+  generateJWT = () => {
+    return jwt.sign(
+      { id: this.id, email: this.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
   };
 
   $formatJson(json) {

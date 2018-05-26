@@ -7,6 +7,23 @@ import { Input, Button } from '@shared/components/form';
 import { getValidationErrors } from '@lib/errors';
 import schema from './schema';
 import css from './index.scss';
+import gql from 'graphql-tag';
+
+export const LOGIN_MUTATION = gql`
+  mutation loginMutation($usernameOrEmail: String!, $password: String!) {
+    login(usernameOrEmail: $usernameOrEmail, password: $password) {
+      token
+      currentUser {
+        id
+        firstName
+        lastName
+        username
+        email
+        role
+      }
+    }
+  }
+`;
 
 class LoginForm extends Component {
   static propTypes = {
@@ -16,12 +33,10 @@ class LoginForm extends Component {
   handleSubmit = (values, actions) => {
     const { onSubmit } = this.props;
 
-    return onSubmit(values)
-      .catch(error => {
-        actions.setErrors(getValidationErrors(error, 'login'));
-        actions.setSubmitting(false);
-      });
-
+    return onSubmit(values).catch(error => {
+      actions.setErrors(getValidationErrors(error, 'login'));
+      actions.setSubmitting(false);
+    });
   };
 
   renderForm = ({ handleSubmit, isSubmitting, isValid }) => {

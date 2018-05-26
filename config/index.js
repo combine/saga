@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 module.exports = {
   // Enable or disable server-side rendering
@@ -21,6 +22,11 @@ module.exports = {
   /* The identifier to use for css-modules.
    */
   cssModulesIdentifier: '[name]__[local]__[hash:base64:5]',
+
+  cookieParams: {
+    secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,
+    maxAge: moment.duration(7, 'days').asMilliseconds()
+  },
 
   // Isomorphic configuration
   isomorphicConfig: {

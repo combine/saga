@@ -1,33 +1,46 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@shared/components/form';
-import { signup } from '@app/actions/auth';
-import transformErrors from '@lib/transformErrors';
+import { getValidationErrors } from '@lib/errors';
+import gql from 'graphql-tag';
 import userSchema from '@schemas/user';
 import css from './index.scss';
 
+export const SIGNUP_MUTATION = gql`
+  mutation signupMutation(
+    $email: String!
+    $username: String!
+    $password: String!
+  ) {
+    signup(username: $username, email: $email, password: $password) {
+      token
+      currentUser {
+        id
+        firstName
+        lastName
+        username
+        email
+        role
+      }
+    }
+  }
+`;
+
 class SignupForm extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    onSubmit: PropTypes.func.isRequired
   };
 
   handleSubmit = (values, actions) => {
-    const { dispatch } = this.props;
+    const { onSubmit } = this.props;
 
-    return dispatch(signup(values))
-      .then(() => {
-        dispatch(push('/'));
-        actions.setSubmitting(false);
-      })
-      .catch(err => {
-        actions.setErrors(transformErrors(err));
-        actions.setSubmitting(false);
-      });
+    return onSubmit(values).catch(error => {
+      actions.setErrors(getValidationErrors(error, 'signup'));
+      actions.setSubmitting(false);
+    });
   };
 
   renderForm = ({ handleSubmit, isSubmitting, isValid }) => {

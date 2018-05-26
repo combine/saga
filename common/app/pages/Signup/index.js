@@ -1,19 +1,50 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { SignupForm } from '@app/components/auth';
+import SignupForm, { SIGNUP_MUTATION } from '@app/components/auth/SignupForm';
 import { Helmet } from 'react-helmet';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
+import { withApollo } from 'react-apollo';
+import currentUser, { GET_CURRENT_USER } from '@shared/auth/currentUser';
+import localStorage from '@shared/lib/localStorage';
 import css from './index.scss';
 
 class SignupPage extends Component {
   static propTypes = {
-    auth: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    client: PropTypes.object.isRequired,
+    currentUser: PropTypes.object
   };
 
+  handleSubmit = values => {
+    const { history, client } = this.props;
+
+    return client
+      .mutate({
+        mutation: SIGNUP_MUTATION,
+        variables: values,
+        update: (cache, { data }) => {
+          const { signup: { currentUser } } = data;
+
+          cache.writeQuery({
+            query: GET_CURRENT_USER,
+            data: { currentUser }
+          });
+        }
+      })
+      .then(({ data }) => {
+        const { token } = data.signup;
+
+        localStorage.set('token', token);
+        history.push('/');
+      });
+  };
   render() {
-    const { auth } = this.props;
+    const { currentUser } = this.props;
     const title = 'Sign Up';
+
+    if (currentUser) {
+      return <Redirect to="/" />;
+    }
 
     return (
       <div className={css.signupPage}>
@@ -21,14 +52,10 @@ class SignupPage extends Component {
           <title>{title}</title>
         </Helmet>
         <h1>{title}</h1>
-        <SignupForm {...this.props} />
+        <SignupForm onSubmit={this.handleSubmit} />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps)(SignupPage);
+export default currentUser(withApollo(withRouter(SignupPage)));

@@ -43,7 +43,7 @@ const typeDefs = `
     products: [Product]
   }
 
-  type LoginPayload {
+  type AuthPayload {
     token: String
     currentUser: User
   }
@@ -57,7 +57,8 @@ const typeDefs = `
   }
 
   type Mutation {
-    login(usernameOrEmail: String!, password: String!): LoginPayload
+    login(usernameOrEmail: String!, password: String!): AuthPayload
+    signup(username: String!, email: String!, password: String!): AuthPayload
     logout: Boolean
   }
 `;
