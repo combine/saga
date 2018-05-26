@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { errorHandler } from '$middleware';
+import { formatError } from 'apollo-errors';
 import schema from './schema';
 
 const env = process.env.NODE_ENV || 'development';
@@ -14,6 +14,7 @@ graphqlMiddleware.use(
   bodyParser.json(),
   graphqlExpress((req, res) => {
     return {
+      formatError,
       schema,
       context: {
         res,
@@ -32,8 +33,5 @@ if (env === 'development') {
     })
   );
 }
-
-// catch thrown errors
-graphqlMiddleware.use(errorHandler);
 
 export default graphqlMiddleware;
