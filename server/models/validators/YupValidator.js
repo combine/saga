@@ -45,7 +45,6 @@ class YupValidator extends Validator {
       // Catch the error throw by `yup`, and create our own validation error.
       throw model.constructor.createValidationError({
         type: 'ModelValidation',
-        statusCode: 400,
         data: this.errorParser(err)
       });
     }

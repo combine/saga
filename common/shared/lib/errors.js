@@ -1,4 +1,10 @@
-import { isEmpty, get } from 'lodash';
+import { isEmpty, mapValues } from 'lodash';
+
+const mapErrors = (err) => {
+  return mapValues(err, (fields) => {
+    return fields.map(field => field.message).join('\n');
+  });
+};
 
 // @param error {Object}: The error object from GraphQL
 // @param gqlPath {String|Array}: The path, or an array of paths to format
@@ -25,11 +31,11 @@ export const getValidationErrors = (error, gqlPath = null) => {
     // format for ease of use
     if (errors.length) {
       if (gqlPath && !isArr) {
-        return get(errors, '[0].data.errors');
+        return mapErrors(errors[0].data);
       }
 
       return errors.map((err) => {
-        return { path: err.path[0], errors: get(err, 'data.errors') };
+        return { path: err.path[0], errors: mapErrors(err.data) };
       });
     }
   }

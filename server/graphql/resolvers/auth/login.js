@@ -1,8 +1,7 @@
 import { User } from '$models';
 import { isAlreadyAuthenticatedResolver } from './acl';
 import { ValidationError } from '$graphql/errors';
-import moment from 'moment';
-import jwt from 'jsonwebtoken';
+import { cookieParams } from '@config';
 
 export default isAlreadyAuthenticatedResolver.createResolver(
   async (_, { usernameOrEmail, password }, { res }) => {
@@ -15,9 +14,7 @@ export default isAlreadyAuthenticatedResolver.createResolver(
     if (!user) {
       throw new ValidationError({
         data: {
-          errors: {
-            usernameOrEmail: global.__('errors.auth.username')
-          }
+          usernameOrEmail: [{ message: global.__('errors.auth.username') }]
         }
       });
     }
@@ -27,29 +24,15 @@ export default isAlreadyAuthenticatedResolver.createResolver(
     if (!validPassword) {
       throw new ValidationError({
         data: {
-          errors: {
-            password: global.__('errors.auth.password')
-          }
+          password: [{ message: global.__('errors.auth.password') }]
         }
       });
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    const cookie = {
-      secure: ['development', 'test'].indexOf(process.env.NODE_ENV) === -1,
-      maxAge: moment.duration(7, 'days').asMilliseconds()
-    };
+    const token = user.generateJWT();
 
     // set cookie
-    res.cookie('jwt', token, cookie);
+    res.cookie('jwt', token, cookieParams);
 
     return {
       token,
