@@ -4,7 +4,7 @@ import SignupForm, { SIGNUP_MUTATION } from '@app/components/auth/SignupForm';
 import { Helmet } from 'react-helmet';
 import { Redirect, withRouter } from 'react-router-dom';
 import { withApollo } from 'react-apollo';
-import currentUser, { GET_CURRENT_USER } from '@shared/auth/currentUser';
+import withUser, { GET_CURRENT_USER } from '@shared/hocs/auth/withUser';
 import localStorage from '@shared/lib/localStorage';
 import css from './index.scss';
 
@@ -38,6 +38,7 @@ class SignupPage extends Component {
         history.push('/');
       });
   };
+
   render() {
     const { currentUser } = this.props;
     const title = 'Sign Up';
@@ -58,4 +59,4 @@ class SignupPage extends Component {
   }
 }
 
-export default currentUser(withApollo(withRouter(SignupPage)));
+export default withUser(withApollo(withRouter(SignupPage)));

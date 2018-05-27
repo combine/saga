@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { withApollo } from 'react-apollo';
 import LoginForm, { LOGIN_MUTATION } from '@app/components/auth/LoginForm';
-import currentUser, { GET_CURRENT_USER } from '@shared/auth/currentUser';
+import withUser, { GET_CURRENT_USER } from '@shared/hocs/auth/withUser';
 import { Redirect, withRouter } from 'react-router-dom';
 import localStorage from '@shared/lib/localStorage';
 import css from './index.scss';
@@ -59,4 +59,4 @@ class LoginPage extends Component {
   }
 }
 
-export default currentUser(withApollo(withRouter(LoginPage)));
+export default withUser(withApollo(withRouter(LoginPage)));

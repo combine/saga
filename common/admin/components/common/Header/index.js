@@ -1,31 +1,44 @@
-import React, { Fragment, Component } from 'react';
-// import PropTypes from 'prop-types';
-import { NavLink, withRouter } from 'react-router-dom';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { NavLink, withRouter, Redirect } from 'react-router-dom';
 import { Header, Menu } from 'semantic-ui-react';
-// import { logout } from '@app/actions/auth';
+import { withUser, withLogout } from '@shared/hocs/auth';
 
 class HeaderView extends Component {
-  // logout = () => {
-  //   const { dispatch } = this.props;
-  //
-  //   dispatch(logout());
-  // };
-  //
-  // renderUser = () => {
-  //   const { auth } = this.props;
-  //
-  //   return (
-  //     <Fragment>
-  //       <Menu.Item>
-  //         <b>{auth.user.username}</b>
-  //       </Menu.Item>
-  //       <Menu.Item as="a" content="Home" href="/" />
-  //       <Menu.Item as="a" content="Logout" onClick={this.logout} />
-  //     </Fragment>
-  //   );
-  // };
-  //
+  static propTypes = {
+    currentUser: PropTypes.object,
+    logout: PropTypes.func.isRequired
+  }
+
+  logout = () => {
+    const { logout } = this.props;
+
+    return logout();
+  }
+
+  renderUser = () => {
+    const { currentUser } = this.props;
+
+    if (!currentUser) return null;
+
+    return (
+      <Menu.Menu position="right">
+        <Menu.Item>
+          <b>{currentUser.username}</b>
+        </Menu.Item>
+        <Menu.Item as="a" content="Home" href="/" />
+        <Menu.Item as="a" content="Logout" onClick={this.logout} />
+      </Menu.Menu>
+    );
+  };
+
   render() {
+    const { currentUser: user } = this.props;
+
+    if (!user || user && user.role !== 'admin') {
+      return <Redirect to='/' />;
+    }
+
     return (
       <Header>
         <Menu size="massive">
@@ -36,10 +49,11 @@ class HeaderView extends Component {
             as={NavLink}
             content="Products"
           />
+          {this.renderUser()}
         </Menu>
       </Header>
     );
   }
 }
 
-export default withRouter(HeaderView);
+export default withUser(withLogout(withRouter(HeaderView)));

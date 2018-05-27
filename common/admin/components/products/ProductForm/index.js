@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { TextArea, Input, Button } from '@shared/components/form';
-import transformErrors from '@lib/transformErrors';
+// import transformErrors from '@lib/transformErrors';
 // import schema from './schema';
 import css from './index.scss';
 
@@ -22,7 +22,7 @@ class LoginForm extends Component {
         actions.setSubmitting(false);
       })
       .catch(err => {
-        actions.setErrors(transformErrors(err));
+        // actions.setErrors(transformErrors(err));
         actions.setSubmitting(false);
       });
   };

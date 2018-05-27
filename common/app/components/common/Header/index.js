@@ -1,33 +1,19 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
-import { withApollo } from 'react-apollo';
 import { Header, Menu } from 'semantic-ui-react';
-import { currentUser } from '@shared/auth';
-import localStorage from '@shared/lib/localStorage';
-import gql from 'graphql-tag';
-
-const LOGOUT_MUTATION = gql`
-  mutation {
-    logout
-  }
-`;
+import { withUser, withLogout } from '@shared/hocs/auth';
 
 class HeaderView extends Component {
   static propTypes = {
     currentUser: PropTypes.object,
-    client: PropTypes.object.isRequired
+    logout: PropTypes.func.isRequired
   }
 
   logout = () => {
-    const { client } = this.props;
+    const { logout } = this.props;
 
-    return client
-      .mutate({ mutation: LOGOUT_MUTATION })
-      .then(() => {
-        localStorage.remove('token');
-        client.resetStore();
-      });
+    return logout();
   }
 
   renderAdmin = () => {
@@ -50,7 +36,11 @@ class HeaderView extends Component {
         <Fragment>
           <Menu.Item><b>{currentUser.username}</b></Menu.Item>
           {this.renderAdmin()}
-          <Menu.Item as="a" content="Logout" onClick={this.logout} />
+          <Menu.Item
+            as="a"
+            content="Logout"
+            onClick={this.logout}
+          />
         </Fragment>
       );
     }
@@ -78,4 +68,4 @@ class HeaderView extends Component {
   }
 }
 
-export default currentUser(withApollo(withRouter(HeaderView)));
+export default withUser(withLogout(withRouter(HeaderView)));
