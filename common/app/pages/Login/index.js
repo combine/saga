@@ -10,7 +10,6 @@ class LoginPage extends Component {
   static propTypes = {
     login: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    client: PropTypes.object.isRequired,
     currentUser: PropTypes.object
   };
 

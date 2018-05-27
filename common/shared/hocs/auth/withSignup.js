@@ -5,9 +5,13 @@ import { GET_CURRENT_USER } from './withUser';
 import localStorage from '@shared/lib/localStorage';
 import gql from 'graphql-tag';
 
-export const LOGIN_MUTATION = gql`
-  mutation loginMutation($usernameOrEmail: String!, $password: String!) {
-    login(usernameOrEmail: $usernameOrEmail, password: $password) {
+export const SIGNUP_MUTATION = gql`
+  mutation signupMutation(
+    $email: String!
+    $username: String!
+    $password: String!
+  ) {
+    signup(username: $username, email: $email, password: $password) {
       token
       currentUser {
         id
@@ -21,19 +25,20 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
-const withLogin = function(ComposedComponent) {
-  class LoginMutation extends Component {
+const withSignup = function(ComposedComponent) {
+  class SignupMutation extends Component {
     static propTypes = {
       mutate: PropTypes.func.isRequired
     };
 
-    executeLogin = values => {
+    executeSignup = values => {
       const { mutate } = this.props;
+
 
       return mutate({
         variables: values,
         update: (cache, { data }) => {
-          const { login: { currentUser } } = data;
+          const { signup: { currentUser } } = data;
 
           cache.writeQuery({
             query: GET_CURRENT_USER,
@@ -41,18 +46,18 @@ const withLogin = function(ComposedComponent) {
           });
         }
       }).then(({ data }) => {
-        const { token } = data.login;
+        const { token } = data.signup;
 
         localStorage.set('token', token);
       });
-    };
+    }
 
     render() {
-      return <ComposedComponent {...this.props} login={this.executeLogin} />;
+      return <ComposedComponent {...this.props} signup={this.executeSignup} />;
     }
   }
 
-  return graphql(LOGIN_MUTATION)(LoginMutation);
+  return graphql(SIGNUP_MUTATION)(SignupMutation);
 };
 
-export default withLogin;
+export default withSignup;

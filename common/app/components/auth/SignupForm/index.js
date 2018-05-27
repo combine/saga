@@ -5,29 +5,8 @@ import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@shared/components/form';
 import { getValidationErrors } from '@lib/errors';
-import gql from 'graphql-tag';
 import userSchema from '@schemas/user';
 import css from './index.scss';
-
-export const SIGNUP_MUTATION = gql`
-  mutation signupMutation(
-    $email: String!
-    $username: String!
-    $password: String!
-  ) {
-    signup(username: $username, email: $email, password: $password) {
-      token
-      currentUser {
-        id
-        firstName
-        lastName
-        username
-        email
-        role
-      }
-    }
-  }
-`;
 
 class SignupForm extends Component {
   static propTypes = {

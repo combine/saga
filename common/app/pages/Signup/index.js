@@ -1,42 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SignupForm, { SIGNUP_MUTATION } from '@app/components/auth/SignupForm';
+import { SignupForm } from '@app/components/auth';
 import { Helmet } from 'react-helmet';
 import { Redirect, withRouter } from 'react-router-dom';
-import { withApollo } from 'react-apollo';
-import withUser, { GET_CURRENT_USER } from '@shared/hocs/auth/withUser';
-import localStorage from '@shared/lib/localStorage';
+import { withUser, withSignup } from '@shared/hocs/auth';
 import css from './index.scss';
 
 class SignupPage extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
-    client: PropTypes.object.isRequired,
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
+    signup: PropTypes.func.isRequired
   };
 
   handleSubmit = values => {
-    const { history, client } = this.props;
+    const { history, signup } = this.props;
 
-    return client
-      .mutate({
-        mutation: SIGNUP_MUTATION,
-        variables: values,
-        update: (cache, { data }) => {
-          const { signup: { currentUser } } = data;
-
-          cache.writeQuery({
-            query: GET_CURRENT_USER,
-            data: { currentUser }
-          });
-        }
-      })
-      .then(({ data }) => {
-        const { token } = data.signup;
-
-        localStorage.set('token', token);
-        history.push('/');
-      });
+    return signup(values).then(() => {
+      history.push('/');
+    });
   };
 
   render() {
@@ -59,4 +41,4 @@ class SignupPage extends Component {
   }
 }
 
-export default withUser(withApollo(withRouter(SignupPage)));
+export default withUser(withSignup(withRouter(SignupPage)));
