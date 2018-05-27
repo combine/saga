@@ -17,7 +17,7 @@ const withLogout = function(ComposedComponent) {
       client: PropTypes.object.isRequired,
       mutate: PropTypes.func.isRequired,
       history: PropTypes.object.isRequired
-    }
+    };
 
     executeMutation = () => {
       const { client, mutate } = this.props;
@@ -26,14 +26,11 @@ const withLogout = function(ComposedComponent) {
         localStorage.remove('token');
         client.resetStore();
       });
-    }
+    };
 
     render() {
       return (
-        <ComposedComponent
-          {...this.props}
-          logout={this.executeMutation}
-        />
+        <ComposedComponent {...this.props} logout={this.executeMutation} />
       );
     }
   }
