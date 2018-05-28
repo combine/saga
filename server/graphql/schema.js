@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 
-const typeDefs = `
+export const typeDefs = `
   type Product {
     id: Int!
     name: String!
