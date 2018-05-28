@@ -1,7 +1,7 @@
 import expect from 'expect';
 import createProduct from '@factories/product';
 import createVariant  from '@factories/variant';
-import { db } from '@support/db';
+import db from '@support/db';
 
 beforeAll(async () => {
   await db.truncateDb();

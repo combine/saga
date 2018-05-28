@@ -2,7 +2,7 @@ import expect from 'expect';
 import sinon from 'sinon';
 import createUser from '@factories/user';
 import { User } from '$models';
-import { db } from '@support/db';
+import db from '@support/db';
 
 beforeAll(async function() {
   await db.truncateDb();
@@ -145,29 +145,6 @@ describe('User', function() {
         const exp = new Date(currTime.getTime() + 60 * 60 * 1000);
 
         expect(user.resetPasswordExp).toEqual(exp);
-      });
-    });
-  });
-
-  describe('Tokenable', function() {
-    let token;
-
-    beforeAll(async function() {
-      token = await user.generateJWT();
-    });
-
-    describe('.generateJWT', function() {
-      it('generates a token with expiration', async function() {
-        expect(token).toBeDefined();
-        expect(token).not.toBe(null);
-      });
-    });
-
-    describe('.decodeJWT', function() {
-      it('verifies the given token against the user', async function() {
-        const decoded = await user.decodeJWT(token);
-        expect(decoded.id).toEqual(user.id);
-        expect(decoded.email).toEqual(user.email);
       });
     });
   });

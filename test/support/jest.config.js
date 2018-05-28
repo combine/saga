@@ -36,8 +36,6 @@ module.exports = {
   rootDir: process.cwd(),
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupTestFrameworkScriptFile: '<rootDir>/test/support/jest.setup.js',
-  // globalSetup: '<rootDir>/test/support/jest.globalSetup.js',
-  // globalTeardown: '<rootDir>/test/support/jest.globalTeardown.js',
   testPathIgnorePatterns: ['/node_modules/', '/lib/', '/dist/'],
   moduleNameMapper
 };

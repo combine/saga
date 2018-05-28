@@ -1,8 +1,8 @@
 import '../../server/init';
 import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import { Model } from 'objection';
-import { db } from './db';
+import Adapter from 'enzyme-adapter-react-16';
+import db from './db';
 
 // Bind Objection models to database
 Model.knex(db.knexInstance());
