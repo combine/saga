@@ -1,7 +1,7 @@
-import { Product } from '$models';
+import findProduct from './findProduct';
 
-export default function product(_, args) {
-  return Product.query()
-    .where(args)
-    .first();
-}
+export default findProduct.createResolver(
+  async (_, args, { product }) => {
+    return product.toJSON();
+  }
+);

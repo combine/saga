@@ -1,4 +1,4 @@
-import baseResolver from '../base';
+import baseResolver from './base';
 import {
   AuthenticatedError,
   UnauthorizedError,

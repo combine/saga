@@ -1,5 +1,5 @@
 import { User } from '$models';
-import { isAlreadyAuthenticatedResolver } from './acl';
+import { isAlreadyAuthenticatedResolver } from '../acl';
 import { ValidationError } from '$graphql/errors';
 import { cookieParams } from '@config';
 
@@ -8,8 +8,7 @@ export default isAlreadyAuthenticatedResolver.createResolver(
     const user = await User.query()
       .where('username', usernameOrEmail)
       .orWhere('email', usernameOrEmail)
-      .first()
-      .debug();
+      .first();
 
     if (!user) {
       throw new ValidationError({

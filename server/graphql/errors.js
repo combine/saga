@@ -22,3 +22,7 @@ export const ValidationError = createError('ValidationError', {
     showPath: true
   }
 });
+
+export const NotFoundError = createError('NotFoundError', {
+  message: 'Could not find the requested resource.'
+});

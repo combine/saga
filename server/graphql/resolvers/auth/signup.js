@@ -1,4 +1,4 @@
-import { isAlreadyAuthenticatedResolver } from './acl';
+import { isAlreadyAuthenticatedResolver } from '../acl';
 import { ValidationError } from '$graphql/errors';
 import { cookieParams } from '@config';
 import { User } from '$models';

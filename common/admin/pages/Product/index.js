@@ -2,28 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { ProductForm } from '@admin/components/products';
+import { ProductQuery } from '@shared/components/products';
+import { withUpdate } from '@shared/hocs/products';
 import { get } from 'lodash';
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-
-const GET_PRODUCT = gql`
-  query getProduct($id: Int, $slug: String) {
-    product(id: $id, slug: $slug) {
-      id
-      slug
-      name
-      description
-    }
-  }
-`;
 
 class AdminProductPage extends Component {
   static propTypes = {
-    match: PropTypes.object.isRequired
+    match: PropTypes.object.isRequired,
+    update: PropTypes.func.isRequired
   };
 
   handleUpdate = (values) => {
-    console.log('mutate:', values);
+    return this.props.update(values);
   }
 
   render() {
@@ -31,12 +21,9 @@ class AdminProductPage extends Component {
     const slug = get(match, 'params.slug', null);
 
     return (
-      <Query query={GET_PRODUCT} variables={{ slug }}>
-        {({ loading, error, data }) => {
-          if (loading) return <p>Loading</p>;
-          if (error) return <p>Error</p>;
-
-          const { product } = data;
+      <ProductQuery slug={slug}>
+        {({ loading, error, product }) => {
+          if (loading || error) return null;
 
           return (
             <React.Fragment>
@@ -51,9 +38,9 @@ class AdminProductPage extends Component {
             </React.Fragment>
           );
         }}
-      </Query>
+      </ProductQuery>
     );
   }
 }
 
-export default AdminProductPage;
+export default withUpdate(AdminProductPage);

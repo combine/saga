@@ -60,6 +60,7 @@ const typeDefs = `
     login(usernameOrEmail: String!, password: String!): AuthPayload
     signup(username: String!, email: String!, password: String!): AuthPayload
     logout: Boolean
+    updateProduct(slug: String!, name: String, description: String): Product
   }
 `;
 

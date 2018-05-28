@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
-import { TextArea, Input, Button } from '@shared/components/form';
-// import transformErrors from '@lib/transformErrors';
+import { Input, Button } from '@shared/components/form';
+import { getValidationErrors } from '@lib/errors';
 // import schema from './schema';
 import css from './index.scss';
 
-class LoginForm extends Component {
+class ProductForm extends Component {
   static propTypes = {
     product: PropTypes.object,
-    onSubmit: PropTypes.instanceOf(Promise)
+    onSubmit: PropTypes.func.isRequired
   };
 
   handleSubmit = (values, actions) => {
@@ -22,7 +21,7 @@ class LoginForm extends Component {
         actions.setSubmitting(false);
       })
       .catch(err => {
-        // actions.setErrors(transformErrors(err));
+        actions.setErrors(getValidationErrors(err));
         actions.setSubmitting(false);
       });
   };
@@ -72,4 +71,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default ProductForm;
