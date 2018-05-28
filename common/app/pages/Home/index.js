@@ -13,7 +13,7 @@ class HomePage extends Component {
         <h1>It Works!</h1>
         <p>
           You've successfully started up your first universally rendered react
-          and redux app.<br />
+          app powered by GraphQL!<br />
           Hint: Try View Source on this page to see that it was rendered on the
           server as well.
         </p>

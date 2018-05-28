@@ -1,11 +1,11 @@
 # Saga
 
-A universal starter-kit for building large SPAs. Comes bundled with fancy
-developer tools and features out of the box.
+Next-generation ecommerce framework built with React and GraphQL.
 
 ## Features
 
-- Server-side rendering with Express
+- GraphQL server backed by apollo-server-express, Objection.js, and PostgreSQL
+- Full support for server-side rendering
 - Code splitting with [dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports) and [react-loadable](https://github.com/thejameskyle/react-loadable)
 - Sane [webpack configurations](webpack/)
 - JS hot reloading with [react-hot-loader (@next)](https://github.com/gaearon/react-hot-loader) and [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
@@ -14,26 +14,6 @@ developer tools and features out of the box.
 - Full production builds that do not rely on `babel-node`.
 - Pre-configured testing tools with `jest` and `enzyme` to work with css modules, static files, and aliased module paths.
 
-## Philosophy
-
-The JavaScript ecosystem is brimming with open source libraries. With advances
-in ES6 and commitments by the big tech companies to invest in JavaScript, the
-last several years have arguably turned web development into what was once a
-huge pain in the ass, to a pretty decently enjoyable experience.
-
-With so many different packages now available, we now have the freedom and the
-choice to craft applications to our exact specifications, reducing bloat and
-minimizing the number of code we need to support cross-platform apps. It really
-is a new world.
-
-However, with so many different developers working on different libraries,
-things are constantly in flux, and breaking changes are often introduced. It can
-be hard to keep up with the latest and greatest since they're always changing.
-
-To help alleviate this, we've collected some of the best practices and features
-from the React ecosystem and put them in one place. Although this boilerplate is
-fully production-capable as is, its main goal is to serve as an example of how
-to bring an application together using the latest tools in the ecosystem.
 
 ## Development Mode
 
@@ -145,41 +125,10 @@ const Header = (props) => {
 
 ```
 
-## Redux Devtools
+## Server-side Rendering (SSR)
 
-This project supports the awesome [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension).
-Install the Chrome or Firefox extension and it should just work.
-
-## Pre-fetching Data for Server Side Rendering (SSR)
-
-When rendering components on the server, you'll find that you may need to fetch
-some data before it can be rendered. The [component renderer](server/renderer/handler.js)
-looks for a `fetchData` method on the container component and its child
-components, then executes all of them and only renders after the promises have
-all been resolved.
-
-```
-//  As an ES6 class
-
-class TodosContainer extends React.Component {
-  static fetchData = ({ store }) => {
-    return store.dispatch(fetchTodos());
-  };
-}
-
-// As a functional stateless component
-
-const TodosContainer = (props) => {
-  const { todos } = props;
-  return (
-    // ...component code
-  );
-}
-
-TodosContainer.fetchData = ({ store }) => {
-  return store.dispatch(fetchTodos());
-}
-```
+This project fully supports server side rendering. See Apollo's documentation
+on [server-sider rendering](https://www.apollographql.com/docs/react/features/server-side-rendering.html).
 
 ## Async / Await
 
