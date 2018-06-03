@@ -1,7 +1,7 @@
-import { User } from '$models';
+import findUser from './findUser';
 
-export default function user(_, args) {
-  return User.query()
-    .where(args)
-    .first();
-}
+export default findUser.createResolver(
+  async (_, args, { userResource: user }) => {
+    return user.toJSON();
+  }
+);

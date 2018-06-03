@@ -1,20 +1,15 @@
-import { login, logout, signup, currentUser } from './auth';
-import { product, updateProduct, findProducts } from './products';
-import { user } from './users';
+import * as auth from './auth';
+import * as products from './products';
+import * as users from './users';
 
-const resolvers = {
+export default {
   Query: {
-    currentUser,
-    user,
-    product,
-    findProducts
+    ...auth.queries,
+    ...users.queries,
+    ...products.queries
   },
   Mutation: {
-    login,
-    logout,
-    signup,
-    updateProduct
+    ...auth.mutations,
+    ...products.mutations
   }
 };
-
-export default resolvers;

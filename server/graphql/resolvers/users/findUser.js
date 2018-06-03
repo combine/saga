@@ -1,25 +1,25 @@
-import { Product } from '$models';
+import { User } from '$models';
 import { NotFoundError } from '$graphql/errors';
 import baseResolver from '../base';
 
 export default baseResolver.createResolver(async (_, args, context) => {
-  const { slug, id } = args;
+  const { id, username, email } = args;
 
-  if (!slug && !id) {
+  if (!id && !username && !email) {
     throw new NotFoundError();
   }
 
-  let product = await Product.query()
+  let user = await User.query()
     .modify(query => {
-      ['id', 'slug'].forEach(col => {
+      ['id', 'username', 'email'].forEach(col => {
         if (args[col]) query.where(col, args[col]);
       });
     })
     .first();
 
-  if (!product) {
+  if (!user) {
     throw new NotFoundError();
   }
 
-  context.product = product;
+  context.userResource = user;
 });

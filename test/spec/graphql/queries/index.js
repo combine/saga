@@ -20,7 +20,7 @@ export default [
         findProducts(query: "test-product") {
           meta {
             total
-            q
+            query
           }
           products {
             id
@@ -36,7 +36,7 @@ export default [
         findProducts: {
           meta: {
             total: 1,
-            q: 'foo'
+            query: 'foo'
           },
           products: [
             {

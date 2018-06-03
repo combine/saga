@@ -121,16 +121,10 @@
       }
     },
     "test:watch": {
-      "command": "npm run test -- --watch",
-      "env": {
-        "NODE_ENV": "test"
-      }
+      "command": "npm run test -- --watch"
     },
     "lint": {
-      "command": "npx eslint --ext .js,.jsx .",
-      "env": {
-        "NODE_ENV": "test"
-      }
+      "command": "npx eslint --ext .js,.jsx ."
     }
   },
   "devDependencies": {

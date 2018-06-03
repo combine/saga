@@ -4,19 +4,26 @@ import { first, last } from 'lodash';
 import moment from 'moment';
 
 export default async function findProducts(root, args) {
-  const { after = null, count = 15, query } = args;
+  const { after = null, count = 15, query: search } = args;
 
-  let q = Product.query()
+  let query = Product.query()
     .select(raw('*, count(*) OVER() AS fullCount'))
-    .where(raw('LOWER(products.name)'), 'LIKE', `%${query.toLowerCase()}%`)
     .limit(count)
     .orderBy('updatedAt', 'desc');
 
-  if (after) {
-    q = q.where('createdAt', '>', moment(after).format());
+  if (search && search !== '') {
+    query.where(
+      raw('LOWER(products.name)'),
+      'LIKE',
+      `%${search.toLowerCase()}%`
+    );
   }
 
-  const products = await q;
+  if (after) {
+    query.where('createdAt', '>', moment(after).format());
+  }
+
+  const products = await query;
 
   return {
     products,
@@ -30,7 +37,7 @@ export default async function findProducts(root, args) {
         return p && moment(p.createdAt).unix();
       })(),
       count,
-      q: query
+      query: search || null
     }
   };
 }

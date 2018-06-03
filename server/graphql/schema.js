@@ -35,7 +35,7 @@ export const typeDefs = `
     total: Int
     count: Int
     after: Int
-    q: String
+    query: String
   }
 
   type ProductList {
@@ -50,8 +50,10 @@ export const typeDefs = `
 
   type Query {
     currentUser: User
+    findUser(id: Int, email: String, username: String): User
     user(id: Int, email: String, username: String): User
     product(id: Int, slug: String): Product
+    findProduct(id: String, slug: String): Product
     findProducts(query: String, after: Int, count: Int): ProductList
     allProducts: [Product]
   }

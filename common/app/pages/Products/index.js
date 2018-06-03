@@ -22,7 +22,7 @@ const FIND_PRODUCTS = gql`
         total
         count
         after
-        q
+        query
       }
     }
   }

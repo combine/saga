@@ -1,4 +1,14 @@
-export { default as currentUser } from './currentUser';
-export { default as login } from './login';
-export { default as logout } from './logout';
-export { default as signup } from './signup';
+import currentUser from './currentUser';
+import login from './login';
+import logout from './logout';
+import signup from './signup';
+
+export const queries = {
+  currentUser
+};
+
+export const mutations = {
+  login,
+  logout,
+  signup
+};
