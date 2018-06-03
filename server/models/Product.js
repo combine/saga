@@ -6,7 +6,8 @@ import productSchema from '@schemas/product';
 
 const slugged = slugify({
   sourceField: 'name',
-  unique: true
+  unique: true,
+  update: false
 });
 
 export default class Product extends slugged(Base) {

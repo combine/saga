@@ -235,7 +235,7 @@
     "numbro": "^2.0.6",
     "objection": "^1.1.7",
     "objection-auth": "^4.0.0",
-    "objection-slugify": "^2.0.1",
+    "objection-slugify": "^3.0.0",
     "objection-unique": "^1.0.1",
     "pg": "^7.4.1",
     "pg-escape": "^0.2.0",

@@ -48,7 +48,7 @@ describe('Resolver: updateProduct', function() {
     describe('with slug as the identifier', function() {
       test('updates the product', function() {
         return expect(
-          updateProduct({}, { slug: 'bar', name: 'Baz' }, { user: admin })
+          updateProduct({}, { slug: p.slug, name: 'Baz' }, { user: admin })
         ).resolves.toEqual(
           expect.objectContaining({
             id: p.id,
