@@ -9,11 +9,11 @@ export default yup.object().shape({
   username: yup
     .string()
     .matches(
-      /^[a-zA-Z0-9]+([_]?[a-zA-Z0-9])*$/,
+      /^[a-zA-Z0-9]+([_|.]?[a-zA-Z0-9])*$/,
       'Username can only contain letters, number, and single underscores.'
     )
     .min(3, 'Username must be at least 3 characters.')
-    .max(16, 'Username can\'t exceed 16 characters')
+    .max(64, 'Username can\'t exceed 64 characters')
     .required('Username is required.')
     .when('$patch', patchOptional),
   email: yup

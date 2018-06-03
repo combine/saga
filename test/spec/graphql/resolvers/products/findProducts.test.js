@@ -1,10 +1,5 @@
 import findProducts from '$graphql/resolvers/products/findProducts';
 import { createProduct } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Resolver: findProducts', function() {
   let p1, p2, p3, p4;
@@ -21,15 +16,14 @@ describe('Resolver: findProducts', function() {
       return expect(findProducts({}, {}, {})).resolves.toEqual(
         expect.objectContaining({
           meta: expect.objectContaining({
-            total: 4,
             query: null
           }),
-          products: [
+          products: expect.arrayContaining([
             expect.objectContaining({ id: p1.id }),
             expect.objectContaining({ id: p2.id }),
             expect.objectContaining({ id: p3.id }),
             expect.objectContaining({ id: p4.id })
-          ]
+          ])
         })
       );
     });
@@ -40,10 +34,11 @@ describe('Resolver: findProducts', function() {
       return expect(findProducts({}, { query: 'foo' }, {})).resolves.toEqual(
         expect.objectContaining({
           meta: expect.objectContaining({
-            total: 1,
             query: 'foo'
           }),
-          products: [expect.objectContaining({ name: 'Foo' })]
+          products: expect.arrayContaining([
+            expect.objectContaining({ name: 'Foo' })
+          ])
         })
       );
     });
@@ -51,18 +46,18 @@ describe('Resolver: findProducts', function() {
     describe('and a count parameter', function() {
       test('retrieves a products with the query name', function() {
         return expect(
-          findProducts({}, { query: 'ba', count: 2 }, {})
+          findProducts({}, { query: 'ba', count: 3 }, {})
         ).resolves.toEqual(
           expect.objectContaining({
             meta: expect.objectContaining({
-              count: 2,
-              total: 3,
+              count: 3,
               query: 'ba'
             }),
-            products: [
+            products: expect.arrayContaining([
               expect.objectContaining({ name: 'Bar' }),
-              expect.objectContaining({ name: 'Baz' })
-            ]
+              expect.objectContaining({ name: 'Baz' }),
+              expect.objectContaining({ name: 'Ban' }),
+            ])
           })
         );
       });

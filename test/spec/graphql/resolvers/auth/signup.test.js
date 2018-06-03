@@ -1,26 +1,22 @@
 import signup from '$graphql/resolvers/auth/signup';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
+import faker from 'faker';
 
 describe('Resolver: Signup', function() {
   // mock response object
-  let mockRes = { cookie: () => true };
+  const mockRes = { cookie: () => true };
+  const validData = {
+    username: faker.internet.userName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  };
 
   describe('with valid signup data', function() {
     test('signs up the user', function() {
-      const data = {
-        username: 'foobar',
-        email: 'foo@bar.com',
-        password: 'FoobarOne1'
-      };
-
+      const data = validData;
       return expect(signup({}, data, { res: mockRes })).resolves.toEqual({
         currentUser: expect.objectContaining({
-          username: 'foobar',
-          email: 'foo@bar.com'
+          username: data.username,
+          email: data.email
         }),
         token: expect.any(String)
       });
@@ -30,9 +26,9 @@ describe('Resolver: Signup', function() {
   describe('when username is already taken', function() {
     test('returns a validation error', function() {
       const data = {
-        username: 'foobar',
-        email: 'foo@bar.com',
-        password: 'FoobarOne1'
+        username: validData.username,
+        email: validData.email,
+        password: faker.internet.password()
       };
 
       return expect(signup({}, data, { res: mockRes })).rejects.toEqual(

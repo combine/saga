@@ -1,29 +1,30 @@
 import login from '$graphql/resolvers/auth/login';
 import { createUser } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
+import faker from 'faker';
 
 describe('Resolver: Login', function() {
   // mock response object
-  let mockRes = { cookie: () => true };
-  let user,
-    credentials = { usernameOrEmail: 'foobar', password: 'SecurePass1' };
+  let res = { cookie: () => true };
+  let user;
+  let credentials = {
+    username: faker.internet.userName(),
+    password: faker.internet.password()
+  };
 
   beforeAll(async function() {
-    user = await createUser({
-      username: credentials.usernameOrEmail,
-      password: credentials.password
-    });
+    user = await createUser(credentials);
   });
 
   describe('with valid credentials', function() {
     test('it logs the user in', async function() {
-      const { token, currentUser } = await login({}, credentials, {
-        res: mockRes
-      });
+      const { token, currentUser } = await login(
+        {},
+        {
+          usernameOrEmail: credentials.username,
+          password: credentials.password
+        },
+        { res }
+      );
 
       expect(token).not.toEqual(null);
       expect(currentUser).toEqual(
@@ -35,13 +36,13 @@ describe('Resolver: Login', function() {
     });
   });
 
-  describe('with invalid credentials', function() {
+  describe('with invalid password', function() {
     test('responds with ValidationError', function() {
       return expect(
         login(
           {},
-          { usernameOrEmail: 'foobar', password: 'badpassword' },
-          { res: mockRes }
+          { usernameOrEmail: credentials.username, password: 'badpassword' },
+          { res }
         )
       ).rejects.toThrow(
         expect.objectContaining({

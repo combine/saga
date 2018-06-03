@@ -115,7 +115,7 @@
       }
     },
     "test": {
-      "command": "npx jest -c ./test/support/jest.config.js --forceExit --verbose --runInBand",
+      "command": "npx jest -c ./test/support/jest.config.js --verbose --detectOpenHandles",
       "env": {
         "NODE_ENV": "test"
       }
@@ -132,7 +132,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.3",
-    "babel-jest": "^22.4.3",
+    "babel-jest": "^23.0.1",
     "babel-loader": "^7.1.4",
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-lodash": "^3.3.2",
@@ -168,7 +168,7 @@
     "faker": "^4.1.0",
     "file-loader": "^1.1.11",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^22.4.3",
+    "jest": "^23.1.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.4.0",
     "node-dev": "^3.1.3",

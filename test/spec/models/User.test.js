@@ -2,28 +2,19 @@ import expect from 'expect';
 import sinon from 'sinon';
 import createUser from '@factories/user';
 import { User } from '$models';
-import db from '@support/db';
-
-beforeAll(async function() {
-  await db.truncateDb();
-});
 
 describe('User', function() {
   let user;
 
   beforeAll(async function() {
     user = await createUser({
-      firstName: 'Foo',
-      lastName: 'Bar',
-      username: 'foobar12',
-      password: 'Foobar12',
-      email: 'foo1@bar.com'
+      password: 'Foobar12'
     });
   });
 
   describe('creation', function() {
     test('creates the user', function() {
-      expect(user.username).toEqual('foobar12');
+      expect(user).not.toBe(null);
     });
 
     describe('with missing required fields', function() {
@@ -37,8 +28,7 @@ describe('User', function() {
     describe('with a username that is in use', function() {
       test('throws a validation error', async function() {
         await expect(createUser({
-          username: 'foobar12',
-          password: 'Foobar12'
+          username: user.username
         })).rejects.toThrowError('Unique Validation');
       });
     });
@@ -46,9 +36,7 @@ describe('User', function() {
     describe('with an email that is in use', function() {
       test('throws a validation error', async function() {
         await expect(createUser({
-          username: 'bazbar',
-          email: 'foo1@bar.com',
-          password: 'Foobar12'
+          email: user.email
         })).rejects.toThrowError('Unique Validation');
       });
     });

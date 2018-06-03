@@ -1,10 +1,5 @@
 import expect from 'expect';
 import createProduct from '@factories/product';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Variant', function() {
   let product;

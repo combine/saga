@@ -1,20 +1,15 @@
 import findUser from '$graphql/resolvers/users/findUser';
 import { createUser } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Resolver: findUser', function() {
   let user;
 
   beforeAll(async () => {
-    user = await createUser({ username: 'foobar' });
+    user = await createUser();
   });
 
-  describe('with a valid product id', function() {
-    test('adds product to context', function() {
+  describe('with a valid user id', function() {
+    test('adds user to context', function() {
       return expect(findUser({}, { id: user.id }, {})).resolves.not.toThrow();
     });
   });

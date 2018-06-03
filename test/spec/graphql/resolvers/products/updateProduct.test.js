@@ -1,18 +1,13 @@
 import updateProduct from '$graphql/resolvers/products/updateProduct';
 import { createUser, createProduct } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Resolver: updateProduct', function() {
   let p, user, admin;
 
   beforeAll(async () => {
-    p = await createProduct({ name: 'Foo' });
-    user = await createUser({ username: 'foobar' });
-    admin = await createUser({ username: 'admin', role: 'admin' });
+    p = await createProduct();
+    user = await createUser();
+    admin = await createUser({ role: 'admin' });
   });
 
   describe('when not logged in', function() {

@@ -9,7 +9,7 @@ export default async function findProducts(root, args) {
   let query = Product.query()
     .select(raw('*, count(*) OVER() AS fullCount'))
     .limit(count)
-    .orderBy('updatedAt', 'desc');
+    .orderBy('createdAt', 'desc');
 
   if (search && search !== '') {
     query.where(
@@ -26,7 +26,7 @@ export default async function findProducts(root, args) {
   const products = await query;
 
   return {
-    products,
+    products: products.map(p => p.toJSON()),
     meta: {
       total: (() => {
         const p = first(products);

@@ -1,19 +1,11 @@
 import currentUser from '$graphql/resolvers/auth/currentUser';
 import { createUser } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Resolver: currentUser', function() {
   let user;
 
   beforeAll(async function() {
-    user = await createUser({
-      username: 'foo',
-      password: 'Password1'
-    });
+    user = await createUser();
   });
 
   describe('with user in context', function() {

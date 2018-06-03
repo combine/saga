@@ -1,16 +1,11 @@
 import user from '$graphql/resolvers/users/user';
 import { createUser } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
 
 describe('Resolver: user', function() {
   let u;
 
   beforeAll(async () => {
-    u = await createUser({ username: 'foobar', email: 'foo@bar.com' });
+    u = await createUser();
   });
 
   describe('with a valid user id', function() {

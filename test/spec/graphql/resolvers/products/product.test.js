@@ -1,16 +1,12 @@
 import product from '$graphql/resolvers/products/product';
 import { createProduct } from '@factories';
-import db from '@support/db';
-
-beforeAll(async () => {
-  await db.truncateDb();
-});
+import faker from 'faker';
 
 describe('Resolver: product', function() {
   let p;
 
   beforeAll(async () => {
-    p = await createProduct({ name: 'Foo' });
+    p = await createProduct({ name: faker.commerce.productName() });
   });
 
   describe('with a valid product id', function() {
