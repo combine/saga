@@ -6,10 +6,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { StaticRouter } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import { getBundles } from 'react-loadable/webpack';
-import { matchRoutes, getStats } from './helpers';
+import { matchRoutes, safeRequire } from './helpers';
 import { enableDynamicImports, enableSSR } from '@config';
 import { get } from 'lodash';
-import qs from 'query-string';
 import AdminContainer from '@admin/containers/App';
 import AppContainer from '@app/containers/App';
 import schema from '$graphql/schema';
@@ -18,16 +17,18 @@ import appRoutes from '@app/routes';
 import Loadable from 'react-loadable';
 import render from './render';
 
-const stats = getStats(enableDynamicImports);
+const stats = enableDynamicImports
+  ? safeRequire('../../react-loadable.json')
+  : null;
 
 export default function handleRender(req, res) {
   let context = {};
   let modules = [];
 
-  const routes = req.user && req.user.isAdmin() ? [
-    ...appRoutes.slice(0, -1),
-    ...adminRoutes
-  ] : appRoutes;
+  const routes =
+    req.user && req.user.isAdmin()
+      ? [...appRoutes.slice(0, -1), ...adminRoutes]
+      : appRoutes;
 
   // Check for matched routes against the baseUrl of the request.
   const matches = matchRoutes(req.baseUrl, routes);
@@ -38,7 +39,7 @@ export default function handleRender(req, res) {
     return res.status(500).send('Server Error');
   }
 
-  const [ pathname, search ] = req.originalUrl.split('?');
+  const [pathname, search] = req.originalUrl.split('?');
   const location = { pathname, search };
   const matchPath = get(matches[0], 'route.path');
   const layout = matchPath.match(/\/admin/) ? 'admin' : 'app';
@@ -84,8 +85,7 @@ export default function handleRender(req, res) {
   return getDataFromTree(Component).then(() => {
     const html = renderToString(Component);
     const state = client.extract();
-    const bundles = stats && getBundles(stats, modules) || [];
-    const markup = render(html, layout, state, bundles);
+    const bundles = (stats && getBundles(stats, modules)) || [];
     const status = matches.length && matches[0].match.path === '*' ? 404 : 200;
 
     // A 301 redirect was rendered somewhere if context.url exists after
@@ -95,6 +95,13 @@ export default function handleRender(req, res) {
     }
 
     res.contentType('text/html');
-    return res.status(status).send(markup);
+
+    return render(html, layout, state, bundles)
+      .then(markup => {
+        return res.status(status).send(markup);
+      })
+      .catch(err => {
+        console.error('Could not server-render React components:', err);
+      });
   });
 }

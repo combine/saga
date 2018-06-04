@@ -28,19 +28,9 @@ module.exports = {
     maxAge: moment.duration(7, 'days').asMilliseconds()
   },
 
-  // Isomorphic configuration
-  isomorphicConfig: {
-    assets: {
-      images: {
-        extensions: [
-          'png',
-          'jpg',
-          'jpeg',
-          'gif',
-          'ico',
-          'svg'
-        ]
-      }
-    }
-  }
+  // Webpack stats asset file. This file is created by webpack after asset
+  // compilation and allows the server to reference the correct bundles.
+  // The file is located relative to `webpack.config.output.path`. In dev mode,
+  // this file is availble on the dev server.
+  webpackStatsFilename: 'webpack-assets.json',
 };

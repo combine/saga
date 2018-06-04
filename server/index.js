@@ -29,26 +29,9 @@ if (env === 'development') {
   process.on('unhandledRejection', r => console.log(r));
 }
 
-const configureIsomorphicTools = function(server) {
-  // configure isomorphic tools
-  // this must be equal to the Webpack configuration's "context" parameter
-  const basePath = path.resolve(__dirname, '..');
-  const ISOTools = require('webpack-isomorphic-tools');
-
-  // this global variable will be used later in express middleware
-  global.ISOTools = new ISOTools(config.isomorphicConfig).server(
-    basePath,
-    () => server
-  );
-};
-
 const startServer = () => {
   const server = require('./server');
   const port = process.env.PORT || process.env.APPLICATION_PORT || 3000;
-
-  if (!global.ISOTools) {
-    configureIsomorphicTools(server);
-  }
 
   return Loadable.preloadAll().then(() => {
     return server.listen(port, error => {

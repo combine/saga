@@ -2,21 +2,40 @@
 import { template } from 'lodash';
 import { Helmet } from 'react-helmet';
 import { getEnv } from '@shared/lib/env';
+import { webpackStatsFilename } from '@config';
+import { safeRequire } from './helpers';
+import axios from 'axios';
 
 const env = getEnv();
+const getAssets = async () => {
+  const path = `${process.env.PUBLIC_ASSET_PATH}${webpackStatsFilename}`;
 
-export default function render(html, layout, initialState = {}, bundles = []) {
   if (env === 'development') {
-    global.ISOTools.refresh();
+    // In dev, this file comes from the dev server, so we have to request it via
+    // an http request.
+    try {
+      return (await axios.get(path)).data;
+    } catch (err) {
+      console.error(`Could not fetch asset manifest from ${path}:`, err);
+    }
+  } else {
+    return Promise.resolve(safeRequire(path));
   }
+};
 
+export default async function render(
+  html,
+  layout,
+  initialState = {},
+  bundles = []
+) {
   const compile = template(require(`@templates/layouts/${layout}.html`));
-  const assets = global.ISOTools.assets();
   const helmet = Helmet.renderStatic();
-  const appJs = assets.javascript[layout];
-  const appCss = assets.styles[layout];
-  const vendorJs = assets.javascript.vendor;
-  const vendorCss = assets.styles.vendor;
+  const assets = await getAssets();
+  const appJs = assets[layout].js;
+  const appCss = assets[layout].css;
+  const vendorJs = assets.vendor.js;
+  const vendorCss = assets.vendor.css;
   const chunkCss = bundles.filter(bundle => bundle.file.match(/.css/));
   const chunkJs = bundles.filter(bundle => bundle.file.match(/.js/));
 
@@ -29,6 +48,7 @@ export default function render(html, layout, initialState = {}, bundles = []) {
     vendorCss,
     chunkCss,
     chunkJs,
-    initialState
+    initialState,
+    assetPath: (asset) => `${process.env.PUBLIC_ASSET_PATH}${asset}`
   });
 }

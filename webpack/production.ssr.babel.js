@@ -11,8 +11,6 @@ const allowedPlugin = (plugin, key) => {
   switch (key) {
     case 'reactLoadablePlugin':
       return enableDynamicImports;
-    case 'isomorphicPlugin':
-      return false;
     case 'bundleAnalyzerPlugin':
       return analyzeBundle;
     default:
@@ -37,7 +35,6 @@ export default merge.strategy({
   target: 'node',
   entry: ['./server/renderer/handler.js'],
   externals: [
-    // images are handled by isomorphic webpack.
     // html files are required directly
     /\.(html|png|gif|jpg)$/,
     // treat all node modules as external to keep this bundle small

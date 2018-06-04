@@ -1,2 +1,2 @@
-export { default as getStats } from './getStats';
 export { default as matchRoutes } from './matchRoutes';
+export { default as safeRequire } from './safeRequire';

@@ -1,26 +1,20 @@
 import yn from 'yn';
 import path from 'path';
 import webpack from 'webpack';
-import IsoPlugin from 'webpack-isomorphic-tools/plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
-import { mapValues, keyBy, filter } from 'lodash';
+import { mapValues, keyBy, filter, map } from 'lodash';
 import { _moduleAliases } from '../package.json';
 import babelOpts from './babel.config.client';
-import {
-  enableDynamicImports,
-  isomorphicConfig,
-  clientEnv,
-  cssModulesIdentifier
-} from '../config';
+import * as config from '../config';
 
 const isDev = process.env.NODE_ENV === 'development';
 const cwd = process.cwd();
+const { enableDynamicImports, clientEnv, cssModulesIdentifier } = config;
 
-if (isDev) {
-  require('dotenv').load();
-}
+if (isDev) require('dotenv').load();
 
 export const isSSR = yn(process.env.SSR) || false;
 export const analyzeBundle = yn(process.env.ANALYZE) || false;
@@ -28,7 +22,6 @@ export const basePlugins = {
   reactLoadablePlugin: new ReactLoadablePlugin({
     filename: path.join(__dirname, '..', 'react-loadable.json')
   }),
-  isomorphicPlugin: new IsoPlugin(isomorphicConfig).development(isDev),
   miniExtractPlugin: new MiniCssExtractPlugin({
     filename: '[name].[chunkhash].css'
   }),
@@ -37,7 +30,19 @@ export const basePlugins = {
       return JSON.stringify(process.env[env]);
     })
   }),
-  bundleAnalyzerPlugin: new BundleAnalyzerPlugin()
+  bundleAnalyzerPlugin: new BundleAnalyzerPlugin(),
+  statsWriterPlugin: new StatsWriterPlugin({
+    filename: config.webpackStatsFilename,
+    transform(data) {
+      console.log(data);
+      return JSON.stringify(mapValues(data.assetsByChunkName, (o) => {
+        return {
+          js: o.filter(file => file.match(/.js/)),
+          css: o.filter(file => file.match(/.css/))
+        };
+      }), null, 2);
+    }
+  })
 };
 
 const allowedPlugin = (plugin, key) => {
@@ -138,7 +143,7 @@ export default {
         use: [
           'css-hot-loader',
           MiniCssExtractPlugin.loader,
-          { loader: 'css-loader' },
+          { loader: 'css-loader', options: { modules: false } },
           { loader: 'postcss-loader' },
           { loader: 'sass-loader' },
           {
@@ -154,7 +159,7 @@ export default {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       },
       {
-        test: basePlugins.isomorphicPlugin.regular_expression('images'),
+        test: /\.(png|jpg|jpeg|gif|ico|svg)$/,
         use: [
           {
             loader: 'url-loader',

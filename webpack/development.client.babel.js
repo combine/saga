@@ -7,8 +7,7 @@ const {
 } = process.env;
 
 console.info('Firing up Webpack dev server...\n');
-
-serve({
+const opts = {
   config: baseConfig,
   host: DEV_SERVER_HOSTNAME,
   port: DEV_SERVER_PORT,
@@ -16,7 +15,12 @@ serve({
     publicPath: baseConfig.output.publicPath,
     headers: { 'Access-Control-Allow-Origin': '*' },
     stats: {
-      colors: true
+      colors: true,
+      children: false
     }
   }
-});
+};
+
+console.log(opts.config.output, opts.dev);
+
+serve(opts);
