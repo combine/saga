@@ -2,7 +2,7 @@ import Base from './Base';
 import Variant from './Variant';
 import slugify from 'objection-slugify';
 import yup from 'yup';
-import productSchema from '@schemas/product';
+import productSchema from '$schemas/product';
 
 const slugged = slugify({
   sourceField: 'name',

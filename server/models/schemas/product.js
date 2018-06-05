@@ -1,5 +1,5 @@
 import yup from 'yup';
-import { patchOptional } from '@schemas/lib';
+import { patchOptional } from './lib';
 
 export default yup.object().shape({
   name: yup

@@ -7,7 +7,8 @@ const {
 } = process.env;
 
 console.info('Firing up Webpack dev server...\n');
-const opts = {
+
+serve({
   config: baseConfig,
   host: DEV_SERVER_HOSTNAME,
   port: DEV_SERVER_PORT,
@@ -19,8 +20,4 @@ const opts = {
       children: false
     }
   }
-};
-
-console.log(opts.config.output, opts.dev);
-
-serve(opts);
+});

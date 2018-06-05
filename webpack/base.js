@@ -5,7 +5,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
-import { mapValues, keyBy, filter, map } from 'lodash';
+import { mapValues, keyBy, filter } from 'lodash';
 import { _moduleAliases } from '../package.json';
 import babelOpts from './babel.config.client';
 import * as config from '../config';
@@ -34,7 +34,6 @@ export const basePlugins = {
   statsWriterPlugin: new StatsWriterPlugin({
     filename: config.webpackStatsFilename,
     transform(data) {
-      console.log(data);
       return JSON.stringify(mapValues(data.assetsByChunkName, (o) => {
         return {
           js: o.filter(file => file.match(/.js/)),

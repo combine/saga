@@ -22,17 +22,17 @@
     "@images": "common/images",
     "@lib": "common/shared/lib",
     "@middleware": "common/shared/middleware",
-    "@schemas": "common/shared/schemas",
     "@shared": "common/shared",
     "@support": "test/support",
     "@templates": "server/templates",
     "$api": "server/api",
     "$auth": "server/auth",
     "$db": "server/db",
+    "$graphql": "server/graphql",
     "$lib": "server/lib",
     "$middleware": "server/middleware",
     "$models": "server/models",
-    "$graphql": "server/graphql"
+    "$schemas": "server/models/schemas"
   },
   "scripts": {
     "knex": "better-npm-run knex",
@@ -92,7 +92,8 @@
       "command": "npx webpack --config webpack/production.client.babel.js --progress",
       "env": {
         "NODE_ENV": "production",
-        "PUBLIC_ASSET_PATH": "/assets/"
+        "PUBLIC_ASSET_PATH": "/assets/",
+        "PUBLIC_OUTPUT_PATH": "dist/public"
       }
     },
     "prod:build:ssr": {

@@ -5,7 +5,7 @@ import config from '../config';
 import babelOpts from './babel.config.ssr';
 import { enableDynamicImports } from '../config';
 import baseConfig, { basePlugins, analyzeBundle } from './base';
-import { set, filter } from 'lodash';
+import { filter } from 'lodash';
 
 const allowedPlugin = (plugin, key) => {
   switch (key) {
@@ -13,6 +13,8 @@ const allowedPlugin = (plugin, key) => {
       return enableDynamicImports;
     case 'bundleAnalyzerPlugin':
       return analyzeBundle;
+    case 'statsWriterPlugin':
+      return false;
     default:
       return true;
   }
@@ -53,8 +55,7 @@ export default merge.strategy({
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          // tell babel to uglify production server code for SSR rendering
-          options: set(babelOpts, 'presets[0][1].targets.uglify', true)
+          options: babelOpts
         }
       },
       {

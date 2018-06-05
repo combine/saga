@@ -1,6 +1,6 @@
 import Base from './Base';
 import yup from 'yup';
-import variantSchema from '@schemas/variant';
+import variantSchema from '$schemas/variant';
 import Monetize from './plugins/monetize';
 
 const monetize = Monetize({ price: 'priceInCents' });

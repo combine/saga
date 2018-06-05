@@ -8,7 +8,7 @@ import { ApolloProvider } from 'react-apollo';
 import apolloClient from './apolloClient';
 
 // Render the application
-window.main = () => {
+(function() {
   Loadable.preloadReady().then(() => {
     ReactDOM.hydrate(
       <BrowserRouter>
@@ -19,4 +19,4 @@ window.main = () => {
       document.getElementById('app')
     );
   });
-};
+})();

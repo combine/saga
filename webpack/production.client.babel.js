@@ -10,30 +10,24 @@ export default merge(baseConfig, {
     filename: '[name].[hash].js',
     chunkFilename: config.enableDynamicImports ? '[name].[hash].js' : undefined
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      name: true
-    }
-  },
   plugins: [
     new webpack.BannerPlugin({
       banner:
         'hash:[hash], chunkhash:[chunkhash], name:[name], ' +
         'filebase:[filebase], query:[query], file:[file]'
     }),
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        parallel: 4,
-        compress: {
-          warnings: false
-        },
-        mangle: true,
-        output: {
-          comments: false
-        }
-      }
-    }),
+    // new UglifyJSPlugin({
+    //   uglifyOptions: {
+    //     parallel: 4,
+    //     compress: {
+    //       warnings: false
+    //     },
+    //     mangle: true,
+    //     output: {
+    //       comments: false
+    //     }
+    //   }
+    // }),
     new CompressionPlugin({
       asset: '[file].gz',
       algorithm: 'gzip',

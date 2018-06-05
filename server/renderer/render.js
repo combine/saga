@@ -1,4 +1,4 @@
-// cache the main layout template with lodash
+import path from 'path';
 import { template } from 'lodash';
 import { Helmet } from 'react-helmet';
 import { getEnv } from '@shared/lib/env';
@@ -7,19 +7,27 @@ import { safeRequire } from './helpers';
 import axios from 'axios';
 
 const env = getEnv();
-const getAssets = async () => {
-  const path = `${process.env.PUBLIC_ASSET_PATH}${webpackStatsFilename}`;
+const publicAssetPath = process.env.PUBLIC_ASSET_PATH || '/assets/';
+const outputPath = process.env.PUBLIC_OUTPUT_PATH || 'dist/public';
 
+const getAssets = async () => {
   if (env === 'development') {
     // In dev, this file comes from the dev server, so we have to request it via
     // an http request.
+    const uri = `${publicAssetPath}${webpackStatsFilename}`;
+
     try {
-      return (await axios.get(path)).data;
+      return (await axios.get(uri)).data;
     } catch (err) {
-      console.error(`Could not fetch asset manifest from ${path}:`, err);
+      console.error(`Could not fetch asset manifest from ${uri}:`, err);
     }
   } else {
-    return Promise.resolve(safeRequire(path));
+    // In production, just require() the JSON stats file since the manifest is
+    // hosted on the same server.
+    const module = path.join('..', '..', outputPath, webpackStatsFilename);
+    return Promise.resolve(
+      safeRequire(module)
+    );
   }
 };
 
@@ -29,7 +37,7 @@ export default async function render(
   initialState = {},
   bundles = []
 ) {
-  const compile = template(require(`@templates/layouts/${layout}.html`));
+  const compile = template(safeRequire(`@templates/layouts/${layout}.html`));
   const helmet = Helmet.renderStatic();
   const assets = await getAssets();
   const appJs = assets[layout].js;
@@ -49,6 +57,6 @@ export default async function render(
     chunkCss,
     chunkJs,
     initialState,
-    assetPath: (asset) => `${process.env.PUBLIC_ASSET_PATH}${asset}`
+    assetPath: asset => `${publicAssetPath}${asset}`
   });
 }

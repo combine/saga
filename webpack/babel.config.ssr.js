@@ -6,8 +6,9 @@ export default {
       {
         targets: {
           node: 'current',
-          uglify: true
-        }
+          uglify: false
+        },
+        useBuiltIns: true
       }
     ],
     'react'

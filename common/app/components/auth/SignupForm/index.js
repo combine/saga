@@ -5,7 +5,7 @@ import { Formik, Field } from 'formik';
 import { Form } from 'semantic-ui-react';
 import { Input, Button } from '@shared/components/form';
 import { getValidationErrors } from '@lib/errors';
-import userSchema from '@schemas/user';
+import userSchema from '$schemas/user';
 import css from './index.scss';
 
 class SignupForm extends Component {

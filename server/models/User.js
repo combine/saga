@@ -2,9 +2,9 @@ import Base from './Base';
 import { compose } from 'objection';
 import { Authenticatable, Recoverable } from 'objection-auth';
 import { omit } from 'lodash';
-import { patchOptional } from '@schemas/lib';
+import { patchOptional } from '$schemas/lib';
 import jwt from 'jsonwebtoken';
-import userSchema from '@schemas/user';
+import userSchema from '$schemas/user';
 import Unique from 'objection-unique';
 import yup from 'yup';
 
