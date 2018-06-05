@@ -32,5 +32,5 @@ module.exports = {
   // compilation and allows the server to reference the correct bundles.
   // The file is located relative to `webpack.config.output.path`. In dev mode,
   // this file is availble on the dev server.
-  webpackStatsFilename: 'webpack-assets.json',
+  manifestFilename: 'webpack-manifest.json',
 };

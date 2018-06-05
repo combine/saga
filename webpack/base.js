@@ -2,7 +2,7 @@ import yn from 'yn';
 import path from 'path';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { StatsWriterPlugin } from 'webpack-stats-plugin';
+import ManifestPlugin from 'webpack-manifest-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
 import { mapValues, keyBy, filter } from 'lodash';
@@ -31,16 +31,8 @@ export const basePlugins = {
     })
   }),
   bundleAnalyzerPlugin: new BundleAnalyzerPlugin(),
-  statsWriterPlugin: new StatsWriterPlugin({
-    filename: config.webpackStatsFilename,
-    transform(data) {
-      return JSON.stringify(mapValues(data.assetsByChunkName, (o) => {
-        return {
-          js: o.filter(file => file.match(/.js/)),
-          css: o.filter(file => file.match(/.css/))
-        };
-      }), null, 2);
-    }
+  manifestPlugin: new ManifestPlugin({
+    fileName: config.manifestFilename
   })
 };
 

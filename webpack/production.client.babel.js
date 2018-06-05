@@ -16,18 +16,18 @@ export default merge(baseConfig, {
         'hash:[hash], chunkhash:[chunkhash], name:[name], ' +
         'filebase:[filebase], query:[query], file:[file]'
     }),
-    // new UglifyJSPlugin({
-    //   uglifyOptions: {
-    //     parallel: 4,
-    //     compress: {
-    //       warnings: false
-    //     },
-    //     mangle: true,
-    //     output: {
-    //       comments: false
-    //     }
-    //   }
-    // }),
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        parallel: 4,
+        compress: {
+          warnings: false
+        },
+        mangle: true,
+        output: {
+          comments: false
+        }
+      }
+    }),
     new CompressionPlugin({
       asset: '[file].gz',
       algorithm: 'gzip',

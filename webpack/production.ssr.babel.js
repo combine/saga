@@ -13,7 +13,7 @@ const allowedPlugin = (plugin, key) => {
       return enableDynamicImports;
     case 'bundleAnalyzerPlugin':
       return analyzeBundle;
-    case 'statsWriterPlugin':
+    case 'manifestPlugin':
       return false;
     default:
       return true;

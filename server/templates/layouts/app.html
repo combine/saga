@@ -5,15 +5,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width height=device-height" />
   <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.png">
-<%= vendorCss.map(file => `  <link type="text/css" rel="stylesheet" href="${assetPath(file)}" />`).join('\n') %>
-<%= appCss.map(file => `  <link type="text/css" rel="stylesheet" href="${assetPath(file)}" />`).join('\n') %>
-<%= chunkCss.map(bundle => `  <link type="text/css" rel="stylesheet" href="${assetPath(bundle.file)}" />`).join('\n') %>
+  <link type="text/css" rel="stylesheet" href="<%= assets['vendor.css'] %>" />
+  <link type="text/css" rel="stylesheet" href="<%= assets['app.css'] %>" />
+<%= chunkCss.map(bundle => `  <link type="text/css" rel="stylesheet" href="${bundle.file}" />`).join('\n') %>
 </head>
 <body>
   <div id="app"><%= html %></div>
   <script>window.__APOLLO_STATE__ = <%= JSON.stringify(initialState).replace(/</g, '\\u003c') %>;</script>
-<%= vendorJs.map(file => `  <script src="${assetPath(file)}"></script>`).join('\n') %>
-<%= appJs.map(file => `  <script src="${assetPath(file)}"></script>`).join('\n') %>
-<%= chunkJs.map(bundle => `  <script src="${assetPath(bundle.file)}"></script>`).join('\n') %>
+  <script src="<%= assets['vendor.js'] %>"></script>
+  <script src="<%= assets['app.js'] %>"></script>
+<%= chunkJs.map(bundle => `  <script src="${bundle.file}"></script>`).join('\n') %>
 </body>
 </html>

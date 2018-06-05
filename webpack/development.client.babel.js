@@ -1,17 +1,13 @@
 import serve from 'webpack-serve';
 import baseConfig from './base';
 
-const {
-  DEV_SERVER_PORT,
-  DEV_SERVER_HOSTNAME
-} = process.env;
-
 console.info('Firing up Webpack dev server...\n');
 
 serve({
   config: baseConfig,
-  host: DEV_SERVER_HOSTNAME,
-  port: DEV_SERVER_PORT,
+  host: process.env.DEV_SERVER_HOSTNAME,
+  port: process.env.DEV_SERVER_PORT,
+  logLevel: 'debug',
   dev: {
     publicPath: baseConfig.output.publicPath,
     headers: { 'Access-Control-Allow-Origin': '*' },

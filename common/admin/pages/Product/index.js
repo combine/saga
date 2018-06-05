@@ -25,12 +25,14 @@ class AdminProductPage extends Component {
         {({ loading, error, product }) => {
           if (loading || error) return null;
 
+          const title = `Editing ${product.name}`;
+
           return (
             <React.Fragment>
               <Helmet>
-                <title>{product.title}</title>
+                <title>{title}</title>
               </Helmet>
-              <h1>{product.title}</h1>
+              <h1>{title}</h1>
               <ProductForm
                 product={product}
                 onSubmit={this.handleUpdate}
