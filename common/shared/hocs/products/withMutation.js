@@ -19,13 +19,13 @@ export const UPDATE_PRODUCT_MUTATION = gql`
   }
 `;
 
-const withUpdate = function(ComposedComponent) {
+const withMutation = function(ComposedComponent) {
   class UpdateProductMutation extends Component {
     static propTypes = {
       mutate: PropTypes.func.isRequired
     };
 
-    executeUpdate = values => {
+    executeMutation = values => {
       const { mutate } = this.props;
 
       return mutate({
@@ -42,11 +42,13 @@ const withUpdate = function(ComposedComponent) {
     };
 
     render() {
-      return <ComposedComponent {...this.props} update={this.executeUpdate} />;
+      return (
+        <ComposedComponent {...this.props} mutate={this.executeMutation} />
+      );
     }
   }
 
   return graphql(UPDATE_PRODUCT_MUTATION)(UpdateProductMutation);
 };
 
-export default withUpdate;
+export default withMutation;

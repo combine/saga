@@ -1,1 +1,1 @@
-export { default as withUpdate } from './withUpdate';
+export { default as withMutation } from './withMutation';

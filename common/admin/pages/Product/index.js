@@ -3,21 +3,17 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { ProductForm } from '@admin/components/products';
 import { ProductQuery } from '@shared/components/products';
-import { withUpdate } from '@shared/hocs/products';
+import { withMutation } from '@shared/hocs/products';
 import { get } from 'lodash';
 
 class AdminProductPage extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired
+    mutate: PropTypes.func.isRequired
   };
 
-  handleUpdate = (values) => {
-    return this.props.update(values);
-  }
-
   render() {
-    const { match } = this.props;
+    const { match, mutate } = this.props;
     const slug = get(match, 'params.slug', null);
 
     return (
@@ -35,7 +31,7 @@ class AdminProductPage extends Component {
               <h1>{title}</h1>
               <ProductForm
                 product={product}
-                onSubmit={this.handleUpdate}
+                onSubmit={mutate}
               />
             </React.Fragment>
           );
@@ -45,4 +41,4 @@ class AdminProductPage extends Component {
   }
 }
 
-export default withUpdate(AdminProductPage);
+export default withMutation(AdminProductPage);
