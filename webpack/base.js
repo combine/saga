@@ -74,7 +74,7 @@ export default {
   output: {
     path: path.join(__dirname, '..', process.env.PUBLIC_OUTPUT_PATH),
     filename: '[name].bundle.js',
-    publicPath: process.env.PUBLIC_ASSET_PATH || '/',
+    publicPath: process.env.PUBLIC_ASSET_PATH || '/assets/',
     chunkFilename: enableDynamicImports ? '[name].bundle.js' : undefined
   },
   resolve: {

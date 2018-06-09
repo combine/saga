@@ -15,6 +15,11 @@ const app = new express();
 // Bind all models to Knex
 Model.knex(db);
 
+// Run with webpack-hot-client and webpack-dev-middleware for hot reloading
+if (env === 'development') {
+  require('./server.dev')(app);
+}
+
 // Secure with helmet
 app.use(helmet());
 

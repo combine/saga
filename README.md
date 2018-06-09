@@ -194,9 +194,3 @@ Example using Heroku, if serving via CDN:
 ```
 heroku config:set PUBLIC_ASSET_PATH=https://my.cdn.com
 ```
-
-Example using Heroku, if serving locally:
-
-```
-heroku config:set PUBLIC_ASSET_PATH=/assets
-```
