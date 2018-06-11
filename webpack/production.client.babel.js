@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import baseConfig from './base';
+import baseConfig from './base.client';
 import CompressionPlugin from 'compression-webpack-plugin';
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
 import merge from 'webpack-merge';

@@ -4,7 +4,7 @@ import path from 'path';
 import config from '../config';
 import babelOpts from './babel.config.ssr';
 import { enableDynamicImports } from '../config';
-import baseConfig, { basePlugins, analyzeBundle } from './base';
+import baseConfig, { basePlugins, analyzeBundle } from './base.client';
 import { filter } from 'lodash';
 
 const allowedPlugin = (plugin, key) => {

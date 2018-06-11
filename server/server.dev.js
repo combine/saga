@@ -2,8 +2,7 @@ import hotClient from 'webpack-hot-client';
 import devMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
 import DashboardPlugin from 'webpack-dashboard/plugin';
-
-import config from '../webpack/base';
+import config from '../webpack/base.client';
 
 /* This module sets up the development environment for our server.
  * This is and should only be loaded in development ONLY:

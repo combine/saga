@@ -95,7 +95,7 @@
       }
     },
     "prod:build:server": {
-      "command": "npx babel ./server -d ./dist --ignore '**/*.test.js,renderer/handler.js'",
+      "command": "npx babel ./server -d ./dist --ignore 'renderer/handler.js'",
       "env": {
         "NODE_ENV": "production"
       }

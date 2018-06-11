@@ -4,16 +4,15 @@ import { Helmet } from 'react-helmet';
 import { manifestFilename } from '@config';
 import { safeRequire } from './helpers';
 
-const outputPath = process.env.PUBLIC_OUTPUT_PATH || 'dist/public';
-const module = path.join(__dirname, '..', '..', outputPath, manifestFilename);
-const assets = safeRequire(module);
-
 export default async function render(
   html,
   layout,
   initialState = {},
   bundles = []
 ) {
+  const outputPath = process.env.PUBLIC_OUTPUT_PATH || 'dist/public';
+  const module = path.join(__dirname, '..', '..', outputPath, manifestFilename);
+  const assets = safeRequire(module);
   const compile = template(safeRequire(`@templates/layouts/${layout}.html`));
   const helmet = Helmet.renderStatic();
   const chunkCss = bundles.filter(bundle => bundle.file.match(/.css/));
