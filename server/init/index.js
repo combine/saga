@@ -14,8 +14,17 @@ if (env === 'development') {
   process.on('unhandledRejection', r => console.log(r));
 }
 
+// Loads module aliases defined in package.json
 require('./aliases');
-require('./dotenv');
+
+// Load environment variables
+require('./environment');
+
+// Adds require hook for css-modules loading server side (dev only)
 require('./cssModules');
+
+// Internationalization
 require('./i18n');
+
+// Add additional require extensions (e.g. html)
 require('./requireExtensions');
