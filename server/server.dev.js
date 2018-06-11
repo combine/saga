@@ -1,6 +1,8 @@
 import hotClient from 'webpack-hot-client';
 import devMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
+import DashboardPlugin from 'webpack-dashboard/plugin';
+
 import config from '../webpack/base';
 
 /* This module sets up the development environment for our server.
@@ -12,14 +14,14 @@ import config from '../webpack/base';
 
 module.exports = app => {
   const compiler = webpack(config);
+  const dashboardPlugin = new DashboardPlugin();
+
+  // Add webpack-dashboard plugin
+  compiler.apply(dashboardPlugin);
 
   // Set up hot reloading with WebSockets
   const client = hotClient(compiler, {
-    allEntries: true,
-    stats: {
-      colors: true,
-      children: false
-    }
+    allEntries: true
   });
 
   // Add dev middleware to our express app once hot client is up
@@ -28,11 +30,7 @@ module.exports = app => {
       devMiddleware(compiler, {
         publicPath: config.output.publicPath,
         writeToDisk: true,
-        stats: {
-          colors: true,
-          children: false,
-          warnings: false
-        }
+        stats: 'none'
       })
     );
   });

@@ -56,6 +56,12 @@ export default {
     app: ['./client/app'],
     admin: ['./client/admin']
   },
+  devServer: {
+    stats: {
+      colors: true,
+      children: false
+    }
+  },
   optimization: {
     splitChunks: {
       cacheGroups: {
