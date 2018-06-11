@@ -15,7 +15,7 @@ if (env === 'development') {
 }
 
 require('./aliases');
-require('./environment');
+require('./dotenv');
 require('./cssModules');
 require('./i18n');
 require('./requireExtensions');
