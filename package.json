@@ -68,7 +68,7 @@
       }
     },
     "dev:start": {
-      "command": "npx webpack-dashboard -m -- node ./server",
+      "command": "npx webpack-dashboard -- node ./server",
       "env": {
         "NODE_ENV": "development"
       }

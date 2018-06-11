@@ -3,10 +3,8 @@ import express from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import ReactRenderer from './renderer';
-import { httpsRedirect, authMiddleware } from '$middleware';
+import { httpsRedirect, authMiddleware, hotRequire } from '$middleware';
 import { Model } from 'objection';
-import graphqlMiddleware from './graphql';
 import db from '$db/index';
 
 const env = process.env.NODE_ENV || 'development';
@@ -50,9 +48,9 @@ app.use(
 app.use(authMiddleware);
 
 // Mount GraphQL Service
-app.use(graphqlMiddleware);
+app.use(hotRequire('./graphql'));
 
 // Mount the react render handler
-app.use('*', ReactRenderer);
+app.use('*', hotRequire('./renderer'));
 
 module.exports = app;
