@@ -4,15 +4,15 @@ import helmet from 'helmet';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import ReactRenderer from './renderer';
-import { Model } from 'objection';
 import { httpsRedirect, authMiddleware } from '$middleware';
+import { Model } from 'objection';
 import graphqlMiddleware from './graphql';
 import db from '$db/index';
 
 const env = process.env.NODE_ENV || 'development';
 const app = new express();
 
-// Bind all models to Knex
+// Bind all Objection.js models to Knex
 Model.knex(db);
 
 // Run with webpack-hot-client and webpack-dev-middleware for hot reloading
