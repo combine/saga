@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Field } from 'formik';
-import { Form } from 'semantic-ui-react';
-import { Input, Button } from '@shared/components/form';
+import { Input, FormActions, StickyForm } from '@shared/components/form';
+import { Grid, Container } from 'semantic-ui-react';
+import { VariantFormFieldFragment } from '@admin/components/variants';
 import { getValidationErrors } from '@lib/errors';
 // import schema from './schema';
 import css from './index.scss';
@@ -10,7 +11,8 @@ import css from './index.scss';
 class ProductForm extends Component {
   static propTypes = {
     product: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    title: PropTypes.string
   };
 
   handleSubmit = (values, actions) => {
@@ -26,11 +28,31 @@ class ProductForm extends Component {
       });
   };
 
-  renderForm = ({ handleSubmit, isSubmitting, isValid }) => {
+  renderActions = (form) => {
     const { product } = this.props;
 
+    return (() => (
+      <FormActions
+        form={form}
+        submitText={product ? 'Update Product' : 'Create Product'}
+      />
+    ));
+  }
+
+  renderForm = (form) => {
+    const { product, title } = this.props;
+    const { handleSubmit } = form;
+
     return (
-      <Form className={css.productForm} onSubmit={handleSubmit} error={true}>
+      <StickyForm
+        formProps={{
+          onSubmit: handleSubmit,
+          error: true
+        }}
+        className={css.productForm}
+        renderActions={this.renderActions(form)}
+      >
+        {title && <h1>{title}</h1>}
         <Field
           component={Input}
           name="name"
@@ -42,17 +64,27 @@ class ProductForm extends Component {
           name="description"
           placeholder="Description"
         />
-        <div className={css.actions}>
-          <Button
-            primary
-            type="submit"
-            loading={isSubmitting}
-            disabled={isSubmitting || !isValid}
-          >
-            {product ? 'Update Product' : 'Create Product'}
-          </Button>
-        </div>
-      </Form>
+        {product.variants.map(variant => {
+          return (
+            <Container key={variant.id}>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column width={10}>
+                    <h3>Variant {variant.id}</h3>
+                    <VariantFormFieldFragment
+                      variant={variant}
+                      key={variant.id || Date.now()}
+                    />
+                  </Grid.Column>
+                  <Grid.Column width={2}>
+                    Save
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Container>
+          );
+        })}
+      </StickyForm>
     );
   };
 

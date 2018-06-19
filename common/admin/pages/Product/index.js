@@ -28,10 +28,10 @@ class AdminProductPage extends Component {
               <Helmet>
                 <title>{title}</title>
               </Helmet>
-              <h1>{title}</h1>
               <ProductForm
                 product={product}
                 onSubmit={mutate}
+                title={title}
               />
             </React.Fragment>
           );

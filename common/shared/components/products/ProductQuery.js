@@ -10,6 +10,13 @@ export const GET_PRODUCT_QUERY = gql`
       slug
       name
       description
+      variants {
+        id
+        isMaster
+        priceInCents
+        barcode
+        sku
+      }
     }
   }
 `;
