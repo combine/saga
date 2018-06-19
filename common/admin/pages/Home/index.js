@@ -6,11 +6,11 @@ class AdminHomePage extends Component {
     return (
       <div>
         <Helmet>
-          <title>Admin</title>
+          <title>Dashboard</title>
         </Helmet>
-        <h1>Admin Page</h1>
+        <h1>Dashboard</h1>
         <p>
-          This is the admin home page. Work is still in progress.
+          This is the admin dashboard. Take a look around!
         </p>
       </div>
     );
