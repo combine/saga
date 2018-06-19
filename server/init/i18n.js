@@ -9,7 +9,7 @@ i18n.configure({
   objectNotation: true,
 
   // the absolute path to the locales directory
-  directory: path.join(__dirname, '/locales'),
+  directory: path.join(__dirname, '..', 'locales'),
 
   // don't update local files automatically
   updateFiles: false,

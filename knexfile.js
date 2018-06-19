@@ -1,3 +1,4 @@
+import './server/init';
 import path from 'path';
 import { knexSnakeCaseMappers } from 'objection';
 
