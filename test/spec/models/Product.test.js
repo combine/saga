@@ -45,7 +45,7 @@ describe('Product', function() {
 
   describe('.variants', function() {
     test('returns a list of variants', async function() {
-      const variants = await product.$relatedQuery('variants');
+      const variants = await product.$loadRelated('variants');
 
       expect(variants).toEqual(
         expect.arrayContaining([

@@ -11,7 +11,7 @@ const baseResolver = createResolver(
     if (yn(process.env.DEBUG)) {
       console.error(
         JSON.stringify(
-          { args, context, error, message: error.toString() },
+          { args, context, error, message: error },
           null,
           2
         ),

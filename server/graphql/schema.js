@@ -53,7 +53,7 @@ export const typeDefs = `
     findUser(id: Int, email: String, username: String): User
     user(id: Int, email: String, username: String): User
     product(id: Int, slug: String): Product
-    findProduct(id: String, slug: String): Product
+    findProduct(id: Int, slug: String): Product
     findProducts(query: String, after: Int, count: Int): ProductList
     allProducts: [Product]
   }
