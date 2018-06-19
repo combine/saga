@@ -1,4 +1,3 @@
-import '../../server/init';
 import { configure } from 'enzyme';
 import { Model } from 'objection';
 import Adapter from 'enzyme-adapter-react-16';

@@ -5,7 +5,7 @@
  */
 const env = process.env.NODE_ENV || 'development';
 
-if (env === 'development') {
+if (env !== 'production') {
   // Set up dev compilation tools
   require('babel-polyfill');
   require('babel-register');

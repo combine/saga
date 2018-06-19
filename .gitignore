@@ -4,11 +4,12 @@ node_modules
 npm-debug.log*
 .DS_Store
 
-# test database
-/test/db.sqlite3
-
 # ignore built static files
 /dist
 /webpack-assets.json
 /webpack-stats.json
 /react-loadable.json
+
+# testing
+.env.test
+/test/db.sqlite3

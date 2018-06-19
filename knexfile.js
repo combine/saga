@@ -1,11 +1,5 @@
-require('./server/init');
-
 import path from 'path';
 import { knexSnakeCaseMappers } from 'objection';
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').load();
-}
 
 const { DB_DRIVER, DB_NAME, DB_HOST, DB_USER, DB_PASS, USER } = process.env;
 const driver = DB_DRIVER || 'postgres';
@@ -35,7 +29,6 @@ const drivers = {
     },
   }
 };
-
 
 module.exports = {
   test: { ...drivers[driver], ...opts },

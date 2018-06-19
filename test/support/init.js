@@ -1,4 +1,5 @@
 // NOTE: This file is run before tests via 'npm pretest'.
+require('../../server/init');
 const db = require('./db');
 const get = require('lodash/get');
 const dbName = get(db, 'config.knex.connection.database');
