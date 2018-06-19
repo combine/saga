@@ -1,44 +1,44 @@
-const path = require('path');
-const { knexSnakeCaseMappers } = require('objection');
-const env = process.NODE_ENV || 'development';
+require('./server/init');
 
-if (env !== 'production') {
+import path from 'path';
+import { knexSnakeCaseMappers } from 'objection';
+
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
 
-const opts = Object.assign({
+const { DB_DRIVER, DB_NAME, DB_HOST, DB_USER, DB_PASS, USER } = process.env;
+const driver = DB_DRIVER || 'postgres';
+const opts = {
   migrations: {
     tableName: 'knex_migrations',
     directory: path.join(__dirname, 'server/db/migrations')
   },
   seeds: {
     directory: path.join(__dirname, 'server/db/seeds')
-  }
-}, knexSnakeCaseMappers());
-
-const pg = Object.assign({
-  client: 'postgresql',
-  connection: {
-    host: process.env.PG_DB_HOST,
-    user: process.env.PG_DB_USER,
-    password: process.env.PG_DB_PASS,
-    database: process.env.PG_DB_NAME
   },
-  pool: {
-    min: 2,
-    max: 10
+  ...knexSnakeCaseMappers()
+};
+
+const drivers = {
+  postgres: {
+    client: 'postgresql',
+    connection: {
+      database: DB_NAME,
+      host: DB_HOST || 'localhost',
+      user: DB_USER || USER || 'postgres',
+      password: DB_PASS
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
   }
-}, opts);
+};
+
 
 module.exports = {
-  test: Object.assign({}, pg, {
-    connection: {
-      host: process.env.TEST_DB_HOST || 'localhost',
-      user: process.env.TEST_DB_USER || process.env.USER || 'postgres',
-      password: process.env.TEST_DB_PASS || null,
-      database: process.env.TEST_DB_NAME || 'saga_test'
-    }
-  }),
-  development: pg,
-  production: pg
+  test: { ...drivers[driver], ...opts },
+  development: { ...drivers[driver], ...opts },
+  production: { ...drivers[driver], ...opts }
 };

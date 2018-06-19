@@ -37,6 +37,8 @@
   "scripts": {
     "knex": "better-npm-run knex",
     "db:test:prepare": "better-npm-run db:migrate",
+    "db:create": "better-npm-run db:create",
+    "db:drop": "better-npm-run db:drop",
     "db:migrate": "better-npm-run db:migrate",
     "db:rollback": "better-npm-run db:rollback",
     "db:seed": "better-npm-run db:seed",
@@ -58,6 +60,8 @@
   },
   "betterScripts": {
     "knex": "npx babel-node $(npm bin)/knex",
+    "db:create": "npx babel-node ./server/db/cli --task=create",
+    "db:drop": "npx babel-node ./server/db/cli --task=drop",
     "db:migrate": "npm run knex -- migrate:latest",
     "db:rollback": "npm run knex -- migrate:rollback",
     "db:seed": "npm run knex -- seed:run",
