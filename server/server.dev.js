@@ -18,7 +18,7 @@ import config from '../webpack/base.client';
 const startCacheInvalidator = function() {
   const cwd = process.cwd();
   const watcher = chokidar.watch([
-    path.join(cwd, 'server', '**/*.js'),
+    path.join(cwd, 'server', '**/*.(js|html)'),
     path.join(cwd, 'common', 'admin', '**/*'),
     path.join(cwd, 'common', 'app', '**/*')
   ], { persistent: true });
