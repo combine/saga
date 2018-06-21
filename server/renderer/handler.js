@@ -22,8 +22,10 @@ const stats = enableDynamicImports
   : null;
 
 export default function handleRender(req, res) {
-  let context = {};
-  let modules = [];
+  let context = {}, modules = [];
+
+  // We're definitely sending HTML back down the wire.
+  res.contentType('text/html');
 
   const routes =
     req.user && req.user.isAdmin()
@@ -43,6 +45,7 @@ export default function handleRender(req, res) {
   const location = { pathname, search };
   const matchPath = get(matches[0], 'route.path');
   const layout = matchPath.match(/\/admin/) ? 'admin' : 'app';
+  const status = matches.length && matches[0].match.path === '*' ? 404 : 200;
   const App = layout === 'admin' ? AdminContainer : AppContainer;
   const cache = new InMemoryCache();
 
@@ -59,7 +62,9 @@ export default function handleRender(req, res) {
 
   // If SSR is disabled, just render the skeleton HTML with the initial state.
   if (!enableSSR) {
-    return res.send(render(null, {}, []));
+    return render(null, layout, {}, []).then(markup => {
+      return res.status(status).send(markup);
+    });
   }
 
   const Component = (() => {
@@ -86,15 +91,12 @@ export default function handleRender(req, res) {
     const html = renderToString(Component);
     const state = client.extract();
     const bundles = (stats && getBundles(stats, modules)) || [];
-    const status = matches.length && matches[0].match.path === '*' ? 404 : 200;
 
     // A 301 redirect was rendered somewhere if context.url exists after
     // rendering has happened.
     if (context.url) {
       return res.redirect(302, context.url);
     }
-
-    res.contentType('text/html');
 
     return render(html, layout, state, bundles)
       .then(markup => {
