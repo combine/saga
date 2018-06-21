@@ -62,7 +62,7 @@ module.exports = app => {
       devMiddleware(compiler, {
         publicPath: config.output.publicPath,
         writeToDisk: true,
-        stats: 'none'
+        stats: { color: true, children: false }
       })
     );
   });
