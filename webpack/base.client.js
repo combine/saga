@@ -20,7 +20,7 @@ export const isSSR = yn(process.env.SSR) || false;
 export const analyzeBundle = yn(process.env.ANALYZE) || false;
 export const basePlugins = {
   reactLoadablePlugin: new ReactLoadablePlugin({
-    filename: path.join(__dirname, '..', 'react-loadable.json')
+    filename: path.join(cwd, 'react-loadable.json')
   }),
   miniExtractPlugin: new MiniCssExtractPlugin({
     filename: '[name].[chunkhash].css'
@@ -49,12 +49,81 @@ const allowedPlugin = (plugin, key) => {
   }
 };
 
+// This function returns a loader set that will compile sass files from within
+// the specified entry point.
+const scssLoaderForEntryPoint = (entry) => {
+  const test = new RegExp(path.resolve(cwd, `common/${entry}`) + '.+\\.scss');
+
+  return [
+    // These scss files will be converted into css-modules.
+    {
+      test: test,
+      exclude: [
+        path.resolve(cwd, 'node_modules'),
+        path.resolve(cwd, `common/${entry}/assets/css/base`)
+      ],
+      use: [
+        'css-hot-loader',
+        MiniCssExtractPlugin.loader,
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            minimize: false,
+            importLoaders: 1,
+            localIdentName: cssModulesIdentifier
+          }
+        },
+        { loader: 'postcss-loader' },
+        { loader: 'sass-loader' },
+        {
+          // allows resources like variables, colors to be available in
+          // css modules inside react components.
+          loader: 'sass-resources-loader',
+          options: {
+            resources: [
+              './common/shared/assets/css/resources/*.scss',
+              `./common/${entry}/assets/css/resources/*.scss`
+            ]
+          }
+        }
+      ]
+    },
+
+    // Some scss files should not be converted into css modules, since they
+    // should be applied globally.
+    {
+      test: test,
+      include: [
+        path.resolve(cwd, 'node_modules'),
+        path.resolve(cwd, `common/${entry}/assets/css/base/index.scss`)
+      ],
+      use: [
+        'css-hot-loader',
+        MiniCssExtractPlugin.loader,
+        { loader: 'css-loader', options: { modules: false } },
+        { loader: 'postcss-loader' },
+        { loader: 'sass-loader' },
+        {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: [
+              './common/shared/assets/css/resources/*.scss',
+              `./common/${entry}/assets/css/resources/*.scss`
+            ]
+          }
+        }
+      ]
+    }
+  ];
+};
+
 export default {
-  context: path.resolve(__dirname, '..'),
+  context: path.resolve(cwd),
   mode: isDev ? 'development' : 'production',
   entry: {
-    app: ['./client/app'],
-    admin: ['./client/admin']
+    admin: ['./client/admin'],
+    app: ['./client/app']
   },
   devServer: {
     stats: {
@@ -65,20 +134,21 @@ export default {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          chunks: 'all',
-          reuseExistingChunk: true,
-          priority: 1,
-          enforce: true,
-          // extract to vendor chunk if it's in /node_modules
-          test: module => /node_modules/.test(module.context)
+        vendorAdmin: {
+          test: module => /node_modules/.test(module.context),
+          name: 'admin.vendor',
+          chunks: chunk => chunk.name === 'admin'
+        },
+        vendorAapp: {
+          test: module => /node_modules/.test(module.context),
+          name: 'app.vendor',
+          chunks: chunk => chunk.name === 'app'
         }
       }
     }
   },
   output: {
-    path: path.join(__dirname, '..', process.env.PUBLIC_OUTPUT_PATH),
+    path: path.join(cwd, process.env.PUBLIC_OUTPUT_PATH),
     filename: '[name].bundle.js',
     publicPath: process.env.PUBLIC_ASSET_PATH || '/assets/',
     chunkFilename: enableDynamicImports ? '[name].bundle.js' : undefined
@@ -98,59 +168,9 @@ export default {
         loader: 'babel-loader',
         options: babelOpts
       },
-      {
-        // For all .scss files that should be modularized. This should exclude
-        // anything inside node_modules and everything inside common/css/base
-        // since they should be globally scoped.
-        test: /\.scss$/,
-        exclude: [
-          path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../common/css/base')
-        ],
-        use: [
-          'css-hot-loader',
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              minimize: false,
-              importLoaders: 1,
-              localIdentName: cssModulesIdentifier
-            }
-          },
-          { loader: 'postcss-loader' },
-          { loader: 'sass-loader' },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: './common/css/resources/*.scss'
-            }
-          }
-        ]
-      },
-      {
-        // for .scss modules that need to be available globally, we don't pass
-        // the files through css-loader to be modularized.
-        test: /\.scss$/,
-        include: [
-          path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../common/css/base')
-        ],
-        use: [
-          'css-hot-loader',
-          MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { modules: false } },
-          { loader: 'postcss-loader' },
-          { loader: 'sass-loader' },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: './common/css/resources/*.scss'
-            }
-          }
-        ]
-      },
+      ...scssLoaderForEntryPoint('shared'),
+      ...scssLoaderForEntryPoint('app'),
+      ...scssLoaderForEntryPoint('admin'),
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']

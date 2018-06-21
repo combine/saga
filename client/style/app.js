@@ -16,4 +16,4 @@
 import 'semantic-ui-css/semantic.min.css';
 
 // Include initial base styles.
-import '@css/base/index.scss';
+import '@app/assets/css/base/index.scss';

@@ -1,4 +1,4 @@
-import './styles';
+import './style/admin';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '@admin/containers/App';

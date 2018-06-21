@@ -1,5 +1,5 @@
 import path from 'path';
-import { template } from 'lodash';
+import { template, difference } from 'lodash';
 import { Helmet } from 'react-helmet';
 import { manifestFilename } from '@config';
 import { safeRequire } from './helpers';
@@ -10,19 +10,20 @@ const manifestPath = path.join(__dirname, '../..', output, manifestFilename);
 const getAssets = (layout, chunks = []) => {
   const manifest = safeRequire(manifestPath);
   const isLayout = f => f.match(new RegExp(layout));
-  const isVendor = f => f.match(/vendor/);
+  const isVendor = f => f.match(new RegExp(`${layout}\\.vendor`));
   const isCss = f => f.match(/.css/);
   const isJs = f => f.match(/.js/);
   const assetPath = k => manifest[k];
-
   const keys = Object.keys(manifest);
 
   // vendors go first.
-  const bundles = [ ...keys.filter(isVendor), ...keys.filter(isLayout) ];
+  const bundles = keys.filter(isLayout);
+  const vendors = keys.filter(isVendor);
+  const assets = [...vendors, ...difference(bundles, vendors)];
 
   return {
     css: [
-      ...bundles.filter(isCss).map(assetPath),
+      ...assets.filter(isCss).map(assetPath),
       ...chunks.map(b => b.file).filter(isCss)
     ],
     js: [
