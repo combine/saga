@@ -1,7 +1,7 @@
 import yn from 'yn';
 import path from 'path';
 import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { ReactLoadablePlugin } from 'react-loadable/webpack';
@@ -22,8 +22,9 @@ export const basePlugins = {
   reactLoadablePlugin: new ReactLoadablePlugin({
     filename: path.join(cwd, 'react-loadable.json')
   }),
-  miniExtractPlugin: new MiniCssExtractPlugin({
-    filename: '[name].[chunkhash].css'
+  extractCssChunksPlugin: new ExtractCssChunks({
+    filename: '[name].[chunkhash].css',
+    hot: isDev ? true : false
   }),
   definePlugin: new webpack.DefinePlugin({
     'process.env': mapValues(keyBy(clientEnv), env => {
@@ -40,7 +41,7 @@ const allowedPlugin = (plugin, key) => {
   switch (key) {
     case 'reactLoadablePlugin':
       return enableDynamicImports;
-    case 'miniExtractPlugin':
+    case 'extractCssChunksPlugin':
       return !isSSR;
     case 'bundleAnalyzerPlugin':
       return analyzeBundle;
@@ -63,8 +64,7 @@ const scssLoaderForEntryPoint = (entry) => {
         path.resolve(cwd, `common/${entry}/assets/css/base`)
       ],
       use: [
-        'css-hot-loader',
-        MiniCssExtractPlugin.loader,
+        ExtractCssChunks.loader,
         {
           loader: 'css-loader',
           options: {
@@ -99,8 +99,7 @@ const scssLoaderForEntryPoint = (entry) => {
         path.resolve(cwd, `common/${entry}/assets/css/base/index.scss`)
       ],
       use: [
-        'css-hot-loader',
-        MiniCssExtractPlugin.loader,
+        ExtractCssChunks.loader,
         { loader: 'css-loader', options: { modules: false } },
         { loader: 'postcss-loader' },
         { loader: 'sass-loader' },
@@ -173,7 +172,7 @@ export default {
       ...scssLoaderForEntryPoint('admin'),
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+        use: [ExtractCssChunks.loader, 'css-loader', 'postcss-loader']
       },
       {
         test: /\.(png|jpg|jpeg|gif|ico|svg)$/,

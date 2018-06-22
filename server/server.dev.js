@@ -5,6 +5,7 @@ import devMiddleware from 'webpack-dev-middleware';
 import webpack from 'webpack';
 import DashboardPlugin from 'webpack-dashboard/plugin';
 import config from '../webpack/base.client';
+import { manifestFilename } from '@config';
 
 /* This module sets up the development environment for our server.
  * This is and should only be loaded in development ONLY:
@@ -18,9 +19,10 @@ import config from '../webpack/base.client';
 const startCacheInvalidator = function() {
   const cwd = process.cwd();
   const watcher = chokidar.watch([
-    path.join(cwd, 'server', '**/*.(js|html)'),
-    path.join(cwd, 'common', 'admin', '**/*'),
-    path.join(cwd, 'common', 'app', '**/*')
+    path.join(cwd, 'client', '**/*'),
+    path.join(cwd, 'common', '**/*'),
+    path.join(cwd, 'config', '**/*'),
+    path.join(cwd, 'server', '**/*')
   ], { persistent: true });
 
   watcher.on('ready', () => {
@@ -30,6 +32,12 @@ const startCacheInvalidator = function() {
       if (event === 'change') {
         console.log('File changed, clearing cache:', file);
 
+        // Invalidate manifest
+        const output = process.env.PUBLIC_OUTPUT_PATH || 'dist/public';
+        const manifestPath = path.join(cwd, output, manifestFilename);
+        delete require.cache[manifestPath];
+
+        // Invalidate watched files
         Object.keys(watchFiles).forEach(dir => {
           watchFiles[dir].forEach(file => {
             delete require.cache[`${dir}/${file}`];
