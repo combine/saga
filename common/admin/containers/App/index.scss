@@ -1,7 +1,16 @@
 .appContainer {
   height: 100%;
 
-  .content {
-    padding: 30px;
+  .container {
+    display: flex;
+    justify-content: flex-start;
+
+    .sidebar {
+      flex: 0;
+    }
+    .content {
+      flex: 1;
+      padding: 0 30px;
+    }
   }
 }

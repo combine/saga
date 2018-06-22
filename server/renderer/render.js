@@ -27,7 +27,7 @@ const getAssets = (layout, chunks = []) => {
       ...chunks.map(b => b.file).filter(isCss)
     ],
     js: [
-      ...bundles.filter(isJs).map(assetPath),
+      ...assets.filter(isJs).map(assetPath),
       ...chunks.map(b => b.file).filter(isJs)
     ]
   };

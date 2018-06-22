@@ -66,12 +66,12 @@ module.exports = app => {
 
   // Add dev middleware to our express app once hot client is up
   client.server.on('listening', () => {
-    return app.use(
-      devMiddleware(compiler, {
-        publicPath: config.output.publicPath,
-        writeToDisk: true,
-        stats: { color: true, children: false }
-      })
-    );
+    const middleware = devMiddleware(compiler, {
+      publicPath: config.output.publicPath,
+      writeToDisk: true,
+      stats: { color: true, children: false }
+    });
+
+    return app.use(middleware);
   });
 };

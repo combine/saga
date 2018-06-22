@@ -23,7 +23,8 @@ export const basePlugins = {
     filename: path.join(cwd, 'react-loadable.json')
   }),
   extractCssChunksPlugin: new ExtractCssChunks({
-    filename: '[name].[chunkhash].css',
+    filename: isDev ? '[name].css' : '[name].[id].css',
+    chunkFilename: '[id].css',
     hot: isDev ? true : false
   }),
   definePlugin: new webpack.DefinePlugin({
@@ -148,9 +149,9 @@ export default {
   },
   output: {
     path: path.join(cwd, process.env.PUBLIC_OUTPUT_PATH),
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     publicPath: process.env.PUBLIC_ASSET_PATH || '/assets/',
-    chunkFilename: enableDynamicImports ? '[name].bundle.js' : undefined
+    chunkFilename: enableDynamicImports ? '[name].js' : undefined
   },
   resolve: {
     extensions: ['.js', '.jsx', '.scss'],

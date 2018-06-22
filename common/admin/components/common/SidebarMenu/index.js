@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
 class SidebarMenu extends Component {
@@ -9,17 +9,8 @@ class SidebarMenu extends Component {
   };
 
   render() {
-    const { visible } = this.props;
-
     return (
-      <Sidebar
-        as={Menu}
-        animation="uncover"
-        width="thin"
-        visible={visible}
-        icon="labeled"
-        vertical
-      >
+      <Menu vertical>
         <Menu.Item as={NavLink} to="/admin" exact={true} name="home">
           <Icon name="home" />
           Home
@@ -28,7 +19,7 @@ class SidebarMenu extends Component {
           <Icon name="cart" />
           Products
         </Menu.Item>
-      </Sidebar>
+      </Menu>
     );
   }
 }

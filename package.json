@@ -45,6 +45,7 @@
     "start": "better-npm-run dev:start",
     "prod": "better-npm-run prod:build && better-npm-run serve",
     "serve": "better-npm-run serve",
+    "dev:clean": "better-npm-run dev:clean",
     "dev:start": "better-npm-run dev:start",
     "prod:build": "better-npm-run prod:build",
     "prod:build:client": "better-npm-run prod:build:client",
@@ -71,8 +72,14 @@
         "NODE_ENV": "production"
       }
     },
+    "dev:clean": {
+      "command": "rm -rf dist",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
     "dev:start": {
-      "command": "node ./server",
+      "command": "npm run dev:clean && node ./server",
       "env": {
         "NODE_ENV": "development"
       }
