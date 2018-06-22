@@ -4,6 +4,8 @@
   .container {
     display: flex;
     justify-content: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
 
     .sidebar {
       flex: 0;

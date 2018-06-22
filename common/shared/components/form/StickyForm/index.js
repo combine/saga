@@ -21,7 +21,7 @@ export default class StickyForm extends Component {
 
     return (
       <Form {...formProps} className={classnames(className)}>
-        <Grid centered columns={2}>
+        <Grid columns={2}>
           <Grid.Column width={10}>
             <div ref={this.handleContextRef}>{children}</div>
           </Grid.Column>

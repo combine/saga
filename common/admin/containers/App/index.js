@@ -10,7 +10,7 @@ import css from './index.scss';
 class App extends Component {
   render() {
     return (
-      <Container fluid={false} className={css.appContainer}>
+      <Container fluid={true} className={css.appContainer}>
         <Header />
         <div className={css.container}>
           <div className={css.sidebar}>
