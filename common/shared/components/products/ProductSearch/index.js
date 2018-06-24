@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 import { debounce } from 'lodash';
 import classnames from 'classnames';
 import css from './index.scss';
@@ -46,6 +46,12 @@ class ProductSearch extends Component {
 
   debouncedSearch = debounce(this.handleSearch, DEBOUNCE_TIMER);
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSearch();
+    }
+  }
+
   handleSearchChange = (e, { value }) => {
     const { instant, onSearchChange, emptyQuery } = this.props;
     const query = value || emptyQuery;
@@ -64,20 +70,15 @@ class ProductSearch extends Component {
     const { query } = this.state;
 
     return (
-      <div className={classnames(css.productSearch, className)}>
-        <Form
-          className={classnames(css.searchForm)}
-          onSubmit={this.handleSearch}
-        >
-          <Input
-            placeholder="Search..."
-            onChange={this.handleSearchChange}
-            disabled={loading}
-            action={{ icon: 'search', loading }}
-            value={query}
-          />
-        </Form>
-      </div>
+      <Input
+        placeholder="Search..."
+        className={classnames(css.productSearch, className)}
+        onChange={this.handleSearchChange}
+        onKeyPress={this.handleKeyPress}
+        disabled={loading}
+        action={{ icon: 'search', loading, onClick: this.handleSearch }}
+        value={query}
+      />
     );
   }
 }
