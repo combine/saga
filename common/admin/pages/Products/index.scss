@@ -1,0 +1,10 @@
+.menu:global {
+  &.ui.secondary.menu {
+    margin-left: 0;
+
+    &> .item:first-child {
+      padding-left: 0;
+      margin-left: 0;
+    }
+  }
+}
