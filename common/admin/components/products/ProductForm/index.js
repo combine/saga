@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Field } from 'formik';
 import { Input, FormActions, StickyForm } from '@shared/components/form';
-import { Grid, Container, Segment, Header, Button } from 'semantic-ui-react';
-import { VariantFormFieldFragment } from '@admin/components/variants';
+import { Segment } from 'semantic-ui-react';
+import { VariantEditor } from '@admin/components/variants';
 import { getValidationErrors } from '@lib/errors';
 // import schema from './schema';
 import css from './index.scss';
@@ -15,7 +15,7 @@ class ProductForm extends Component {
     title: PropTypes.string
   };
 
-  static propTypes = {
+  static defaultProps = {
     product: {}
   };
 
@@ -69,36 +69,7 @@ class ProductForm extends Component {
           />
         </Segment>
         <Segment clearing>
-          <Header as="h3">
-            Variants
-          </Header>
-          <Button
-            floated="right"
-            size="tiny"
-            content="Add Variant"
-            icon="plus"
-          />
-          <div>
-            {product &&
-              product.variants.map(variant => {
-                return (
-                  <Container key={variant.id}>
-                    <Grid>
-                      <Grid.Row>
-                        <Grid.Column width={10}>
-                          <h3>Variant {variant.id}</h3>
-                          <VariantFormFieldFragment
-                            variant={variant}
-                            key={variant.id || Date.now()}
-                          />
-                        </Grid.Column>
-                        <Grid.Column width={2}>Save</Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Container>
-                );
-              })}
-          </div>
+          <VariantEditor product={product} />
         </Segment>
       </StickyForm>
     );
