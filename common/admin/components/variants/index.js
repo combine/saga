@@ -2,4 +2,4 @@ export {
   default as VariantForm,
   VariantFormFieldFragment
 } from './VariantForm';
-export { default as VariantEditor } from './VariantEditor';
+export { default as VariantCreator } from './VariantCreator';
