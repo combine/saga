@@ -1,5 +1,6 @@
 import Base from './Base';
 import Variant from './Variant';
+import OptionType from './OptionType';
 import slugify from 'objection-slugify';
 import yup from 'yup';
 import productSchema from '$schemas/product';
@@ -40,6 +41,14 @@ export default class Product extends slugged(Base) {
       join: {
         from: 'products.id',
         to: 'variants.productId'
+      }
+    },
+    optionTypes: {
+      relation: Base.HasManyRelation,
+      modelClass: OptionType,
+      join: {
+        from: 'products.id',
+        to: 'option_types.productId'
       }
     }
   };

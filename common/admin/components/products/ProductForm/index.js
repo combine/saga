@@ -56,7 +56,7 @@ class ProductForm extends Component {
               renderActions={() => (
                 <FormActions
                   form={form}
-                  submitText={product ? 'Save' : 'Create'}
+                  submitText={product.id ? 'Save' : 'Create'}
                 />
               )}
             >

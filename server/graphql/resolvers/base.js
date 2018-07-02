@@ -9,14 +9,14 @@ const baseResolver = createResolver(
   // errors, etc
   (root, args, context, error) => {
     if (yn(process.env.DEBUG)) {
-      console.error(
-        JSON.stringify(
-          { args, context, error, message: error },
-          null,
-          2
-        ),
-        error
-      );
+      console.error(error);
+      //   JSON.stringify(
+      //     { args, context, error, message: error.toString() },
+      //     null,
+      //     2
+      //   ),
+      //   error
+      // );
     }
     return isInstance(error) ? error : new UnknownError();
   }

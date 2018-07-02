@@ -11,7 +11,7 @@ import qs from 'query-string';
 import gql from 'graphql-tag';
 import css from './index.scss';
 
-const FIND_PRODUCTS = gql`
+export const FIND_PRODUCTS = gql`
   query findProducts($query: String!, $count: Int, $after: Int) {
     findProducts(query: $query, count: $count, after: $after) {
       products {

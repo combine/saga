@@ -58,11 +58,30 @@ export const typeDefs = `
     allProducts: [Product]
   }
 
+  input OptionTypeInput {
+    name: String
+    values: [String]
+  }
+
+  input VariantInput {
+    priceInCents: Int!
+    sku: String
+    barcode: String
+    options: [String]
+  }
+
+
   type Mutation {
     login(usernameOrEmail: String!, password: String!): AuthPayload
     signup(username: String!, email: String!, password: String!): AuthPayload
     logout: Boolean
     updateProduct(slug: String!, name: String, description: String): Product
+    createProduct(
+      name: String,
+      description: String,
+      optionTypes: [OptionTypeInput],
+      variants: [VariantInput]
+    ): Product
   }
 `;
 

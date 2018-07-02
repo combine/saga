@@ -66,6 +66,12 @@
     "db:migrate": "npm run knex -- migrate:latest",
     "db:rollback": "npm run knex -- migrate:rollback",
     "db:seed": "npm run knex -- seed:run",
+    "db:test:prepare": {
+      "command": "npm run knex -- migrate",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
     "serve": {
       "command": "node ./dist/index.js",
       "env": {
@@ -81,7 +87,8 @@
     "dev:start": {
       "command": "npm run dev:clean && node ./server",
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "DEBUG": true
       }
     },
     "prod:build": {
