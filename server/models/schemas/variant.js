@@ -5,5 +5,6 @@ export default yup.object().shape({
   isMaster: yup.boolean().default(false),
   priceInCents: yup.number().integer().default(0),
   sku: yup.string(),
-  barcode: yup.string()
+  barcode: yup.string(),
+  options: yup.string()
 });

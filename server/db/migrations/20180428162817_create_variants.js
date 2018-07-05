@@ -5,7 +5,7 @@ exports.up = function(knex) {
     table.boolean('is_master');
     table.integer('product_id');
     table.integer('price_in_cents');
-    table.json('options');
+    table.jsonb('options');
     table.string('sku');
     table.string('barcode');
     table.timestamps();

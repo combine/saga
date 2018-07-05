@@ -32,7 +32,7 @@ const moduleNameMapper = {
 
 module.exports = {
   verbose: true,
-  moduleFileExtensions: ['js', 'jsx'],
+  moduleFileExtensions: ['js', 'jsx', 'json'],
   rootDir: process.cwd(),
   snapshotSerializers: ['enzyme-to-json/serializer'],
   setupTestFrameworkScriptFile: '<rootDir>/test/support/jest.setup.js',

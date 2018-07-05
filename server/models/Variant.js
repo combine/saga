@@ -8,6 +8,7 @@ const monetize = Monetize({ price: 'priceInCents' });
 export default class Variant extends monetize(Base) {
   static tableName = 'variants';
   static idColumn = 'id';
+  static jsonAttributes = ['options'];
   static yupSchema = variantSchema.concat(yup.object().shape({
     id: yup.number().integer(),
     updatedAt: yup.date(),

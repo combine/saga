@@ -70,7 +70,6 @@ const withMutations = function(ComposedComponent) {
       return createProduct({
         variables: values,
         update: (cache, { data: { createProduct: product } }) => {
-          console.log('new prod:', product);
           // Read the data from our cache for this query.
           const data = cache.readQuery({
             query: FIND_PRODUCTS,
