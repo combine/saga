@@ -36,6 +36,7 @@
   },
   "scripts": {
     "console": "bnr console",
+    "runner": "bnr runner",
     "knex": "bnr knex",
     "db:test:prepare": "bnr db:migrate",
     "db:create": "bnr db:create",
@@ -63,6 +64,7 @@
   },
   "betterScripts": {
     "console": "node ./scripts/repl.js",
+    "runner": "node ./scripts/runner.js",
     "knex": "npx babel-node $(npm bin)/knex",
     "db:create": "npx babel-node ./server/db/cli --task=create",
     "db:drop": "npx babel-node ./server/db/cli --task=drop",
