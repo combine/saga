@@ -7,4 +7,4 @@ export default yup.object().shape({
     .required('A product name is required.')
     .when('$patch', patchOptional),
   description: yup.string()
-});
+}).noUnknown();

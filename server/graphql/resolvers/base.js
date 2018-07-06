@@ -10,13 +10,6 @@ const baseResolver = createResolver(
   (root, args, context, error) => {
     if (yn(process.env.DEBUG)) {
       console.error(error);
-      //   JSON.stringify(
-      //     { args, context, error, message: error.toString() },
-      //     null,
-      //     2
-      //   ),
-      //   error
-      // );
     }
     return isInstance(error) ? error : new UnknownError();
   }

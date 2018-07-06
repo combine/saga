@@ -28,45 +28,35 @@ describe('Resolver: createProduct', function() {
   describe('as an admin', function() {
     describe('with valid product values', function() {
       test('creates the product', function() {
+        const variants = [
+          { priceInCents: 100, options: { Size: 'S', Color: 'Blue' } },
+          { priceInCents: 100, options: { Size: 'S', Color: 'Green' } },
+          { priceInCents: 100, options: { Size: 'M', Color: 'Blue' } },
+          { priceInCents: 100, options: { Size: 'M', Color: 'Green' } },
+          { priceInCents: 100, options: { Size: 'L', Color: 'Blue' } },
+          { priceInCents: 100, options: { Size: 'L', Color: 'Green' } }
+        ];
+
         return expect(
-          createProduct({}, {
-            name: 'Bar Baz',
-            description: 'A test product',
-            variants: [
-              {
-                priceInCents: 100,
-                options: { 'Size': 'S', 'Color': 'Blue' }
-              },
-              {
-                priceInCents: 100,
-                options: { 'Size': 'S', 'Color': 'Green' }
-              },
-              {
-                priceInCents: 100,
-                options: { 'Size': 'M', 'Color': 'Green' }
-              },
-              {
-                priceInCents: 100,
-                options: { 'Size': 'M', 'Color': 'Green' }
-              },
-              {
-                priceInCents: 100,
-                options: { 'Size': 'L', 'Color': 'Green' }
-              },
-              {
-                priceInCents: 100,
-                options: { 'Size': 'L', 'Color': 'Green' }
-              },
-            ]
-          }, { user: admin })
+          createProduct(
+            {},
+            {
+              name: 'Bar Baz',
+              description: 'A test product',
+              variants
+            },
+            { user: admin }
+          )
         ).resolves.toEqual(
           expect.objectContaining({
             name: 'Bar Baz',
-            variants: expect.arrayContaining([
-              expect.objectContaining({
-                options: JSON.stringify({ 'Size': 'S', 'Color': 'Blue' })
-              })
-            ])
+            variants: expect.arrayContaining(
+              variants.map(v =>
+                expect.objectContaining({
+                  options: v.options
+                })
+              )
+            )
           })
         );
       });

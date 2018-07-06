@@ -27,4 +27,4 @@ export default yup.object().shape({
     .max(64, 'Password can\'t be more than 64 characters.')
     .required('Password is required.')
     .when('$patch', patchOptional)
-});
+}).noUnknown();

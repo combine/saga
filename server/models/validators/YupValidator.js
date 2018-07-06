@@ -34,7 +34,6 @@ class YupValidator extends Validator {
       // async validation (unless we implement it on our own).
       result = yupSchema.validateSync(json, {
         abortEarly: false,
-        stripUnknown: true,
         context: {
           // if this is an update, we make fields optional since updates
           // do not have all the fields in the json to validate.
@@ -51,12 +50,6 @@ class YupValidator extends Validator {
 
     // Return the modified/validated data (possibly with default values added)
     return result;
-  }
-
-  afterValidate(args) {
-    // Takes the same arguments as `validate`. Usually there is no need
-    // to override this.
-    return super.afterValidate(args);
   }
 }
 
