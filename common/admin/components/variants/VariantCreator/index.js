@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
-import OptionTypes from './OptionTypes';
+import OptionList from './OptionList';
 import VariantList from './VariantList';
 
 import css from './index.scss';
@@ -10,26 +10,20 @@ class VariantCreator extends Component {
   static propTypes = {
     form: PropTypes.shape({
       values: PropTypes.shape({
-        optionTypes: PropTypes.array
+        variants: PropTypes.array
       })
     })
   };
 
-  state = { adding: false };
+  state = { adding: false, options: [] };
 
-  handleStartAdding = () => {
-    const { form } = this.props;
-    const { adding } = this.state;
-
-    this.setState({ adding: !adding });
-
-    // Add a default
-    form.setFieldValue('optionTypes.0.name', 'Size');
-  };
+  handleOptionChange = (options) => {
+    this.setState({ options });
+  }
 
   render() {
     const { form } = this.props;
-    const { adding } = this.state;
+    const { adding, options } = this.state;
 
     return (
       <div className={css.variantEditor}>
@@ -41,20 +35,19 @@ class VariantCreator extends Component {
         <Button
           secondary
           type="button"
-          onClick={this.handleStartAdding}
+          onClick={() => this.setState({ adding: !adding })}
           content={adding ? 'Cancel' : 'Add Variant'}
         />
         {adding && (
           <Fragment>
-            <OptionTypes
+            <OptionList
               form={form}
-              optionTypes={form.values.optionTypes}
-              onAddOptionValue={this.handleAddOptionValue}
+              onChange={this.handleOptionChange}
             />
             <Fragment>
               <VariantList
                 form={form}
-                optionTypes={form.values.optionTypes}
+                options={options}
                 variants={form.values.variants}
               />
             </Fragment>

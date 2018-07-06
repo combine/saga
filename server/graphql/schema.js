@@ -58,18 +58,14 @@ export const typeDefs = `
     allProducts: [Product]
   }
 
-  input OptionTypeInput {
-    name: String
-    values: [String]
-  }
-
   input VariantInput {
     priceInCents: Int!
     sku: String
     barcode: String
-    options: [String]
+    options: OptionsList
   }
 
+  scalar OptionsList
 
   type Mutation {
     login(usernameOrEmail: String!, password: String!): AuthPayload
@@ -79,7 +75,6 @@ export const typeDefs = `
     createProduct(
       name: String,
       description: String,
-      optionTypes: [OptionTypeInput],
       variants: [VariantInput]
     ): Product
   }

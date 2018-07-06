@@ -24,13 +24,11 @@ export const CREATE_PRODUCT_MUTATION = gql`
   mutation createProductMutation(
     $name: String!
     $description: String!
-    $optionTypes: [OptionTypeInput]
     $variants: [VariantInput]
   ) {
     createProduct(
       name: $name
       description: $description
-      optionTypes: $optionTypes
       variants: $variants
     ) {
       id

@@ -19,7 +19,7 @@ class ProductForm extends Component {
     product: {
       name: '',
       description: '',
-      optionTypes: []
+      variants: []
     }
   };
 
