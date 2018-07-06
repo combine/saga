@@ -20,13 +20,21 @@ exports.seed = async function(knex) {
     email: 'admin@example.com'
   });
 
-  await Product.query().insert([
+  await Product.query().insertWithRelated([
     {
       name: faker.commerce.productName(),
       description: [
         faker.commerce.productAdjective(),
         faker.commerce.productMaterial()
-      ].join(' ')
+      ].join(' '),
+      variants: [
+        {  priceInCents: 1500, options: { 'Size': 'S', 'Color': 'Red' } },
+        {  priceInCents: 1500, options: { 'Size': 'S', 'Color': 'Blue' } },
+        {  priceInCents: 1500, options: { 'Size': 'M', 'Color': 'Red' } },
+        {  priceInCents: 1500, options: { 'Size': 'M', 'Color': 'Blue' } },
+        {  priceInCents: 1500, options: { 'Size': 'L', 'Color': 'Red' } },
+        {  priceInCents: 1500, options: { 'Size': 'L', 'Color': 'Blue' } },
+      ]
     },
     {
       name: faker.commerce.productName(),
