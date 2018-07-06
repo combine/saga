@@ -35,6 +35,7 @@
     "$schemas": "server/models/schemas"
   },
   "scripts": {
+    "console": "bnr console",
     "knex": "bnr knex",
     "db:test:prepare": "bnr db:migrate",
     "db:create": "bnr db:create",
@@ -61,6 +62,7 @@
     "heroku-postbuild": "bnr prod:build"
   },
   "betterScripts": {
+    "console": "node ./scripts/repl.js",
     "knex": "npx babel-node $(npm bin)/knex",
     "db:create": "npx babel-node ./server/db/cli --task=create",
     "db:drop": "npx babel-node ./server/db/cli --task=drop",
