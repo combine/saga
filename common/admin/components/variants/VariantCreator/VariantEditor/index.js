@@ -6,7 +6,7 @@ import { InputField } from '@shared/components/form';
 import { validOptions } from '@admin/helpers/variants';
 import css from './index.scss';
 
-class VariantList extends Component {
+class VariantEditor extends Component {
   static propTypes = {
     options: PropTypes.array,
     variants: PropTypes.array
@@ -94,4 +94,4 @@ class VariantList extends Component {
   }
 }
 
-export default VariantList;
+export default VariantEditor;

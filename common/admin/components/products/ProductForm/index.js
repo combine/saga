@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Field } from 'formik';
 import { Input, FormActions, StickyForm } from '@shared/components/form';
 import { Segment } from 'semantic-ui-react';
-import { VariantCreator } from '@admin/components/variants';
+import { VariantCreator, VariantList } from '@admin/components/variants';
 import { getValidationErrors } from '@lib/errors';
 // import schema from './schema';
 import css from './index.scss';
@@ -35,6 +35,25 @@ class ProductForm extends Component {
         actions.setSubmitting(false);
       });
   };
+
+  renderVariantForms = (form) => {
+    const { product } = this.props;
+    const variants = form.values.variants.filter(v => !v.isMaster);
+    let component;
+
+    if (!product.id || !variants.length) {
+      component = <VariantCreator form={form} />;
+    } else {
+      component = <VariantList variants={variants} />;
+    }
+
+    return (
+      <Segment clearing>
+        <h3>Variants</h3>
+        {component}
+      </Segment>
+    );
+  }
 
   render() {
     const { product, title } = this.props;
@@ -76,9 +95,7 @@ class ProductForm extends Component {
                   placeholder="Description"
                 />
               </Segment>
-              <Segment clearing>
-                {!product.id && <VariantCreator form={form} />}
-              </Segment>
+              {this.renderVariantForms(form)}
             </StickyForm>
           );
         }}
