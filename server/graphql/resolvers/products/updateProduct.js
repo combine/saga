@@ -6,12 +6,9 @@ export default isAdminResolver.createResolver(
     async (_, args, context) => {
       let { product } = context;
 
-      product = await product.$query().patchAndFetch({
-        name: args.name,
-        description: args.description
-      });
+      let updatedProduct = await product.$query().upsertGraphAndFetch(args);
 
-      return product.toJSON();
+      return updatedProduct.toJSON();
     }
   )
 );

@@ -19,6 +19,7 @@ export const typeDefs = `
     priceInCents: Int!
     sku: String
     barcode: String
+    options: OptionsList
   }
 
   type User {
