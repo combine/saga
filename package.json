@@ -45,6 +45,7 @@
     "db:migrate:make": "bnr db:migrate:make",
     "db:rollback": "bnr db:rollback",
     "db:seed": "bnr db:seed",
+    "db:fresh": "bnr db:fresh",
     "start": "bnr dev:start",
     "prod": "bnr prod:build && bnr serve",
     "serve": "bnr serve",
@@ -72,6 +73,7 @@
     "db:migrate:make": "npm run knex -- migrate:make",
     "db:rollback": "npm run knex -- migrate:rollback",
     "db:seed": "npm run knex -- seed:run",
+    "db:fresh": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
     "db:test:prepare": {
       "command": "npm run knex -- migrate",
       "env": {
