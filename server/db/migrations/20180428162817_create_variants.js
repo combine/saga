@@ -3,12 +3,12 @@ exports.up = function(knex) {
   return knex.schema
     .createTable('variants', table => {
       table.increments('id').primary();
-      table.boolean('is_master');
-      table.integer('product_id');
-      table.integer('price_in_cents');
-      table.jsonb('options');
-      table.string('sku');
-      table.string('barcode');
+      table.boolean('is_master').notNullable().defaultTo(false);
+      table.integer('product_id').notNullable();
+      table.integer('price_in_cents').defaultTo(0);
+      table.jsonb('options').nullable().defaultTo(null);
+      table.string('sku').defaultTo('');
+      table.string('barcode').defaultTo('');
       table.timestamps();
 
       table.index(['product_id']);

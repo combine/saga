@@ -1,14 +1,10 @@
 import { isAdminResolver } from '../acl';
-import findProduct from './findProduct';
+import { Product } from '$models';
 
 export default isAdminResolver.createResolver(
-  findProduct.createResolver(
-    async (_, args, context) => {
-      let { product } = context;
+  async (_, args) => {
+    let updatedProduct = await Product.query().upsertGraphAndFetch(args);
 
-      let updatedProduct = await product.$query().upsertGraphAndFetch(args);
-
-      return updatedProduct.toJSON();
-    }
-  )
+    return updatedProduct.toJSON();
+  }
 );

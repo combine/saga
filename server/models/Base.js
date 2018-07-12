@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import { YupValidator } from '$models/validators';
+import dayjs from 'dayjs';
 
 export default class Base extends Model {
   static modelPaths = [__dirname];
@@ -9,10 +10,11 @@ export default class Base extends Model {
   }
 
   $beforeInsert() {
-    this.createdAt = new Date().toISOString();
+    this.createdAt = dayjs().toISOString();
+    this.updatedAt = dayjs().toISOString();
   }
 
   $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
+    this.updatedAt = dayjs().toISOString();
   }
 }

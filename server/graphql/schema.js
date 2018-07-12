@@ -60,7 +60,9 @@ export const typeDefs = `
   }
 
   input VariantInput {
-    priceInCents: Int!
+    id: Int
+    isMaster: Boolean
+    priceInCents: Int
     sku: String
     barcode: String
     options: OptionsList
@@ -72,7 +74,12 @@ export const typeDefs = `
     login(usernameOrEmail: String!, password: String!): AuthPayload
     signup(username: String!, email: String!, password: String!): AuthPayload
     logout: Boolean
-    updateProduct(slug: String!, name: String, description: String): Product
+    updateProduct(
+      id: Int!,
+      name: String,
+      description: String,
+      variants: [VariantInput]
+    ): Product
     createProduct(
       name: String,
       description: String,

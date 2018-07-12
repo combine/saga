@@ -40,6 +40,9 @@ export default class Product extends slugged(Base) {
       join: {
         from: 'products.id',
         to: 'variants.productId'
+      },
+      modify: (query) => {
+        return query.where('isMaster', false);
       }
     }
   };
@@ -47,7 +50,11 @@ export default class Product extends slugged(Base) {
   async $afterInsert(queryContext) {
     await super.$afterInsert(queryContext);
 
-    await this.$relatedQuery('variants').insert({
+    return this.createMaster();
+  }
+
+  createMaster() {
+    return this.$relatedQuery('variants').insert({
       isMaster: true
     });
   }

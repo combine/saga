@@ -4,7 +4,7 @@ exports.up = function(knex) {
     table.increments('id').primary();
     table.string('name').notNullable();
     table.string('slug').unique();
-    table.text('description');
+    table.text('description').nullable();
     table.timestamps();
   });
 };
