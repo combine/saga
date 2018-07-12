@@ -1,0 +1,22 @@
+.productForm {
+  position: relative;
+  padding-top: 35px;
+
+  .stickyBar {
+    height: 35px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .stickyBarInner {
+    h1 {
+      margin: 0;
+    }
+
+    background: $white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

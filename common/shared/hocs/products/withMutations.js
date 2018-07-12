@@ -7,15 +7,29 @@ import gql from 'graphql-tag';
 
 export const UPDATE_PRODUCT_MUTATION = gql`
   mutation updateProductMutation(
-    $slug: String!
+    $id: Int!
     $name: String!
     $description: String!
+    $variants: [VariantInput]
   ) {
-    updateProduct(slug: $slug, name: $name, description: $description) {
+    updateProduct(
+      id: $id
+      name: $name
+      description: $description
+      variants: $variants
+    ) {
       id
       slug
       name
       description
+      variants {
+        id
+        isMaster
+        priceInCents
+        sku
+        barcode
+        options
+      }
     }
   }
 `;
@@ -26,15 +40,19 @@ export const CREATE_PRODUCT_MUTATION = gql`
     $description: String!
     $variants: [VariantInput]
   ) {
-    createProduct(
-      name: $name
-      description: $description
-      variants: $variants
-    ) {
+    createProduct(name: $name, description: $description, variants: $variants) {
       id
       slug
       name
       description
+      variants {
+        id
+        isMaster
+        priceInCents
+        sku
+        barcode
+        options
+      }
     }
   }
 `;

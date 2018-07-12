@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Field } from 'formik';
-import { Input, FormActions, StickyForm } from '@shared/components/form';
-import { Segment } from 'semantic-ui-react';
+import { Input } from '@shared/components/form';
+import { Header, Button, Segment, Form, Sticky } from 'semantic-ui-react';
 import { VariantCreator, VariantList } from '@admin/components/variants';
 import { getValidationErrors } from '@lib/errors';
+import omitDeep from '@shared/lib/omitDeep';
 // import schema from './schema';
 import css from './index.scss';
 
@@ -23,10 +24,15 @@ class ProductForm extends Component {
     }
   };
 
+  constructor(props) {
+    super(props);
+    this.headerBarRef = createRef();
+  }
+
   handleSubmit = (values, actions) => {
     const { onSubmit } = this.props;
 
-    return onSubmit(values)
+    return onSubmit(omitDeep(values, '__typename'))
       .then(() => {
         actions.setSubmitting(false);
       })
@@ -36,24 +42,16 @@ class ProductForm extends Component {
       });
   };
 
-  renderVariantForms = (form) => {
+  renderVariantForms = form => {
     const { product } = this.props;
-    const variants = form.values.variants.filter(v => !v.isMaster);
-    let component;
+    const { variants } = form.values;
 
     if (!product.id || !variants.length) {
-      component = <VariantCreator form={form} />;
-    } else {
-      component = <VariantList variants={variants} />;
+      return <VariantCreator form={form} />;
     }
 
-    return (
-      <Segment clearing>
-        <h3>Variants</h3>
-        {component}
-      </Segment>
-    );
-  }
+    return <VariantList variants={variants} />;
+  };
 
   render() {
     const { product, title } = this.props;
@@ -66,20 +64,27 @@ class ProductForm extends Component {
         enableReinitialize={true}
         render={form => {
           return (
-            <StickyForm
-              formProps={{
-                onSubmit: form.handleSubmit,
-                error: true
-              }}
+            <Form
+              ref={this.headerBarRef}
+              onSubmit={form.handleSubmit}
               className={css.productForm}
-              renderActions={() => (
-                <FormActions
-                  form={form}
-                  submitText={product.id ? 'Save' : 'Create'}
-                />
-              )}
+              error={true}
             >
-              {title && <h1>{title}</h1>}
+              <Sticky
+                context={this.headerBarRef.current}
+                className={css.stickyBar}
+              >
+                <div className={css.stickyBarInner}>
+                  {title && <h1>{title}</h1>}
+                  <Button
+                    primary
+                    type="submit"
+                    loading={form.isSubmitting}
+                    disabled={!form.isValid || form.isSubmitting}
+                    content={product.id ? 'Save' : 'Create'}
+                  />
+                </div>
+              </Sticky>
               <Segment>
                 <Field
                   component={Input}
@@ -95,8 +100,11 @@ class ProductForm extends Component {
                   placeholder="Description"
                 />
               </Segment>
-              {this.renderVariantForms(form)}
-            </StickyForm>
+              <Segment clearing>
+                <h3>Variants</h3>
+                {this.renderVariantForms(form)}
+              </Segment>
+            </Form>
           );
         }}
       />
