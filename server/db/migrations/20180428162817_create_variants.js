@@ -14,6 +14,8 @@ exports.up = function(knex) {
       table.index(['product_id']);
       table.index(['sku']);
       table.index(['barcode']);
+
+      table.unique(['product_id', 'options']);
     })
     .raw(
       'CREATE INDEX on ?? USING GIN (??)',
