@@ -35,7 +35,7 @@ export default merge.strategy({
     }
   },
   target: 'node',
-  entry: ['./server/renderer/handler.js'],
+  entry: ['./server/renderer/middleware.js'],
   externals: [
     // html files are required directly
     /\.(html|png|gif|jpg)$/,
@@ -44,7 +44,7 @@ export default merge.strategy({
   ],
   output: {
     path: path.join(__dirname, '..', process.env.OUTPUT_PATH, 'renderer'),
-    filename: 'handler.built.js',
+    filename: 'middleware.built.js',
     libraryTarget: 'commonjs'
   },
   plugins: [...filter(basePlugins, allowedPlugin)],

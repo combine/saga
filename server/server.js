@@ -51,7 +51,7 @@ app.use(authMiddleware);
 // Mount GraphQL Service
 app.use(hotRequire('./graphql'));
 
-// Mount the react render handler
+// Mount the react render middleware
 app.use('*', hotRequire('./renderer'));
 
 module.exports = app;

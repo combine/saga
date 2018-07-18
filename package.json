@@ -121,7 +121,7 @@
       }
     },
     "prod:build:server": {
-      "command": "npx babel ./server -d ./dist --ignore 'renderer/handler.js'",
+      "command": "npx babel ./server -d ./dist --ignore 'renderer/middleware.js'",
       "env": {
         "NODE_ENV": "production"
       }

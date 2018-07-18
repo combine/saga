@@ -45,9 +45,9 @@ export default function handleRender(req, res) {
   const location = { pathname, search };
   const matchPath = get(matches[0], 'route.path');
   const layout = matchPath.match(/\/admin/) ? 'admin' : 'app';
-  const status = matches.length && matches[0].match.path === '*' ? 404 : 200;
   const App = layout === 'admin' ? AdminContainer : AppContainer;
   const cache = new InMemoryCache();
+  let status = matches.length && matches[0].match.path === '*' ? 404 : 200;
 
   const client = new ApolloClient({
     ssrMode: true,
@@ -87,7 +87,7 @@ export default function handleRender(req, res) {
     return component;
   })();
 
-  return getDataFromTree(Component).then(() => {
+  const renderApp = () => {
     const html = renderToString(Component);
     const state = client.extract();
     const bundles = (stats && getBundles(stats, modules)) || [];
@@ -105,5 +105,9 @@ export default function handleRender(req, res) {
       .catch(err => {
         console.error('Could not server-render React components:', err);
       });
-  });
+  };
+
+  return getDataFromTree(Component)
+    .then(renderApp)
+    .catch(renderApp);
 }

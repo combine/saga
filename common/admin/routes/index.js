@@ -8,5 +8,5 @@ export default [
   { path: '/admin/products', exact: true, component: Products },
   { path: '/admin/products/new', exact: true, component: NewProductPage },
   { path: '/admin/products/:slug', exact: true, component: EditProductPage },
-  { path: '*', component: Error }
+  { path: '/admin/*', component: Error }
 ];
