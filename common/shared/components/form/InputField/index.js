@@ -12,9 +12,9 @@ const InputField = (props) => {
     <React.Fragment>
       <Input
         className={classnames(className)}
+        error={hasError}
         {...field}
         {...rest}
-        error={hasError}
       />
     </React.Fragment>
   );

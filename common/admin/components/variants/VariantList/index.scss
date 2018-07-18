@@ -1,3 +1,32 @@
 .optionField {
-  width: 50px;
+  width: 100px;
+}
+
+.variantListTable {
+  width: auto;
+  overflow-x: scroll;
+}
+
+:global(.ui.form) {
+  .variant {
+    td:not(.checkbox) {
+      padding: 0 5px;
+    }
+    td:nth-child(2) {
+      padding: 0 5px 0 0;
+    }
+    &:hover {
+      :global(.ui.input input) {
+        border-color: $primary;
+      }
+    }
+    :global(.ui.input input) {
+      border-color: transparent;
+      padding: 0.5em 0.75em;
+
+      &:focus {
+        border-color: $primary;
+      }
+    }
+  }
 }

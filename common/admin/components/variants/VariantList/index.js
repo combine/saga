@@ -20,16 +20,14 @@ class VariantList extends Component {
     const options = Object.keys(first(variants).options);
 
     return (
-      <Table basic className={css.variantListForm}>
+      <Table basic className={css.variantListTable}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell collapsing>
               <Checkbox />
             </Table.HeaderCell>
-            {options.map((option, idx) => (
-              <Table.HeaderCell collapsing key={idx}>
-                {option}
-              </Table.HeaderCell>
+            {options.map((opt, idx) => (
+              <Table.HeaderCell key={idx}>{opt}</Table.HeaderCell>
             ))}
             <Table.HeaderCell>Price</Table.HeaderCell>
             <Table.HeaderCell>SKU</Table.HeaderCell>
@@ -38,19 +36,22 @@ class VariantList extends Component {
         <Table.Body>
           {variants.map((variant, idx) => {
             return (
-              <Table.Row key={idx}>
-                <Table.Cell>
+              <Table.Row className={css.variant} key={idx}>
+                <Table.Cell className={css.checkbox}>
                   <Checkbox />
                 </Table.Cell>
-                {map(variant.options, (value, key, index) => (
-                  <Table.Cell key={`${idx}-${index}-${value}`}>
-                    <Field
-                      component={Input}
-                      className={css.optionField}
-                      name={`variants.${idx}.options[${key}]`}
-                    />
-                  </Table.Cell>
-                ))}
+                {options.map((name, index) => {
+                  return (
+                    <Table.Cell key={`${idx}-${index}`}>
+                      <Field
+                        component={InputField}
+                        name={`variants[${idx}].options[${name}]`}
+                        className={css.optionField}
+                        placeholder={name}
+                      />
+                    </Table.Cell>
+                  );
+                })}
                 <Table.Cell>
                   <Field
                     component={InputField}
