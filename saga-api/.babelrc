@@ -1,0 +1,15 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ],
+  "plugins": [
+    "transform-es2015-modules-commonjs",
+    "transform-class-properties",
+    "transform-export-extensions",
+    "transform-object-rest-spread"
+  ]
+}

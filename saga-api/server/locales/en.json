@@ -1,0 +1,35 @@
+{
+	"models": {
+		"User": {
+			"username": {
+				"string": {
+					"regex": {
+						"base": "Username can only contain alphanumeric characters and single underscores."
+					}
+				}
+			},
+			"password": {
+				"string": {
+					"regex": {
+						"base": "Password must contain at least 8 characters, 1 uppercase, 1 lowercase, and 1 number."
+					},
+					"min": "Password must contain at least 8 characters."
+				},
+				"any": {
+					"required": "A password is required."
+				}
+			},
+			"email": {
+				"string": {
+					"email": "Email must be a valid email."
+				}
+			}
+		}
+	},
+	"errors": {
+		"auth": {
+			"username": "Username or email not found.",
+			"password": "Invalid password."
+		}
+	}
+}

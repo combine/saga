@@ -1,0 +1,51 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "max-len": [
+      "error",
+      { "code": 80, "tabWidth": 2 }
+    ],
+    "indent": [
+      1,
+      2,
+      { "SwitchCase": 1 }
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "no-console": 0,
+    "no-unused-vars": [1],
+    "semi": [
+      2,
+      "always"
+    ]
+  },
+  "env": {
+    "browser": false,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "globals": {
+    "expect": true,
+    "__non_webpack_require__": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    },
+    "ecmaVersion": 6
+  },
+  "plugins": [
+    "babel"
+  ]
+}
