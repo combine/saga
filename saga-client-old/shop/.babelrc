@@ -1,0 +1,28 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current",
+          "uglify": false
+        }
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-es2015-modules-commonjs",
+    "transform-class-properties",
+    "transform-export-extensions",
+    "transform-object-rest-spread",
+    "dynamic-import-node"
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "react"
+      ]
+    }
+  }
+}

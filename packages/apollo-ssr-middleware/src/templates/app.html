@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <%= title %>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width height=device-height" />
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.png">
+<%= assets.css.map(asset => `  <link type="text/css" rel="stylesheet" href="${asset}" />`).join('\n') %>
+</head>
+<body>
+  <div id="app"><%= html %></div>
+  <script>window.__APOLLO_STATE__ = <%= JSON.stringify(state).replace(/</g, '\\u003c') %>;</script>
+<%= assets.js.map(asset => `  <script src="${asset}"></script>`).join('\n') %>
+</body>
+</html>
